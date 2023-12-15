@@ -6,31 +6,31 @@
   
   <title>Digital Image Processing | fluid</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="RIS-GAN：利用生成对抗网络探索残影和光照的去影技术摘要​		残影图像和光照估计在图像增强中已经被证明非常有帮助。在本文中，我们提出了一个通用而新颖的框架 RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像。我们设计了三个鉴别器，用来区分预测的负残影图">
+  <meta name="description" content="RIS-GAN：利用生成对抗网络探索残影和光照的去影技术 摘要 ​		残影图像和光照估计在图像增强中已经被证明非常有帮助。在本文中，我们提出了一个通用而新颖的框架 RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像。我们设计了三个鉴别器，用来区分预测的负残">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Digital Image Processing">
 <meta property="og:url" content="http://example.com/2023/12/14/DIP/index.html">
 <meta property="og:site_name" content="fluid">
-<meta property="og:description" content="RIS-GAN：利用生成对抗网络探索残影和光照的去影技术摘要​		残影图像和光照估计在图像增强中已经被证明非常有帮助。在本文中，我们提出了一个通用而新颖的框架 RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像。我们设计了三个鉴别器，用来区分预测的负残影图">
+<meta property="og:description" content="RIS-GAN：利用生成对抗网络探索残影和光照的去影技术 摘要 ​		残影图像和光照估计在图像增强中已经被证明非常有帮助。在本文中，我们提出了一个通用而新颖的框架 RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像。我们设计了三个鉴别器，用来区分预测的负残">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="d:\Typora_picture\DIP\image-20231028141106817.png">
-<meta property="og:image" content="d:\Typora_picture\DIP\image-20231028144546139.png">
-<meta property="og:image" content="d:\Typora_picture\DIP\image-20231028145555526.png">
-<meta property="og:image" content="d:\Typora_picture\DIP\image-20231028154219597.png">
-<meta property="og:image" content="d:\Typora_picture\DIP\image-20231028154925114.png">
-<meta property="og:image" content="d:\Typora_picture\DIP\image-20231028154937955.png">
-<meta property="og:image" content="d:\Typora_picture\DIP\image-20231028155126659.png">
-<meta property="og:image" content="d:\Typora_picture\DIP\image-20231028155948183.png">
-<meta property="og:image" content="d:\Typora_picture\DIP\image-20231028160052648.png">
-<meta property="og:image" content="d:\Typora_picture\DIP\image-20231028160127001.png">
-<meta property="og:image" content="d:\Typora_picture\DIP\image-20231028160327746.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP%5Cimage-20231028141106817.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP%5Cimage-20231028144546139.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP%5Cimage-20231028145555526.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP%5Cimage-20231028154219597.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP%5Cimage-20231028154925114.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP%5Cimage-20231028154937955.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP%5Cimage-20231028155126659.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP%5Cimage-20231028155948183.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP%5Cimage-20231028160052648.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP%5Cimage-20231028160127001.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP%5Cimage-20231028160327746.png">
 <meta property="article:published_time" content="2023-12-14T09:03:07.000Z">
 <meta property="article:modified_time" content="2023-12-14T09:27:45.204Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="DIP">
 <meta property="article:tag" content="GAN">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="d:\Typora_picture\DIP\image-20231028141106817.png">
+<meta name="twitter:image" content="d:%5CTypora_picture%5CDIP%5Cimage-20231028141106817.png">
   
     <link rel="alternate" href="/atom.xml" title="fluid" type="application/atom+xml">
   
@@ -115,59 +115,108 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h2 id="RIS-GAN：利用生成对抗网络探索残影和光照的去影技术"><a href="#RIS-GAN：利用生成对抗网络探索残影和光照的去影技术" class="headerlink" title="RIS-GAN：利用生成对抗网络探索残影和光照的去影技术"></a>RIS-GAN：利用生成对抗网络探索残影和光照的去影技术</h2><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>​		<strong>残影图像</strong>和<strong>光照估计</strong>在<strong>图像增强</strong>中已经被证明非常有帮助。在本文中，我们提出了一个通用而新颖的框架 RIS-GAN，利用<strong>生成对抗网络</strong>探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的<strong>负残影图像和反向光照图</strong>可以用来生成间接去影图像，以<strong>粗糙到精细</strong>的方式改善粗糙的去影结果，得到无阴影的精细图像。我们设计了三个鉴别器，用来区分预测的负残影图像、去影图像和反向光照图是否与相应的真实信息相比是真实的还是伪造的。据我们所知，我们是第一个<strong>探索残影和光照用于去影</strong>的研究者。我们在<strong>两个基准数据集</strong>上评估了我们提出的方法，即 <strong>SRD 和 ISTD</strong>，广泛的实验证明，尽管我们的生成器中没有特定的阴影感知组件，但我们提出的方法在性能上优于现有技术。</p>
-<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>​		阴影是一种无处不在的自然现象，当光线部分或完全被阻挡时就会出现，它会<strong>降低一些计算机视觉任务的准确性和有效性</strong>，如目标跟踪、物体检测和识别（Mikic等，2000年；Long等，2014年；Cucchiara等，2002年；Hua等，2013年；Long和Hua，2015年；2017年；Hua等，2018年；Luo等，2019年），图像分割和本质图像分解（Li和Snavely，2018年）。因此，有必要进行<strong>去影处理</strong>以<strong>改善图像和视频编辑的视觉效果</strong>，如电影和电视后期编辑。然而，在复杂场景中由于光照变化、纹理变化和其他环境因素，去除阴影仍然是一个非常具有挑战性的问题。</p>
+        <h2 id="RIS-GAN：利用生成对抗网络探索残影和光照的去影技术">RIS-GAN：利用生成对抗网络探索残影和光照的去影技术</h2>
+<h2 id="摘要">摘要</h2>
+<p>​		<strong>残影图像</strong>和<strong>光照估计</strong>在<strong>图像增强</strong>中已经被证明非常有帮助。在本文中，我们提出了一个通用而新颖的框架 RIS-GAN，利用<strong>生成对抗网络</strong>探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的<strong>负残影图像和反向光照图</strong>可以用来生成间接去影图像，以<strong>粗糙到精细</strong>的方式改善粗糙的去影结果，得到无阴影的精细图像。我们设计了三个鉴别器，用来区分预测的负残影图像、去影图像和反向光照图是否与相应的真实信息相比是真实的还是伪造的。据我们所知，我们是第一个<strong>探索残影和光照用于去影</strong>的研究者。我们在<strong>两个基准数据集</strong>上评估了我们提出的方法，即 <strong>SRD 和 ISTD</strong>，广泛的实验证明，尽管我们的生成器中没有特定的阴影感知组件，但我们提出的方法在性能上优于现有技术。</p>
+<h2 id="引言">引言</h2>
+<p>​		阴影是一种无处不在的自然现象，当光线部分或完全被阻挡时就会出现，它会<strong>降低一些计算机视觉任务的准确性和有效性</strong>，如目标跟踪、物体检测和识别（Mikic等，2000年；Long等，2014年；Cucchiara等，2002年；Hua等，2013年；Long和Hua，2015年；2017年；Hua等，2018年；Luo等，2019年），图像分割和本质图像分解（Li和Snavely，2018年）。因此，有必要进行<strong>去影处理</strong>以<strong>改善图像和视频编辑的视觉效果</strong>，如电影和电视后期编辑。然而，在复杂场景中由于光照变化、纹理变化和其他环境因素，去除阴影仍然是一个非常具有挑战性的问题。</p>
 <p>​		已经存在许多研究工作，包括传统方法（Shor和Lischinski，2008年；Xiao等，2013a；Zhang等，2019年）和基于学习的方法（Gryka、Terry和Brostow，2015年；Wang等，2018年；Le等，2018年）已经被开发出来以解决这个具有挑战性的问题。与传统方法不同，传统方法高度依赖于一些先验知识（如恒定光照和梯度），并且常常在阴影边界上<strong>产生明显的伪影</strong>。学习方法，尤其是像（Hu等，2018年）和（Sidorov，2019年）这样的深度学习方法，取得了一些进展。然而，这些方法的有效性<strong>高度依赖于训练数据集和设计的网络架构</strong>。当训练集不足或网络模型不足时，它们无法产生所期望的阴影检测掩模和去影图像。此外，大多数现有的深度学习方法<strong>只关注阴影本身</strong>，而没有很好地探索其他额外信息，如残影和光照用于去影。</p>
 <p>​		在本文中，我们提出了一个通用框架 RIS-GAN，利用<strong>生成对抗网络</strong>来探索残影和光照，用于去除阴影，与Sidorov的AngularGAN（Sidorov，2019）不同，后者仅引入了一个<strong>基于光照的角度损失</strong>，而没有估计光照颜色或光照颜色图。如图1所示，我们的RIS-GAN包括在编码器-解码器结构中的<strong>四个生成器</strong>以及<strong>三个鉴别器</strong>。这四个生成器分别用于<strong>生成负残影图像、中间去影图像、反向光照图和精细去影图像</strong>。原则上，不同于现有的深度学习方法（Qu等，2017年；Hu等，2018年；Zhu等，2018年）专门为去影而设计的，任何种类的编码器-解码器结构都可以用作我们的生成器。对于残影生成器，我们遵循负残影（Fu等，2017年）的思路，让生成器接受一个阴影图像，生成一个负残影，以检测阴影区域，并通过间接应用与输入阴影图像的逐元素相加来恢复阴影较轻或无阴影的图像。对于光照生成器，我们基于Retinex模型（Fu等，2016年；Guo、Li和Ling，2016年；Wang等，2019年）设计了它，其中地面真实的无阴影图像可以被视为反射图像，而阴影图像是观察到的图像。光照生成器的输出是反向光照图，可用于阴影区域检测，并通过间接应用与输入阴影图像的逐元素相乘来恢复去影图像。</p>
-<p><img src="D:\Typora_picture\DIP\image-20231028141106817.png" alt="image-20231028141106817"></p>
+<p><img src="D:%5CTypora_picture%5CDIP%5Cimage-20231028141106817.png" alt="image-20231028141106817"></p>
 <p>​		我们强调，我们使用精细化生成器以<strong>粗糙到精细</strong>的方式改善从去影生成器获得的去影图像。除了粗糙的去影结果，我们还通过探索的<strong>负残影和反向光照</strong>，将两个间接的去影图像纳入，以恢复最终的精细去影图像。通过这种处理，去影精细化生成器具有<strong>三个互补的输入源</strong>，确保了高质量的去影结果。</p>
 <p>​		与所有生成对抗网络（GANs）一样，我们提出的RIS-GAN交替采用了四个生成器和三个鉴别器之间的对抗训练过程（Goodfellow等，2014年），以生成高质量的负残影图像、反向光照图和去影图像。值得一提的是，我们设计了一个<strong>交叉损失函数</strong>，以确保恢复的去影图像与探索的残影和光照一致。我们还采用了一个<strong>联合鉴别器</strong>（He和Patel，2018年），以确保三个鉴别器具有相同的架构和相同的参数值，以判断生成的结果与相应的真实情况相比是真实还是伪造的，这可以确保所有生成的结果与相应的真实情况难以区分。随着训练周期的增加，生成器和鉴别器都改进了其功能，使得越来越难以区分生成的输出与相应的真实情况。因此，在经过一定数量的训练周期后，我们可以利用<strong>生成器</strong>中学到的<strong>参数</strong>来生成负残影图像、反向光照图和去影图像。</p>
 <p>​		与现有的阴影检测和去影方法不同，我们的主要贡献可以总结为三点：</p>
 <ul>
 <li>我们是第一个提出一个通用而新颖的框架RIS-GAN，其中包括编码器-解码器结构的生成器，用于探索阴影和无阴影图像之间的残影和光照，用于去除阴影。</li>
-<li>在交叉损失函数和联合鉴别器中，已经很好地探索了残影、光照和阴影之间的关联，我们能够获得互补的输入源，以更好地改善去影结果的质量。 </li>
+<li>在交叉损失函数和联合鉴别器中，已经很好地探索了残影、光照和阴影之间的关联，我们能够获得互补的输入源，以更好地改善去影结果的质量。</li>
 <li>即使在我们的编码器-解码器结构生成器中没有特定的阴影感知组件，我们提出的RIS-GAN仍然优于现有技术。这些实验结果清楚地证明了所提出方法的有效性。</li>
 </ul>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>​		我们通过生成对抗网络GANs（Goodfellow等，2014年）探索了阴影图像和无阴影图像之间的残影和光照，这是因为GAN在<strong>风格转移</strong>和<strong>细节恢复</strong>方面具有能力（Li和Wand，2016年）。背后的直觉是，探索的残影和光照可以为去影提供有用的额外细节和见解。</p>
+<h2 id="方法">方法</h2>
+<p>​		我们通过生成对抗网络GANs（Goodfellow等，2014年）探索了阴影图像和无阴影图像之间的残影和光照，这是因为GAN在<strong>风格转移</strong>和<strong>细节恢复</strong>方面具有能力（Li和Wand，2016年）。背后的直觉是，探索的残影和光照可以为去影提供有用的额外细节和见解。</p>
 <p>​		用于阴影去除的提出框架RIS-GAN包括多个GAN，如图1所示。给定输入阴影图像$I$，我们应用三个编码器-解码器结构来生成<strong>残影图像</strong>$I_{res}$，<strong>中间去影图像</strong>$I_{imd}$和<strong>反向光照图</strong>$S_{inv}$。通过输入阴影图像和残影图像的逐元素相加，我们可以得到<strong>间接去影图像</strong>$I_{rem}^1$。通过输入阴影图像和反向光照的逐元素相乘，我们可以得到<strong>另一个间接去影图像</strong>$I_{rem}^2$。我们可以应用另一个编码器-解码器结构来改善<strong>粗糙的去影图像</strong>$I_{coarse}$以及两个间接去影图像$I_{rem}^1$和$I_{rem}^2$，生成<strong>精细的去影图像</strong>$I_{fine}$。</p>
-<p>​		我们的RIS-GAN由相同的编码器-解码器结构中的四个生成器和三个鉴别器组成。这四个生成器分别是<strong>残影生成器、去影生成器、光照生成器、检测生成器和精细化生成器</strong>，分别表示为$G_{res}、G_{rem}、G_{illum}和G_{ref}$，用于<strong>生成负残影图像、粗糙的去影图像、反向光照图和精细的去影图像</strong>。三个鉴别器$D_{res}、D_{illum}和D_{ref}$共享相同的架构和参数，用于<strong>确定生成的残影图像、反向光照图和最终去影图像与地面真实的残影图像、反向光照图和无阴影图像相比是真实还是伪造的</strong>。为了方便读者，我们总结了上述提到的符号之间的关系如下：<br>$$<br>I_{res} &#x3D; G_{res}(I),\ S_{inv}&#x3D;G_{illum}(I)\ \ \ \ (1)\<br>I^1_{rem} &#x3D; I ⊕ I_{res},\ I_{rem}^2 &#x3D; I ⊗ S_{inv}\ \ \ \  (2)\<br>I_{coarse} &#x3D; G_{rem}(I)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \   (3)\<br>I_{fine} &#x3D; G_{ref}(I_{coarse}, I_{rem}^1, I_{rem}^2)\ \ \ \ \ \ (4)<br>$$<br>​		我们的网络以<strong>阴影图像</strong>作为<strong>输入</strong>，并以<strong>端到端的方式输出</strong>负残影图像、反向光照图和精细的去影图像。生成器和鉴别器之间的交替训练确保了预测结果的良好质量。</p>
+<p>​		我们的RIS-GAN由相同的编码器-解码器结构中的四个生成器和三个鉴别器组成。这四个生成器分别是<strong>残影生成器、去影生成器、光照生成器、检测生成器和精细化生成器</strong>，分别表示为$G_{res}、G_{rem}、G_{illum}和G_{ref}$，用于<strong>生成负残影图像、粗糙的去影图像、反向光照图和精细的去影图像</strong>。三个鉴别器$D_{res}、D_{illum}和D_{ref}$共享相同的架构和参数，用于<strong>确定生成的残影图像、反向光照图和最终去影图像与地面真实的残影图像、反向光照图和无阴影图像相比是真实还是伪造的</strong>。为了方便读者，我们总结了上述提到的符号之间的关系如下：<br>
+$$<br>
+I_{res} = G_{res}(I),\ S_{inv}=G_{illum}(I)\ \ \ \ (1)\<br>
+I^1_{rem} = I ⊕ I_{res},\ I_{rem}^2 = I ⊗ S_{inv}\ \ \ \  (2)\<br>
+I_{coarse} = G_{rem}(I)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \   (3)\<br>
+I_{fine} = G_{ref}(I_{coarse}, I_{rem}^1, I_{rem}^2)\ \ \ \ \ \ (4)<br>
+$$<br>
+​		我们的网络以<strong>阴影图像</strong>作为<strong>输入</strong>，并以<strong>端到端的方式输出</strong>负残影图像、反向光照图和精细的去影图像。生成器和鉴别器之间的交替训练确保了预测结果的良好质量。</p>
 <p>​		接下来，我们将详细描述生成器、鉴别器、损失函数以及实现细节。</p>
-<h2 id="编码器-解码器生成器"><a href="#编码器-解码器生成器" class="headerlink" title="编码器-解码器生成器"></a>编码器-解码器生成器</h2><p>​		原则上，在我们的RIS-GAN框架中可以<strong>使用任何编码器-解码器结构</strong>。在本文中，我们不打算在框架中设计任何特定的阴影感知组件，而只是采用DenseUNet架构（Raj和Venkateswaran，2018年）作为每个编码器-解码器生成器的实现。DenseUNet包括一个用于<strong>捕获上下文的收缩路径</strong>和一个用于<strong>上采样的对称扩展路径</strong>。与传统UNet架构不同，DenseUNet在网络中添加了<strong>密集块</strong>，它将每一层的输出与其输入连接起来，并馈送给下一层。这增强了我们四个编码器-解码器生成器中的<strong>信息和梯度流动</strong>：</p>
+<h2 id="编码器-解码器生成器">编码器-解码器生成器</h2>
+<p>​		原则上，在我们的RIS-GAN框架中可以<strong>使用任何编码器-解码器结构</strong>。在本文中，我们不打算在框架中设计任何特定的阴影感知组件，而只是采用DenseUNet架构（Raj和Venkateswaran，2018年）作为每个编码器-解码器生成器的实现。DenseUNet包括一个用于<strong>捕获上下文的收缩路径</strong>和一个用于<strong>上采样的对称扩展路径</strong>。与传统UNet架构不同，DenseUNet在网络中添加了<strong>密集块</strong>，它将每一层的输出与其输入连接起来，并馈送给下一层。这增强了我们四个编码器-解码器生成器中的<strong>信息和梯度流动</strong>：</p>
 <ul>
-<li>残影生成器$G_{res}$用于获取一个与地面真实残影图像$I_{res}^{gt} $接近的残影图像，该真实残影图像是在阴影图像和相应的无阴影图像$I^{gt}$之间获得的，即$I_{res}^{gt}&#x3D;I^{gt}-I$。</li>
+<li>残影生成器$G_{res}$用于获取一个与地面真实残影图像$I_{res}^{gt} $接近的残影图像，该真实残影图像是在阴影图像和相应的无阴影图像$I^{gt}$之间获得的，即$I_{res}^{gt}=I^{gt}-I$。</li>
 <li>去影生成器$G_{rem}$用于生成粗糙的去影图像$I_{coarse}$。</li>
-<li>光照生成器$G_{illum}$用于估计阴影图像中的反向光照图。请注意，地面真实反向光照图是基于基于Retinex的图像增强方法（Fu等，2016年；Guo、Li和Ling，2016年；Wang等，2019年）计算的，即$S^{gt}_{inv}&#x3D;I^{gt}*I^{-1}$，其中$I^{gt}$可以被视为反射图像，而$I$是观察到的图像。</li>
+<li>光照生成器$G_{illum}$用于估计阴影图像中的反向光照图。请注意，地面真实反向光照图是基于基于Retinex的图像增强方法（Fu等，2016年；Guo、Li和Ling，2016年；Wang等，2019年）计算的，即$S^{gt}_{inv}=I^{gt}*I^{-1}$，其中$I^{gt}$可以被视为反射图像，而$I$是观察到的图像。</li>
 <li>精细化生成器$G_{ref}$用于使用探索的残影和光照来改进当前的中间去影图像和两个间接去影图像，以构成最终的去影图像。</li>
 </ul>
-<p><img src="D:\Typora_picture\DIP\image-20231028144546139.png" alt="image-20231028144546139"></p>
+<p><img src="D:%5CTypora_picture%5CDIP%5Cimage-20231028144546139.png" alt="image-20231028144546139"></p>
 <p>图2：阴影去除的残影和光照可视化。从左到右分别是阴影图像$I$，通过残影获得的间接去影图像$I_{rem}^1$，通过光照获得的间接去影图像$I_{rem}^2$，精细的无阴影图像$I_{fine}^1$以及地面真实的无阴影图像$I^{gt}$.</p>
 <p>​		为了更好地理解我们的检测生成器和精细化生成器，我们在图2中可视化了一些示例。正如我们可以观察到的，通过残影和光照获得的间接去影图像具有很好的质量，对于进一步的精细化以获得最终的去影图像来说是互补的。</p>
-<h2 id="联合鉴别器"><a href="#联合鉴别器" class="headerlink" title="联合鉴别器"></a>联合鉴别器</h2><p>​		鉴别器是一个<strong>卷积网络</strong>，用于区分生成器产生的预测残影图像、最终去影图像以及估计的光照与相应的地面真实相比是真实的还是伪造的。为了确保所有生成的结果都与相应的地面真实不可区分，我们使用了一个带有联合鉴别器（He和Patel，2018）的GAN。联合鉴别器被训练以学习一个联合分布，以判断生成的结果是否是真实的或伪造的。</p>
-<p><img src="D:\Typora_picture\DIP\image-20231028145555526.png" alt="image-20231028145555526"></p>
+<h2 id="联合鉴别器">联合鉴别器</h2>
+<p>​		鉴别器是一个<strong>卷积网络</strong>，用于区分生成器产生的预测残影图像、最终去影图像以及估计的光照与相应的地面真实相比是真实的还是伪造的。为了确保所有生成的结果都与相应的地面真实不可区分，我们使用了一个带有联合鉴别器（He和Patel，2018）的GAN。联合鉴别器被训练以学习一个联合分布，以判断生成的结果是否是真实的或伪造的。</p>
+<p><img src="D:%5CTypora_picture%5CDIP%5Cimage-20231028145555526.png" alt="image-20231028145555526"></p>
 <p>图3：我们RIS-GAN中鉴别器的架构。它由<strong>五个卷积层</strong>组成，每个卷积层后面都跟着批量<strong>标准化和Leaky ReLU激活函数</strong>。对于这五个卷积层，所有卷积核的大小都是4×4；步幅为4×4，只有第一个卷积层的步幅为2×2；输出通道的数量为：64 → 128 → 256 → 512 → 1</p>
 <p>​		值得注意的是，我们使用了<strong>频谱标准化方法</strong>（Miyato等，2018年）来稳定鉴别器网络的训练过程，因为频谱标准化是一种简单而有效的标准化方法，用于限制GAN中鉴别器的优化过程，它可以使整个生成器的性能更好。</p>
-<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>​		为了得到一个健壮的参数模型，我们用来优化提出的RIS-GAN的损失函数有五个组成部分：去影损失$L_{rem}$，残影损失$L_{res}$，光照损失$L_{illum}$，交叉损失$L_{cross}$和对抗损失$L_{adv}$。总损失$L$可以写为：</p>
-<p>$$<br>L &#x3D; λ_1L_{res} + λ_2L_{rem} + λ_3L_{illum} + λ_4L_{cross} + L_{adv},\ \ \ \ (5)<br>$$<br>​		其中$λ_1、λ_2、λ_3和λ_4$是超参数。</p>
-<p>​		<strong>去影损失</strong>定义为<strong>视觉一致性损失和感知一致性损失</strong>，即：<br>$$<br>L_{rem} &#x3D; L_{vis} + β_1L_{percept},\ \ \ \ (6)<br>$$<br>​		其中$β$是权重参数。$L_{vis}$是<strong>用于去影生成器的视觉一致性损失</strong>，计算方法是使用去影结果与地面真实之间的L-1范数，而$L_{percept}$是旨在<strong>保留图像结构的感知一致性损失</strong>。具体来说，<br>$$<br>L_{vis} &#x3D; ||I^{gt} − I_{fine}||<em>1 + ||I^{gt} − I</em>{coarse}||<em>1,\ \ \ \ (7)\<br>L</em>{percept} &#x3D; ||VGG(I^{gt}) − VGG(I_{fine}))||<em>2^2 + ||VGG(I^{gt}) − VGG(I</em>{coarse}))||_2^2,\ \ \ \ (8)<br>$$<br>​		其中$VGG(·)$是来自VGG19模型的<strong>特征提取器</strong>。</p>
-<p>​		<strong>残影损失</strong>可以被看作是<strong>阴影区域中的遮挡亮度</strong>，即：<br>$$<br>L_{res} &#x3D; ||I_{res}^{gt} − G_{res}(I)||<em>1,\ \ \ \ (9)<br>$$<br>​		<strong>光照损失</strong>计算了由$G</em>{illum}$生成的光照结果与地面真实反向光照图$S_{inv}^{gt}$之间的L-1范数。然后，光照分支的光照损失可以表示为：<br>$$<br>L_{illum} &#x3D; ||S_{inv}^{gt} − G_{illum}(I)||<em>1,\ \ \ \ (10)<br>$$<br>​		<strong>交叉损失</strong>旨在确保残影、光照和阴影信息之间的<strong>一致性和相关性</strong>，具体为：<br>$$<br>L</em>{cross} &#x3D; ||I^{gt} − (G_{res}(I)⊕I)||<em>1 + β_2||I^{gt}−(G</em>{illum}(I)⊗I)||<em>1,\ \ \ \ (11)<br>$$<br>​		对抗损失$L</em>{adv}$是网络的<strong>联合对抗损失</strong>，描述如下：</p>
-<p>$$<br>\begin{align}<br>L_{adv} &#x3D;\  &amp; E_{(I,I^{gt},I_{res}^{gt},S_{inv}^{gt})}[log(D_{ref}(I^{gt})) \ +\ &amp;log(1 − D_{ref}(G_{ref}(G_{res}(I), G_{rem}(I), G_{illum}(I))))+log(D_{res}(I_{res}^{gt})) \ +\ &amp; log(1 − D_{res}(G_{res}(I)))+log(D_{illum}(S_{inv}^{gt})) \ +\ &amp; log(1 − D_{illum}(G_{illum}(I)))]\ \ \ \ (12)<br>\end{align}<br>$$<br>​		其中$D_{res},\ D_{ref}和D_{illum}$是三个鉴别器。</p>
+<h2 id="损失函数">损失函数</h2>
+<p>​		为了得到一个健壮的参数模型，我们用来优化提出的RIS-GAN的损失函数有五个组成部分：去影损失$L_{rem}$，残影损失$L_{res}$，光照损失$L_{illum}$，交叉损失$L_{cross}$和对抗损失$L_{adv}$。总损失$L$可以写为：</p>
+<p>$$<br>
+L = λ_1L_{res} + λ_2L_{rem} + λ_3L_{illum} + λ_4L_{cross} + L_{adv},\ \ \ \ (5)<br>
+$$<br>
+​		其中$λ_1、λ_2、λ_3和λ_4$是超参数。</p>
+<p>​		<strong>去影损失</strong>定义为<strong>视觉一致性损失和感知一致性损失</strong>，即：<br>
+$$<br>
+L_{rem} = L_{vis} + β_1L_{percept},\ \ \ \ (6)<br>
+$$<br>
+​		其中$β$是权重参数。$L_{vis}$是<strong>用于去影生成器的视觉一致性损失</strong>，计算方法是使用去影结果与地面真实之间的L-1范数，而$L_{percept}$是旨在<strong>保留图像结构的感知一致性损失</strong>。具体来说，<br>
+$$<br>
+L_{vis} = ||I^{gt} − I_{fine}||<em>1 + ||I^{gt} − I</em>{coarse}||<em>1,\ \ \ \ (7)\<br>
+L</em>{percept} = ||VGG(I^{gt}) − VGG(I_{fine}))||<em>2^2 + ||VGG(I^{gt}) − VGG(I</em>{coarse}))||_2^2,\ \ \ \ (8)<br>
+$$<br>
+​		其中$VGG(·)$是来自VGG19模型的<strong>特征提取器</strong>。</p>
+<p>​		<strong>残影损失</strong>可以被看作是<strong>阴影区域中的遮挡亮度</strong>，即：<br>
+$$<br>
+L_{res} = ||I_{res}^{gt} − G_{res}(I)||<em>1,\ \ \ \ (9)<br>
+$$<br>
+​		<strong>光照损失</strong>计算了由$G</em>{illum}$生成的光照结果与地面真实反向光照图$S_{inv}^{gt}$之间的L-1范数。然后，光照分支的光照损失可以表示为：<br>
+$$<br>
+L_{illum} = ||S_{inv}^{gt} − G_{illum}(I)||<em>1,\ \ \ \ (10)<br>
+$$<br>
+​		<strong>交叉损失</strong>旨在确保残影、光照和阴影信息之间的<strong>一致性和相关性</strong>，具体为：<br>
+$$<br>
+L</em>{cross} = ||I^{gt} − (G_{res}(I)⊕I)||<em>1 + β_2||I^{gt}−(G</em>{illum}(I)⊗I)||<em>1,\ \ \ \ (11)<br>
+$$<br>
+​		对抗损失$L</em>{adv}$是网络的<strong>联合对抗损失</strong>，描述如下：</p>
+<p>$$<br>
+\begin{align}<br>
+L_{adv} =\  &amp; E_{(I,I^{gt},I_{res}^{gt},S_{inv}^{gt})}[log(D_{ref}(I^{gt})) \ +\ &amp;log(1 − D_{ref}(G_{ref}(G_{res}(I), G_{rem}(I), G_{illum}(I))))+log(D_{res}(I_{res}^{gt})) \ +\ &amp; log(1 − D_{res}(G_{res}(I)))+log(D_{illum}(S_{inv}^{gt})) \ +\ &amp; log(1 − D_{illum}(G_{illum}(I)))]\ \ \ \ (12)<br>
+\end{align}<br>
+$$<br>
+​		其中$D_{res},\ D_{ref}和D_{illum}$是三个鉴别器。</p>
 <p>​		总体来说，我们的培训任务目标是<strong>解决一个极小极大问题</strong>，旨在找到我们网络的生成器和鉴别器之间的<strong>鞍点</strong>。</p>
-<h2 id="实现细节"><a href="#实现细节" class="headerlink" title="实现细节"></a>实现细节</h2><p>​		我们提出的方法是在一台配备Intel(R) Xeon(R) Silver 4114 CPU @2.20GHz、192GB RAM和NVIDIA GeForce GTX 1080Ti的计算机上使用<strong>Tensorflow</strong>实现的。在我们的实验中，图像的输入尺寸为256×256。学习率的值设置为0.001。在我们的实验中，参数$λ_1、λ_2、λ_3、λ_4、β_1和β_2$分别设置为10、100、1、1、0.1和0.2。小批量大小为2。初始学习率设置为0.001。我们使用动量优化器来优化生成器，使用Adam优化器来优化鉴别器。我们交替训练生成器和鉴别器，共进行10,000个epochs。</p>
-<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>​		为验证我们提出的RIS-GAN的有效性，我们在<strong>SRD数据集</strong>（Qu等，2017）和<strong>ISTD数据集</strong>（Wang等，2018a）上进行了各种实验。SRD数据集包含408对公开可用的阴影和去阴影图像。ISTD数据集包含1870个图像三元组，包括阴影图像、阴影蒙版和无阴影图像。这个数据集包含135种不同的模拟阴影环境，场景非常多样化。这两个数据集都包含各种类型的阴影场景。在本文中，我们使用ISTD数据集中的1330对阴影和去阴影图像进行训练，使用其余的540对图像进行测试。我们还使用训练好的RIS-GAN模型在SRD数据集上进行评估。</p>
-<p>​		关于度量标准，我们使用<strong>Lab空间中的均方根误差（RMSE）</strong>来评估恢复的去影图像与地面真实去影图像之间的阴影去除性能。我们还进行了用户研究，进行全面评估。</p>
-<p><img src="D:\Typora_picture\DIP\image-20231028154219597.png" alt="image-20231028154219597"></p>
-<p>图4：去影效果。从左到右依次是：输入图像(a)，Guo的去影结果(b)，Zhang的去影结果(c)，DeshadowNet的去影结果(d)，ST-CGAN的去影结果(e)，DSC的去影结果(f)，AngularGAN的去影结果(g)和我们的RIS-GAN的去影结果(h)，以及相应的地面真实去影图像(i)</p>
-<h2 id="与现有方法的比较"><a href="#与现有方法的比较" class="headerlink" title="与现有方法的比较"></a>与现有方法的比较</h2><p>​		我们将我们的RIS-GAN与<strong>现有最先进的方法</strong>进行比较，包括两种<strong>传统方法</strong>，即Guo（Guo, Dai,和Hoiem，2011）和Zhang（Zhang, Zhang,和Xiao，2015），以及最近的基于学习的方法，即DeshadowNet（Qu等，2017），DSC（Hu等，2018），ST-CGAN（Wang等，2018a）和AngularGAN（Sidorov，2019）。需要注意的是，阴影去除作用在像素上，恢复像素的值，因此我们添加了<strong>两个框架</strong>，即全局&#x2F;局部-GAN（Iizuka, Simo-Serra,和Ishikawa，2017）用于图像修复和Pix2Pix-HD（Wang等，2018b）用于图像转换，作为另外两个阴影去除的基线方法，以进行充分验证。为了进行公平比较，我们使用<strong>相同的训练数据和相同的图像输入尺寸</strong>（256×256）在相同的硬件上训练所有基于学习的方法。</p>
+<h2 id="实现细节">实现细节</h2>
+<p>​		我们提出的方法是在一台配备Intel® Xeon® Silver 4114 CPU @2.20GHz、192GB RAM和NVIDIA GeForce GTX 1080Ti的计算机上使用<strong>Tensorflow</strong>实现的。在我们的实验中，图像的输入尺寸为256×256。学习率的值设置为0.001。在我们的实验中，参数$λ_1、λ_2、λ_3、λ_4、β_1和β_2$分别设置为10、100、1、1、0.1和0.2。小批量大小为2。初始学习率设置为0.001。我们使用动量优化器来优化生成器，使用Adam优化器来优化鉴别器。我们交替训练生成器和鉴别器，共进行10,000个epochs。</p>
+<h2 id="实验">实验</h2>
+<p>​		为验证我们提出的RIS-GAN的有效性，我们在<strong>SRD数据集</strong>（Qu等，2017）和<strong>ISTD数据集</strong>（Wang等，2018a）上进行了各种实验。SRD数据集包含408对公开可用的阴影和去阴影图像。ISTD数据集包含1870个图像三元组，包括阴影图像、阴影蒙版和无阴影图像。这个数据集包含135种不同的模拟阴影环境，场景非常多样化。这两个数据集都包含各种类型的阴影场景。在本文中，我们使用ISTD数据集中的1330对阴影和去阴影图像进行训练，使用其余的540对图像进行测试。我们还使用训练好的RIS-GAN模型在SRD数据集上进行评估。</p>
+<p>​		关于度量标准，我们使用**Lab空间中的均方根误差（RMSE）**来评估恢复的去影图像与地面真实去影图像之间的阴影去除性能。我们还进行了用户研究，进行全面评估。</p>
+<p><img src="D:%5CTypora_picture%5CDIP%5Cimage-20231028154219597.png" alt="image-20231028154219597"></p>
+<p>图4：去影效果。从左到右依次是：输入图像(a)，Guo的去影结果(b)，Zhang的去影结果©，DeshadowNet的去影结果(d)，ST-CGAN的去影结果(e)，DSC的去影结果(f)，AngularGAN的去影结果(g)和我们的RIS-GAN的去影结果(h)，以及相应的地面真实去影图像(i)</p>
+<h2 id="与现有方法的比较">与现有方法的比较</h2>
+<p>​		我们将我们的RIS-GAN与<strong>现有最先进的方法</strong>进行比较，包括两种<strong>传统方法</strong>，即Guo（Guo, Dai,和Hoiem，2011）和Zhang（Zhang, Zhang,和Xiao，2015），以及最近的基于学习的方法，即DeshadowNet（Qu等，2017），DSC（Hu等，2018），ST-CGAN（Wang等，2018a）和AngularGAN（Sidorov，2019）。需要注意的是，阴影去除作用在像素上，恢复像素的值，因此我们添加了<strong>两个框架</strong>，即全局/局部-GAN（Iizuka, Simo-Serra,和Ishikawa，2017）用于图像修复和Pix2Pix-HD（Wang等，2018b）用于图像转换，作为另外两个阴影去除的基线方法，以进行充分验证。为了进行公平比较，我们使用<strong>相同的训练数据和相同的图像输入尺寸</strong>（256×256）在相同的硬件上训练所有基于学习的方法。</p>
 <p>​		我们总结了比较结果如表1和表2所示。从表中可以看出，在所有竞争方法中，尽管我们的生成器中没有设计特定的阴影感知组件，但我们提出的RIS-GAN在这两个数据集上的阴影区域、非阴影区域和整个图像中<strong>都取得了最佳的RMSE值</strong>。这表明，我们的RIS-GAN生成的去影图像更接近相应的地面真实去影图像。我们的RIS-GAN与最先进的深度学习之间的主要区别是，探索残影和光照在去影任务中表现出了巨大的优势。</p>
 <p>表1：使用RMSE指标在SRD数据集上进行的阴影去除的定量比较结果（数值越小越好）。S、N和A分别代表阴影区域、非阴影区域和整个图像。</p>
-<p><img src="D:\Typora_picture\DIP\image-20231028154925114.png" alt="image-20231028154925114"></p>
+<p><img src="D:%5CTypora_picture%5CDIP%5Cimage-20231028154925114.png" alt="image-20231028154925114"></p>
 <p>表2：在ISTD数据集上进行的阴影去除的RMSE定量比较结果。</p>
-<p><img src="D:\Typora_picture\DIP\image-20231028154937955.png" alt="image-20231028154937955"></p>
-<p>​		为了进一步解释我们提出的RIS-GAN的卓越性能，我们在<strong>图4</strong>中提供了一些可视化结果，涵盖了用于阴影去除的传统方法和基于学习的方法。正如我们在图4(b)中所看到的，Guo可以恢复阴影区域的光照，但对于具有不同纹理的阴影区域的图像，可能会产生不自然的阴影去除结果。Zhang不能很好地处理阴影边界的光照变化，因此恢复的去阴影图像存在边界问题，例如颜色失真或纹理丢失，如图4(c)所示。与这两种传统方法相比，我们提出的RIS-GAN<strong>不仅有效地恢复了阴影区域的光照，还重建了阴影边界的光照和纹理</strong>，如图4(h)所示。<br>​		至于最近的深度学习方法，DeshadowNet、ST-CGAN和DSC从颜色空间方面处理图像，而没有考虑光照方面的因素。这可能会导致不满意的阴影去除结果，如颜色失真或不完整的阴影去除，如图4(d-f)所示。AngularGAN引入了一个基于光照考虑的角度损失，使非阴影区域的光照非常接近相应的地面真实无阴影图像。值得注意的是，光照没有很好地纳入到去阴影图像的恢复中，这导致了阴影区域和非阴影区域之间的一些不一致，如图4(g)所示。相反，我们的RIS-GAN考虑了负残差图像和逆光照图，可以有效去除阴影，并为简单和复杂场景图像产生良好的结果。<strong>阴影区域中恢复的光照与周围环境一致，阴影区域的纹理细节得到了良好的保留</strong>，如图4(h)所示。<br>​		为了进一步验证我们提出的RIS-GAN在复杂场景中的稳健性和潜力，我们收集了一些现实生活中的阴影图像进行实验，并在图5中报告。显然，我们提出的RIS-GAN恢复的去影图像<strong>看起来更真实，几乎没有伪影</strong>。这一观察结果证明了我们的RIS-GAN在复杂场景中的稳健性。</p>
-<p><img src="D:\Typora_picture\DIP\image-20231028155126659.png" alt="image-20231028155126659"></p>
-<p>图5：阴影去除结果。从左到右依次为：输入图像(a)；Guo的阴影去除结果(b)、Zhang的阴影去除结果(c)、DeshadowNet的阴影去除结果(d)、ST-CGAN的阴影去除结果(e)、DSC的阴影去除结果(f)和AngularGAN的阴影去除结果(g)、以及我们的RIS-GAN的阴影去除结果(h)。</p>
+<p><img src="D:%5CTypora_picture%5CDIP%5Cimage-20231028154937955.png" alt="image-20231028154937955"></p>
+<p>​		为了进一步解释我们提出的RIS-GAN的卓越性能，我们在<strong>图4</strong>中提供了一些可视化结果，涵盖了用于阴影去除的传统方法和基于学习的方法。正如我们在图4(b)中所看到的，Guo可以恢复阴影区域的光照，但对于具有不同纹理的阴影区域的图像，可能会产生不自然的阴影去除结果。Zhang不能很好地处理阴影边界的光照变化，因此恢复的去阴影图像存在边界问题，例如颜色失真或纹理丢失，如图4©所示。与这两种传统方法相比，我们提出的RIS-GAN<strong>不仅有效地恢复了阴影区域的光照，还重建了阴影边界的光照和纹理</strong>，如图4(h)所示。<br>
+​		至于最近的深度学习方法，DeshadowNet、ST-CGAN和DSC从颜色空间方面处理图像，而没有考虑光照方面的因素。这可能会导致不满意的阴影去除结果，如颜色失真或不完整的阴影去除，如图4(d-f)所示。AngularGAN引入了一个基于光照考虑的角度损失，使非阴影区域的光照非常接近相应的地面真实无阴影图像。值得注意的是，光照没有很好地纳入到去阴影图像的恢复中，这导致了阴影区域和非阴影区域之间的一些不一致，如图4(g)所示。相反，我们的RIS-GAN考虑了负残差图像和逆光照图，可以有效去除阴影，并为简单和复杂场景图像产生良好的结果。<strong>阴影区域中恢复的光照与周围环境一致，阴影区域的纹理细节得到了良好的保留</strong>，如图4(h)所示。<br>
+​		为了进一步验证我们提出的RIS-GAN在复杂场景中的稳健性和潜力，我们收集了一些现实生活中的阴影图像进行实验，并在图5中报告。显然，我们提出的RIS-GAN恢复的去影图像<strong>看起来更真实，几乎没有伪影</strong>。这一观察结果证明了我们的RIS-GAN在复杂场景中的稳健性。</p>
+<p><img src="D:%5CTypora_picture%5CDIP%5Cimage-20231028155126659.png" alt="image-20231028155126659"></p>
+<p>图5：阴影去除结果。从左到右依次为：输入图像(a)；Guo的阴影去除结果(b)、Zhang的阴影去除结果©、DeshadowNet的阴影去除结果(d)、ST-CGAN的阴影去除结果(e)、DSC的阴影去除结果(f)和AngularGAN的阴影去除结果(g)、以及我们的RIS-GAN的阴影去除结果(h)。</p>
 <p>​		我们进行了一项<strong>用户研究</strong>，共有100名随机志愿者参与，以评估我们提出的RIS-GAN和其他一些阴影去除方法的视觉表现。我们准备了300组图像，每组包含使用RIS-GAN、DeshodowNet、ST-CGAN、DSC和AgularGAN等方法生成的五种阴影去除结果。对于每位志愿者，我们随机展示给他们20组图像，让他们选择每组中哪张阴影去除图像看起来最自然。然后总共会有2000个选择结果。统计所有结果后，我们发现由我们的RIS-GAN生成的阴影去除图像中，有**29.65%**被选为最自然的阴影去除结果，而Deshodow、ST-CGAN、DSC和AgularGAN的阴影去除结果分别被选为最自然的结果的比例为14.85%、19.55%、20.35%和15.60%。</p>
-<h2 id="消融实验"><a href="#消融实验" class="headerlink" title="消融实验"></a>消融实验</h2><p>​		在深入评估我们提出的RIS-GAN的一些组件时，我们设计了以下一系列变体：</p>
+<h2 id="消融实验">消融实验</h2>
+<p>​		在深入评估我们提出的RIS-GAN的一些组件时，我们设计了以下一系列变体：</p>
 <ul>
 <li>BASE：将输入的阴影图像作为阴影去除的结果</li>
 <li>R-GAN：仅使用$G_{res}$，并将$I_{rem}^1$ 作为阴影去除的结果</li>
@@ -183,28 +232,32 @@
 <p>​	（2）来自残差生成器的负残差图像和反向光照图可以帮助提高阴影去除精细化的性能，它们的结合导致了最佳性能；</p>
 <p>​	（3）损失函数$L_{adv}$和$L_{cross}$对于确保高质量的阴影去除结果是必要的，这清楚地展示了联合鉴别器和三个输出之间的交叉学习的优势。</p>
 <p>​		我们还在图6中提供了可视化结果，从中我们可以清楚地看到我们的RIS-GAN恢复了阴影去除区域的最佳细节，看起来更加逼真。</p>
-<p><img src="D:\Typora_picture\DIP\image-20231028155948183.png" alt="image-20231028155948183"></p>
-<p>图6：阴影去除结果。从左到右依次为：输入图像(a)；R-GAN的阴影去除结果(b)；S-GAN的阴影去除结果(c)；I-GAN的阴影去除结果(d)；RS-GAN的阴影去除结果(e)；IS-GAN的阴影去除结果(f)；RIS-GAN1的阴影去除结果(g)；RIS-GAN2的阴影去除结果(h)；以及RIS-GAN的阴影去除结果(i)。</p>
+<p><img src="D:%5CTypora_picture%5CDIP%5Cimage-20231028155948183.png" alt="image-20231028155948183"></p>
+<p>图6：阴影去除结果。从左到右依次为：输入图像(a)；R-GAN的阴影去除结果(b)；S-GAN的阴影去除结果©；I-GAN的阴影去除结果(d)；RS-GAN的阴影去除结果(e)；IS-GAN的阴影去除结果(f)；RIS-GAN1的阴影去除结果(g)；RIS-GAN2的阴影去除结果(h)；以及RIS-GAN的阴影去除结果(i)。</p>
 <p>表3：使用RMSE量化的在SRD和ISTD数据集上的消融研究阴影去除结果。</p>
-<p><img src="D:\Typora_picture\DIP\image-20231028160052648.png" alt="image-20231028160052648"></p>
-<p><img src="D:\Typora_picture\DIP\image-20231028160127001.png" alt="image-20231028160127001"></p>
+<p><img src="D:%5CTypora_picture%5CDIP%5Cimage-20231028160052648.png" alt="image-20231028160052648"></p>
+<p><img src="D:%5CTypora_picture%5CDIP%5Cimage-20231028160127001.png" alt="image-20231028160127001"></p>
 <p>图7：检测结果的可视化。从左到右依次是输入图像、负残差图像、反向照明图、基于探测到的负残差图像和反向照明图的预测阴影蒙版，以及地面真相阴影蒙版。</p>
-<h2 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h2><p>​		为了更好地探索我们提出的RIS-GAN的潜力，我们还可视化了<strong>阴影检测蒙版</strong>，并将当前方法扩展到视频阴影去除。</p>
+<h2 id="讨论">讨论</h2>
+<p>​		为了更好地探索我们提出的RIS-GAN的潜力，我们还可视化了<strong>阴影检测蒙版</strong>，并将当前方法扩展到视频阴影去除。</p>
 <p>​		<strong>阴影检测</strong>。尽管我们的重点是阴影去除而不是检测，但我们的RIS-GAN也可以基于负残差图像和反向照明图来获取阴影检测蒙版。图7展示了令人期待的检测结果。我们观察到，生成的负残差图像和反向照明图有效地区分了阴影和非阴影区域。</p>
 <p>​		<strong>扩展到视频</strong>。我们将我们的RIS-GAN应用于处理阴影视频，通过按顺序处理每个帧。图8展示了每100毫秒提取的帧的阴影去除结果。从这个图中我们可以看到，直接将图像级阴影去除方法应用于视频的视频阴影去除结果还不够好，仍有改进的空间。</p>
-<p><img src="D:\Typora_picture\DIP\image-20231028160327746.png" alt="image-20231028160327746"></p>
+<p><img src="D:%5CTypora_picture%5CDIP%5Cimage-20231028160327746.png" alt="image-20231028160327746"></p>
 <p>图8: 视频中的阴影去除结果可视化。请注意，每100毫秒提取一帧。</p>
 <p>​		此外，尽管我们提出的RIS-GAN框架是为了阴影去除而设计的，但它不仅限于仅用于阴影去除。它很容易扩展并应用于一般的图像级应用，如去雨、图像去雾、本征图像分解，以及其他图像风格转换任务。</p>
-<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>​		在本文中，我们提出了一种通用而新颖的框架RIS-GAN，用于探索阴影去除的残差和光照。在统一的端到端框架下，充分探讨了残差、光照和阴影之间的相关性。通过估计的负残差图像和逆光照图纳入阴影细化，我们能够获取补充的输入来源，生成高质量的阴影去除图像。大量实验证明了结合残差和光照进行阴影去除的优势。</p>
+<h2 id="结论">结论</h2>
+<p>​		在本文中，我们提出了一种通用而新颖的框架RIS-GAN，用于探索阴影去除的残差和光照。在统一的端到端框架下，充分探讨了残差、光照和阴影之间的相关性。通过估计的负残差图像和逆光照图纳入阴影细化，我们能够获取补充的输入来源，生成高质量的阴影去除图像。大量实验证明了结合残差和光照进行阴影去除的优势。</p>
 <p>​		我们未来的工作包括将当前工作扩展到视频级别的阴影去除，并将探索的残差和光照应用于解决真正具有挑战性的视觉问题，如图像照明增强。</p>
-<h2 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h2><p>​		这项工作得到了湖北省重大技术创新项目（2018AAA062）、国家自然科学基金（No.61672390、No.61972298、NO.61902286、No.61972299、No.U1803262）、国家重点研发计划（2017YF-B1002600）、中国博士后科学基金（No. 070307）以及小米公司与武汉大学联合实验室基金的部分支持。</p>
+<h2 id="致谢">致谢</h2>
+<p>​		这项工作得到了湖北省重大技术创新项目（2018AAA062）、国家自然科学基金（No.61672390、No.61972298、NO.61902286、No.61972299、No.U1803262）、国家重点研发计划（2017YF-B1002600）、中国博士后科学基金（No. 070307）以及小米公司与武汉大学联合实验室基金的部分支持。</p>
 <p>​		Chunxia Xiao是通讯作者。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>略</p>
+<h2 id="参考文献">参考文献</h2>
+<p>略</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/12/14/DIP/" data-id="clq4z4tib0001hsu83910fee4" data-title="Digital Image Processing" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://example.com/2023/12/14/DIP/" data-id="clq69umt80001swu89p699w6n" data-title="Digital Image Processing" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
