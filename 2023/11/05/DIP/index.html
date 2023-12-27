@@ -19,12 +19,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="在图像增强领域中,残影图像和光照估计已被证明非常有帮助。在本文中，我们提出了一个通用而新颖的框架RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像...">
+    <meta name="description" content="在图像增强领域中,残影图像和光照估计已被证明非常有帮助。本文提出了一个通用而新颖的框架RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="文献研读:《RIS-GAN：利用生成对抗网络探索残影和光照的去影技术》">
 <meta property="og:url" content="http://example.com/2023/11/05/DIP/index.html">
 <meta property="og:site_name" content="Methods for DIP">
-<meta property="og:description" content="在图像增强领域中,残影图像和光照估计已被证明非常有帮助。在本文中，我们提出了一个通用而新颖的框架RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像...">
+<meta property="og:description" content="在图像增强领域中,残影图像和光照估计已被证明非常有帮助。本文提出了一个通用而新颖的框架RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像...">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/images/gan_training_animation.gif">
 <meta property="og:image" content="http://example.com/images/image-20231028141106817.png">
@@ -39,7 +39,7 @@
 <meta property="og:image" content="http://example.com/images/image-20231028160127001.png">
 <meta property="og:image" content="http://example.com/images/image-20231028160327746.png">
 <meta property="article:published_time" content="2023-11-05T09:03:07.000Z">
-<meta property="article:modified_time" content="2023-12-27T02:47:32.666Z">
+<meta property="article:modified_time" content="2023-12-27T02:49:24.228Z">
 <meta property="article:author" content="ZhangChengWei">
 <meta property="article:tag" content="ShadowRemoval">
 <meta property="article:tag" content="GAN">
@@ -190,7 +190,7 @@
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="文献研读:《RIS-GAN：利用生成对抗网络探索残影和光照的去影技术》 | Methods for DIP">
-      <meta itemprop="description" content="在图像增强领域中,残影图像和光照估计已被证明非常有帮助。在本文中，我们提出了一个通用而新颖的框架RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像...">
+      <meta itemprop="description" content="在图像增强领域中,残影图像和光照估计已被证明非常有帮助。本文提出了一个通用而新颖的框架RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像...">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -212,7 +212,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-12-27 10:47:32" itemprop="dateModified" datetime="2023-12-27T10:47:32+08:00">2023-12-27</time>
+      <time title="修改时间：2023-12-27 10:49:24" itemprop="dateModified" datetime="2023-12-27T10:49:24+08:00">2023-12-27</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -227,7 +227,7 @@
   
 </div>
 
-            <div class="post-description">在图像增强领域中,残影图像和光照估计已被证明非常有帮助。在本文中，我们提出了一个通用而新颖的框架RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像...</div>
+            <div class="post-description">在图像增强领域中,残影图像和光照估计已被证明非常有帮助。本文提出了一个通用而新颖的框架RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像...</div>
         </div>
       </header>
 
