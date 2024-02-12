@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="语法分析是编译过程的一个逻辑阶段。语法分析的任务是在词法分析的基础上将单词序列组合成各类语法短语，如“程序”，“语句”，“表达式”等等，语法分析程序判断源程序在结构上是否正确，源程序的结构由上下文无关文法描述....">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译原理3：语法分析">
+<meta property="og:url" content="http://example.com/2023/09/25/CF_3/index.html">
+<meta property="og:site_name" content="Methods for DIP">
+<meta property="og:description" content="语法分析是编译过程的一个逻辑阶段。语法分析的任务是在词法分析的基础上将单词序列组合成各类语法短语，如“程序”，“语句”，“表达式”等等，语法分析程序判断源程序在结构上是否正确，源程序的结构由上下文无关文法描述....">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/48c2199598949353ab1ee6d3760d5bd.png">
+<meta property="og:image" content="http://example.com/images/1697094343848.jpg">
+<meta property="og:image" content="http://example.com/images/907ae7231e12edc569aa6583539c3de.png">
+<meta property="og:image" content="http://example.com/images/1697094505776.jpg">
+<meta property="og:image" content="http://example.com/images/image-20231225170330842.png">
+<meta property="og:image" content="http://example.com/images/image-20231225171040236.png">
+<meta property="og:image" content="http://example.com/images/image-20231225170916942.png">
+<meta property="og:image" content="http://example.com/images/1697094629495.jpg">
+<meta property="og:image" content="http://example.com/images/1697094713205.jpg">
+<meta property="og:image" content="http://example.com/images/image-20231225171226509.png">
+<meta property="og:image" content="http://example.com/images/1697094729000.jpg">
+<meta property="og:image" content="http://example.com/images/image-20231225171544811.png">
+<meta property="og:image" content="d:\Typora_picture\1697094805833.jpg">
+<meta property="og:image" content="d:\Typora_picture\1697094828282.jpg">
+<meta property="og:image" content="http://example.com/images/image-20231225172204357.png">
+<meta property="og:image" content="d:\Typora_picture\1697094935922.jpg">
+<meta property="og:image" content="d:\Typora_picture\1697095003731.jpg">
+<meta property="og:image" content="d:\Typora_picture\1697095088924.jpg">
+<meta property="og:image" content="http://example.com/images/image-20231225190325117.png">
+<meta property="og:image" content="http://example.com/images/image-20231221214835203.png">
+<meta property="og:image" content="d:\Typora_picture\1697095153948.jpg">
+<meta property="og:image" content="http://example.com/images/image-20231225192226470.png">
+<meta property="og:image" content="http://example.com/images/1697096167034.jpg">
+<meta property="og:image" content="http://example.com/images/image-20231012153644474.png">
+<meta property="og:image" content="http://example.com/images/image-20231225201123239.png">
+<meta property="og:image" content="d:\Typora_picture\1697096505800.jpg">
+<meta property="og:image" content="d:\Typora_picture\1697096541641.jpg">
+<meta property="og:image" content="http://example.com/images/image-20231225201836213.png">
+<meta property="og:image" content="http://example.com/images/image-20231225203823822.png">
+<meta property="og:image" content="http://example.com/images/image-20231225203859468.png">
+<meta property="og:image" content="http://example.com/images/image-20231225204124135.png">
+<meta property="og:image" content="http://example.com/images/image-20231225204311159.png">
+<meta property="og:image" content="http://example.com/images/image-20231225205608369.png">
+<meta property="og:image" content="d:\Typora_picture\1697097423695.jpg">
+<meta property="og:image" content="http://example.com/images/image-20231225210050155.png">
+<meta property="og:image" content="http://example.com/images/image-20231225210528072.png">
+<meta property="og:image" content="http://example.com/images/image-20231225210657269.png">
+<meta property="article:published_time" content="2023-09-25T09:03:07.000Z">
+<meta property="article:modified_time" content="2024-02-12T14:27:24.550Z">
+<meta property="article:author" content="ZhangChengWei">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/48c2199598949353ab1ee6d3760d5bd.png">
+
+
+<link rel="canonical" href="http://example.com/2023/09/25/CF_3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/09/25/CF_3/","path":"2023/09/25/CF_3/","title":"编译原理3：语法分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>编译原理3：语法分析 | Methods for DIP</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Methods for DIP</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">By ZhangCW & WeiGP & JiangT</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">语法分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E4%BD%9C%E7%94%A8"><span class="nav-text">语法分析作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8"><span class="nav-text">语法分析器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BD%9C%E7%94%A8"><span class="nav-text">基本作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-text">分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E6%97%A0%E5%85%B3%E6%96%87%E6%B3%95CFG-BNF"><span class="nav-text">上下文无关文法CFG&#x2F;BNF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E6%A6%82%E8%BF%B0"><span class="nav-text">总体概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%A6%E5%8F%B7%E8%A1%A8%E7%A4%BA%E7%9A%84%E7%BA%A6%E5%AE%9A"><span class="nav-text">符号表示的约定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E6%97%A0%E5%85%B3%E6%96%87%E6%B3%95%E7%9A%84%E6%8E%A8%E5%AF%BC"><span class="nav-text">上下文无关文法的推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E6%9C%AF%E8%AF%AD"><span class="nav-text">重要术语</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E6%96%87%E6%B3%95%E5%BC%80%E5%A7%8B%E7%AC%A6%E5%8F%B7S-%E6%8E%A8%E5%AF%BC-%E5%87%BA%E8%AF%8D%E4%B8%B2w%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="nav-text">从文法开始符号S 推导 出词串w的过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A8%E5%AF%BC"><span class="nav-text">推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%B7%A6%E6%8E%A8%E5%AF%BC-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B"><span class="nav-text">最左推导(自顶向下)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%8F%B3%E6%8E%A8%E5%AF%BC-%E8%87%AA%E5%BA%95%E5%90%91%E4%B8%8A"><span class="nav-text">最右推导(自底向上)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E6%A0%91"><span class="nav-text">语法分析树</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%96%87%E6%B3%95"><span class="nav-text">设计文法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-text">词法分析与语法分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B"><span class="nav-text">语法分析技术-自顶向下</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E8%BE%93%E5%85%A5%E4%B8%B2%E6%9E%84%E9%80%A0%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E6%A0%91"><span class="nav-text">为输入串构造语法分析树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E4%B8%8B%E9%99%8D%E7%9A%84%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-text">递归下降的语法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E9%A2%84%E6%B5%8B%E7%9A%84%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-text">基于预测的语法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E7%9A%84%E5%B1%80%E9%99%90"><span class="nav-text">自顶向下语法分析的局限</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF-%E8%87%AA%E5%BA%95%E5%90%91%E4%B8%8A"><span class="nav-text">语法分析技术-自底向上</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%BA%95%E5%90%91%E4%B8%8A%E7%9A%84%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-text">自底向上的语法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%92%E7%BA%A6"><span class="nav-text">归约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%A5%E6%9F%84"><span class="nav-text">句柄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E5%85%A5-%E5%BD%92%E7%BA%A6%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF"><span class="nav-text">移入-归约分析技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LR%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF"><span class="nav-text">LR语法分析技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LR%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-text">LR语法分析器的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LR%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E6%80%9D%E8%B7%AF"><span class="nav-text">LR语法分析思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LR-1-%E9%A1%B9%E5%92%8C%E5%8F%AF%E8%A1%8C%E5%89%8D%E7%BC%80"><span class="nav-text">LR(1)项和可行前缀</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LR-1-%E9%A1%B9%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-text">LR(1)项的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7"><span class="nav-text">语法分析器生成工具</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ZhangChengWei</p>
+  <div class="site-description" itemprop="description">paper analysis</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/25/CF_3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Methods for DIP">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="编译原理3：语法分析 | Methods for DIP">
+      <meta itemprop="description" content="语法分析是编译过程的一个逻辑阶段。语法分析的任务是在词法分析的基础上将单词序列组合成各类语法短语，如“程序”，“语句”，“表达式”等等，语法分析程序判断源程序在结构上是否正确，源程序的结构由上下文无关文法描述....">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          编译原理3：语法分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-09-25 17:03:07" itemprop="dateCreated datePublished" datetime="2023-09-25T17:03:07+08:00">2023-09-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-12 22:27:24" itemprop="dateModified" datetime="2024-02-12T22:27:24+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CF/" itemprop="url" rel="index"><span itemprop="name">CF</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">语法分析是编译过程的一个逻辑阶段。语法分析的任务是在词法分析的基础上将单词序列组合成各类语法短语，如“程序”，“语句”，“表达式”等等，语法分析程序判断源程序在结构上是否正确，源程序的结构由上下文无关文法描述....</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1>语法分析</h1>
+<h2 id="语法分析作用">语法分析作用</h2>
+<ul>
+<li>
+<p>语法分析器从词法分析器输出的<strong>token序列</strong>中识别出各类<strong>短语</strong>，并<strong>构造语法分析树</strong></p>
+</li>
+<li>
+<p>语法分析树描述了句子的<strong>语法结构</strong></p>
+</li>
+</ul>
+<img src="/images/48c2199598949353ab1ee6d3760d5bd.png" alt="48c2199598949353ab1ee6d3760d5bd" style="zoom: 30%;" />
+<h2 id="语法分析器">语法分析器</h2>
+<h3 id="基本作用">基本作用</h3>
+<img src="/images/1697094343848.jpg" alt="1697094343848" style="zoom:50%;" />
+<ul>
+<li>
+<p>从词法分析器获得<strong>词法单元的序列</strong>，确认该序列是否可以由语言的文法生成</p>
+</li>
+<li>
+<p>对于语法错误的程序，<strong>报告错误</strong>信息</p>
+</li>
+<li>
+<p>对于语法正确的程序，生成<strong>语法分析树</strong> (简称语法树)(通常产生抽象语法树(AST))</p>
+</li>
+</ul>
+<h3 id="分类">分类</h3>
+<ul>
+<li>
+<p>通用的</p>
+<ul>
+<li>
+<p>对任意文法做语法分析</p>
+</li>
+<li>
+<p>效率很低</p>
+</li>
+<li>
+<p>不能用于编译器产品</p>
+</li>
+</ul>
+</li>
+<li>
+<p>非通用的（专用）</p>
+<ul>
+<li>
+<p>自顶向下：从顶（根节点）向底部（叶子）构造语法分析树</p>
+</li>
+<li>
+<p>自底向上：从叶子逐渐向根节点构造语法分析树</p>
+</li>
+<li>
+<p>只能处理某些文法子类，但已经足够描述现代编程语言的大部分语法</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="上下文无关文法CFG-BNF">上下文无关文法CFG/BNF</h2>
+<h3 id="总体概述">总体概述</h3>
+<img src="/images/907ae7231e12edc569aa6583539c3de.png" alt="907ae7231e12edc569aa6583539c3de" style="zoom: 20%;" />
+<p>程序设计语言构造的语法可使用上下文无关文法或BNF表示法来描述</p>
+<ul>
+<li>
+<p>文法可给出精确易懂的语法规则</p>
+</li>
+<li>
+<p>可以自动构造出某些类型的文法的语法分析器</p>
+</li>
+<li>
+<p>文法指出了语言的结构，有助于进一步的语义处理/代码生成</p>
+</li>
+<li>
+<p>支持语言的演化和迭代</p>
+</li>
+</ul>
+<p><strong>上下文无关文法定义</strong></p>
+<ul>
+<li>
+<p><strong>终结符号</strong>：组成串的基本符号(词法单元名字)(语法树的叶子节点)</p>
+<p>​					一般就是<strong>不在产生式头的符号</strong>。</p>
+</li>
+<li>
+<p><strong>非终结符号</strong>：表示串的集合的语法变量，一般就是<strong>各产生式头</strong>的符号。</p>
+<ul>
+<li>
+<p>在程序设计语言中通常对应于某个程序构造，比如stmt (语句)</p>
+</li>
+<li>
+<p>给出语言的层次结构，是语法分析和翻译的关键</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>产生式</strong>：<br>
+描述将终结符号和非终结符号组成串的方法</p>
+<ul>
+<li>
+<p>形式：头(左)部 → 体(右)部</p>
+<ul>
+<li>如：expression → expression + term</li>
+</ul>
+</li>
+<li>
+<p><strong>头部是一个非终结符号</strong>，右部是一个<strong>符号串</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>起始符号</strong>：某个被指定的非终结符号(语法树的根节点)</p>
+<ul>
+<li>起始符号对应的串的集合就是文法的语言</li>
+</ul>
+</li>
+</ul>
+<p>示例：</p>
+<ul>
+<li>终结符号： id, +, –, *, /, (, )</li>
+<li>非终结符号：expression (表达式), term (项), factor (因子)</li>
+<li>起始符号： expression</li>
+<li>产生式集合(下图)</li>
+</ul>
+<img src="/images/1697094505776.jpg" alt="1697094505776" style="zoom: 68%" />
+<img src="/images/image-20231225170330842.png" alt="image-20231225170330842" style="zoom:70%;" />
+<ul>
+<li>
+<p>文法简写(右图)</p>
+<ul>
+<li>
+<p>E：expression     T：term     F：factor</p>
+</li>
+<li>
+<p><strong>| 是元符号</strong> (文法描述中的符号，而不是文法符号)</p>
+</li>
+<li>
+<p>(  和  ) 不是元符号，而是终结符</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="符号表示的约定">符号表示的约定</h3>
+<ul>
+<li>
+<p>终结符</p>
+<ul>
+<li>
+<p>字母表<strong>排前</strong>的<strong>小写</strong>字母，如a、 b、 c</p>
+</li>
+<li>
+<p><strong>运算</strong>符号，如+、 *等</p>
+</li>
+<li>
+<p><strong>标点</strong>符号，如括号、逗号等。</p>
+</li>
+<li>
+<p>数字<strong>0-9</strong></p>
+</li>
+<li>
+<p><strong>黑体</strong>字符串，如id、 if，每个这样的字符串表示一个终结符号</p>
+</li>
+</ul>
+</li>
+<li>
+<p>非终结符</p>
+<ul>
+<li>
+<p>字母表排前的<strong>大写</strong>字母，如A、 B、 C</p>
+</li>
+<li>
+<p>字母<strong>S</strong>，通常表示开始符号</p>
+</li>
+<li>
+<p><strong>小写、斜体</strong>的名字，比如expr、 stmt</p>
+</li>
+<li>
+<p>大写字母与用于表示代表程序构造的非终结符，如E、 T、 F通常表示表达式、项、因子</p>
+</li>
+</ul>
+</li>
+<li>
+<p>文法符号(非终结符或终结符)</p>
+<ul>
+<li>字母表排后的大写字母（如X、 Y、 Z）</li>
+</ul>
+</li>
+<li>
+<p>(可能为空的)终结符号串</p>
+<ul>
+<li>字母表排后的小写字母（主要是u、 v、 …、 z）</li>
+</ul>
+</li>
+</ul>
+<h2 id="上下文无关文法的推导">上下文无关文法的推导</h2>
+<h3 id="重要术语">重要术语</h3>
+<ul>
+<li>
+<p>句型</p>
+<ul>
+<li>
+<p>若S ⇒* 𝛼(经零或多步)， 那么𝛼就是<strong>文法S的句型</strong></p>
+</li>
+<li>
+<p>可能既包含非终结符号，又包含终结符号，也可以是空串</p>
+</li>
+</ul>
+</li>
+<li>
+<p>句子</p>
+<ul>
+<li>文法的句子就是只包含<strong>终结符号</strong>/空串的句型</li>
+</ul>
+</li>
+<li>
+<p>语言</p>
+<ul>
+<li>
+<p>文法G的语言就是G的<strong>句子的集合</strong>，记为L(G)</p>
+</li>
+<li>
+<p>从文法起始符号出发，推导到的所有句子的集合</p>
+</li>
+<li>
+<p>w在L(G)中当且仅当w是G的句子</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20231225171040236.png" alt="image-20231225171040236" style="zoom: 50%;" />
+<img src="/images/image-20231225170916942.png" alt="image-20231225170916942" style="zoom:50%;" />
+<h3 id="从文法开始符号S-推导-出词串w的过程">从文法开始符号S 推导 出词串w的过程</h3>
+<ul>
+<li>
+<p>根据给定的文法，识别输入句子中的各类短语</p>
+</li>
+<li>
+<p>如果输入串的各个单词恰好自左至右地位于分析树的各个叶节点上，那么该词串就是该语言的一个句子</p>
+</li>
+</ul>
+<h3 id="推导">推导</h3>
+<ul>
+<li>
+<p>将待处理的串中的某个<strong>非终结符号</strong>替换为这个非终结符号的某个<strong>产生式的体(右部)</strong></p>
+</li>
+<li>
+<p>从<strong>起始符号</strong>出发，不断进行上面的替换，就可以得到文法的不同句型</p>
+  <img src="/images/1697094629495.jpg" alt="1697094629495" style="zoom: 33%;" />
+<ul>
+<li>“零步或多步”包括“一步”</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/1697094713205.jpg" alt="1697094713205"></p>
+<ul>
+<li>
+<p>在这个例子中，id、()是终结符，E是非终结符</p>
+<ul>
+<li>
+<p>替换当前句型中的哪个非终结符</p>
+</li>
+<li>
+<p>用该非终结符的哪个候选式进行替换</p>
+</li>
+<li>
+<p>显然，输入的<strong>短语</strong>是该语言的一个<strong>句子</strong>/<strong>句型</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="最左推导-自顶向下">最左推导(自顶向下)</h3>
+<ul>
+<li>
+<p>总是选择每个句型的<strong>最左非终结符</strong>进行替换</p>
+<ul>
+<li>是最左推导的符号<img src="/images/image-20231225171226509.png" alt="image-20231225171226509" style="zoom: 50%;float:left" /></li>
+</ul>
+</li>
+<li>
+<p>例：</p>
+<img src="/images/1697094729000.jpg" alt="1697094729000" style="zoom: 50%;" />
+</li>
+</ul>
+<h3 id="最右推导-自底向上">最右推导(自底向上)</h3>
+<ul>
+<li>总是选择每个句型的<strong>最右非终结符</strong>进行替换</li>
+</ul>
+<h3 id="语法分析树">语法分析树</h3>
+<ul>
+<li>推导的图形表示形式
+<ul>
+<li><strong>根结点</strong>的标号是文法的<strong>起始符号</strong></li>
+<li>每个叶子结点的标号是非终结符号、终结符号或ε</li>
+<li>每个内部结点的标号是非终结符号</li>
+<li>每个内部结点表示某个产生式的一次<strong>应用</strong>
+<ul>
+<li>结点的标号为产生式头，其子结点从左到右是产生式的体</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>树的<strong>叶子</strong>组成的<strong>序列</strong>是根的文法符号的一个<strong>句型</strong></li>
+<li>一棵语法分析树可对应多个推导序列
+<ul>
+<li>但只有<strong>唯一的最左推导及最右推导</strong></li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20231225171544811.png" alt="image-20231225171544811" style="zoom:50%;" />
+<h2 id="设计文法">设计文法</h2>
+<h3 id="词法分析与语法分析">词法分析与语法分析</h3>
+<img src="D:\Typora_picture\1697094805833.jpg" alt="1697094805833" style="zoom:33%;" />
+<ul>
+<li>
+<p><strong>上下文无关文法</strong>比正则表达式的能力更强</p>
+</li>
+<li>
+<p>所有的正则语言都可以使用文法描述</p>
+</li>
+<li>
+<p>但一些用文法描述的语言不能用正则表达式描述<br>
+- 有穷自动机不能无穷计数</p>
+</li>
+<li>
+<p>依旧需要正则表达式</p>
+<ul>
+<li>
+<p>正则表达式更加简洁、易于理解</p>
+</li>
+<li>
+<p>根据正则表达式自动构造的词法分析器的效率高</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>文法能够描述程序设计语言的大部分语法：</p>
+<ul>
+<li>
+<p>但不是“全部”</p>
+<ul>
+<li>如，“标识符的先声明后使用”无法用CFG描述</li>
+</ul>
+</li>
+<li>
+<p>因此语法分析器接受的语言是程序设计语言的 超集 ；必须通过 语义分析 来剔除一些符合文法、但不合法的程序</p>
+</li>
+</ul>
+<img src="D:\Typora_picture\1697094828282.jpg" alt="1697094828282" style="zoom:50%;" />
+<p>在进行高效的语法分析前，对文法的处理：</p>
+<ul>
+<li><strong>消除二义性</strong>
+<ul>
+<li>
+<p>如果一个文法可以为某个句子生成多棵语法分析树，这个文法就是二义的</p>
+</li>
+<li>
+<p>消除二义性的惯用技术： <strong>分层</strong></p>
+<ul>
+<li>
+<p>改造文法，对于引发二义性的多种推导处于文法同一层的情况，将<strong>真正想要的推导</strong>提取出来，放到<strong>更深的层次</strong></p>
+</li>
+<li>
+<p>最左推导中，更深层的非终结符总会被优先替换</p>
+</li>
+<li>
+<p>确保只有一种最左推导，消除二义性</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20231225172204357.png" alt="image-20231225172204357" style="zoom:50%;" />
+<ul>
+<li>
+<p>==<strong>消除左递归</strong>（重点）==</p>
+<ul>
+<li>左递归：文法中一个非终结符号A，对某个串α，存在一个推导 A =&gt; Aα</li>
+<li>见下</li>
+</ul>
+</li>
+<li>
+<p>提取左公因子</p>
+<ul>
+<li>将产生式体中 | 的左公因子提取出来，将其他非公因子放到更深的层次</li>
+</ul>
+</li>
+</ul>
+<h2 id="语法分析技术-自顶向下">语法分析技术-自顶向下</h2>
+<h3 id="为输入串构造语法分析树">为输入串构造语法分析树</h3>
+<img src="D:\Typora_picture\1697094935922.jpg" alt="1697094935922" style="zoom: 50%;" />
+<ul>
+<li>
+<p>从分析树的根结点（即文法的起始符号）开始，自顶向下，按照先根次序，深度<br>
+优先地创建各个结点</p>
+</li>
+<li>
+<p>对应于最左推导</p>
+</li>
+<li>
+<p>关键步骤：应用产生式创建新的子结点</p>
+</li>
+<li>
+<p>例：</p>
+<ul>
+<li>输入串: id+id，</li>
+<li>文法：<br>
+𝐸 → 𝐸 + 𝑇 | 𝑇<br>
+𝑇 → 𝑇 ∗ 𝐹 | 𝐹<br>
+𝐹 → 𝐸 | 𝐢𝐝</li>
+</ul>
+</li>
+</ul>
+<h3 id="递归下降的语法分析">递归下降的语法分析</h3>
+<ul>
+<li>
+<p>每个非终结符号对应于一个 过程/函数，该过程负责<strong>扫描此非终结符号对应的结构</strong></p>
+</li>
+<li>
+<p>程序执行从开始符号对应的过程开始</p>
+<ul>
+<li>当扫描整个输入串时宣布分析成功完成</li>
+</ul>
+</li>
+<li>
+<p>关键步骤：应用产生式</p>
+<ul>
+<li>
+<p>A -&gt; X1 | X2 | X3 … 如何知道应用哪个产生式？</p>
+</li>
+<li>
+<p>依次<strong>猜</strong>X1 、X2 、X3 …猜对结束，猜错回溯</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\1697095003731.jpg" alt="1697095003731" style="zoom: 33%;" />
+<ul>
+<li>
+<p>例：</p>
+<ul>
+<li>
+<p>文法：S -&gt; cAd 、A -&gt; ab | a<br>
+输入串：cad<br>
+证明：cAd是S的句子</p>
+</li>
+<li>
+<p>调用函数S，选择S -&gt; cAd</p>
+</li>
+<li>
+<p>输入中的c与句型中的c匹配，调用函数A</p>
+</li>
+<li>
+<p>A选择A -&gt; ab，但b不匹配</p>
+</li>
+<li>
+<p><strong>回溯并选择下一个产生式</strong>A -&gt; a，匹配，对函数A的调用返回到S的调用</p>
+</li>
+<li>
+<p>S -&gt; cAd中最后的d与下一个输入d匹配，结束</p>
+</li>
+</ul>
+</li>
+<li>
+<p>==<strong>左递归</strong>==</p>
+<ul>
+<li>
+<p>如果一个文法中有非终结符号A使得 <strong>𝐴 +⇒ 𝐴𝛼</strong>，这个文法就是左递归的</p>
+</li>
+<li>
+<p>直接左递归</p>
+<ul>
+<li>文法中存在一个形如<strong>𝐴 -&gt; 𝐴𝛼</strong>的产生式</li>
+</ul>
+</li>
+<li>
+<p>自顶向下的语法分析技术不能处理左递归的情况，因此需要消除左递归，但是自底向上的技术可以处理左递归（如 LR 算法）</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>直接左递归的消除</strong></p>
+<ul>
+<li>
+<p>==<strong>将直接左递归更换成下面形式：</strong>==</p>
+<img src="D:\Typora_picture\1697095088924.jpg" alt="1697095088924" style="zoom: 50%;" />
+<ul>
+<li>最后，成为 由A生成的串以某个<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">β_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0528em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>开头，然后跟上零个或多个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">α_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> 的形式<br>
+<img src="/images/image-20231225190325117.png" alt="image-20231225190325117" style="zoom:50%;" /></li>
+</ul>
+</li>
+<li>
+<p>示例：</p>
+<ul>
+<li>注意consume会一直消耗；注意边界判断</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20231221214835203.png" alt="image-20231221214835203" style="zoom:25%;" />
+<img src="D:\Typora_picture\1697095153948.jpg" alt="1697095153948" style="zoom:33%;" />
+<ul>
+<li>
+<p>直接左递归消除后还需要处理间接左递归</p>
+</li>
+<li>
+<p>间接左递归</p>
+<ul>
+<li>也可以消除，这里不作要求</li>
+</ul>
+</li>
+</ul>
+<h3 id="基于预测的语法分析">基于预测的语法分析</h3>
+<ul>
+<li>
+<p>为输入串构造语法分析树</p>
+<ul>
+<li>
+<p>从分析树的根结点（即文法的起始符号）开始，按照<strong>先根次序</strong>，深度优先地创建<br>
+各个结点</p>
+</li>
+<li>
+<p>对应于<strong>最左</strong>推导</p>
+</li>
+</ul>
+</li>
+<li>
+<p>基本步骤</p>
+<ul>
+<li>
+<p>确定句型中<strong>最左边的非终结符号</strong>应用哪个产生式</p>
+</li>
+<li>
+<p>然后对该产生式与输入符号进行匹配</p>
+</li>
+</ul>
+</li>
+<li>
+<p>关键步骤</p>
+<ul>
+<li>
+<p>A -&gt; X~1~ | X~2~ | X~3~ … 如何知道应用哪个产生式？</p>
+</li>
+<li>
+<p>根据<strong>下一字符</strong>，预测正确的产生式，<strong>避免回溯</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>简介</p>
+<ul>
+<li>
+<p>试图从开始符号推导出输入符号串</p>
+</li>
+<li>
+<p>每次为最左边的非终结符号选择<strong>适当</strong>的产生式</p>
+</li>
+<li>
+<p>当两个产生式具有<strong>相同前缀</strong>时</p>
+<ul>
+<li>提取公因子的文法变换</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>提取公因子的文法变换</p>
+<ul>
+<li>
+<p>输入：文法G</p>
+</li>
+<li>
+<p>输出：等价地<strong>提取了左公因子</strong>的文法</p>
+</li>
+<li>
+<p>方法：对于每个非终结符号A，找出它的两个或多个可选产生式体之间的最长公共前缀，将它们提取出来</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20231225192226470.png" alt="image-20231225192226470" style="zoom: 67%;" />
+<ul>
+<li>
+<p>==<strong>预测分析法：LL(k)</strong>==</p>
+<ul>
+<li>
+<p>LL：left-to-right从左到右扫描、left-most最左推导</p>
+</li>
+<li>
+<p>k：向前看k个符号(一般为1)</p>
+</li>
+<li>
+<p>FIRST和FOLLOW</p>
+<ul>
+<li>
+<p>简要证明</p>
+<ul>
+<li>当前句型是xAβ，输入是xa …，<br>
+选择产生式A -&gt; α的必要条件是下列之一
+<ul>
+<li>
+<p>𝛼 *⇒ 𝑎</p>
+</li>
+<li>
+<p>𝛼 *⇒ 𝜖，且β以a开头，即某个句型中a跟在A之后</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>如果按照这两个条件选择时能够保证唯一性，就可以避免回溯</p>
+</li>
+<li>
+<p>==<strong>FIRST(α)</strong>==</p>
+<ul>
+<li>
+<p>可以<strong>从α推导</strong>得到<strong>串的首符号</strong>的集合</p>
+</li>
+<li>
+<p>如果𝛼 *⇒ 𝜖，那么 𝜖 也在FIRST(α)中</p>
+</li>
+<li>
+<p>计算FIRST(X)</p>
+<ul>
+<li>
+<p>X 是<strong>终结符号</strong>，那么**添加 **X</p>
+</li>
+<li>
+<p>X 是<strong>非终结符号</strong>，且 X -&gt; Y~1~Y~2~…Y~k~ 是产生式</p>
+<ul>
+<li>
+<p>如果 a 在FIRST(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">Y_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>)中，且 ε 在FIRST(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">Y_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>), … , FIRST(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">Y_{i-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8917em;vertical-align:-0.2083em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span></span></span></span>)中，那么也添加 a</p>
+</li>
+<li>
+<p>如果 ε <strong>都</strong>在FIRST(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">Y_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>), … ,FIRST(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">Y_k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>)中，那么添加ε</p>
+</li>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">Y_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的开头一定是X的开头，除非<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">Y_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>为空，此时<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">Y_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的开头一定是X的开头，以此类推……</p>
+</li>
+</ul>
+</li>
+<li>
+<p>X是非终结符号且X -&gt; ε，那么也添加ε</p>
+</li>
+</ul>
+</li>
+<li>
+<p>计算FIRST(X~1~X~2~…X~n~)</p>
+<ul>
+<li>
+<p>加入FIRST(X~1~)中所有<strong>非ε符号</strong></p>
+</li>
+<li>
+<p>若<strong>ε在</strong>FIRST(X~1~)中，加入FIRST(<strong>X~2~</strong>)中所有<strong>非ε</strong>符号</p>
+</li>
+<li>
+<p>若ε在<strong>所有</strong>FIRST(X~i~)中，也<strong>加入ε</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>==<strong>FOLLOW(A)</strong>==</p>
+<ul>
+<li>
+<p>可能在某些句型中<strong>紧跟在A右边</strong>的<strong>终结符号</strong>的集合</p>
+<ul>
+<li>例如：S -&gt; αAaβ，终结符号a ∈ FOLLOW(A)</li>
+</ul>
+</li>
+<li>
+<p>FOLLOW函数的意义</p>
+<ul>
+<li>
+<p>如果A -&gt; α，当α =&gt; ε 时，FOLLOW(A)可以帮助我们选择恰当的产生式</p>
+</li>
+<li>
+<p>例如：A -&gt; α，而b属于FOLLOW(A)，如果α =&gt; ε ，而当前输入符号是b，则可以选择A -&gt; α，因为A最终到达了ε，而且后面跟着b</p>
+</li>
+</ul>
+</li>
+<li>
+<p>计算FOLLOW(S)</p>
+<ul>
+<li>
+<p>将<strong>输入结束标记$<strong>加入</strong>FOLLOW(S)<strong>中（S是</strong>开始符号</strong>）</p>
+</li>
+<li>
+<p>按照下面两个规则不断<strong>迭代</strong>，直到所有的FOLLOW集合都不再增长为止</p>
+<ul>
+<li>
+<p>如果存在产生式A -&gt; α<strong>Bβ</strong>，那么**FIRST(β)**中所有非ε的符号都加入FOLLOW(<strong>B</strong>)中</p>
+</li>
+<li>
+<p>如果存在一个产生式A -&gt; αB，或者A -&gt; αBβ且FIRST(β)包含ε，那么FOLLOW(<strong>A</strong>)中所有符号都加入FOLLOW(<strong>B</strong>)中</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>==<strong>LL(1)文法</strong>==</p>
+<ul>
+<li>
+<p>对文法的任意两个产生式A -&gt; α | β</p>
+<ul>
+<li>
+<p>不存在终结符号a使α和β都可推导出以a开头的串</p>
+</li>
+<li>
+<p>α和β最多只有一个可推导出空串</p>
+</li>
+<li>
+<p>若β可推导出空串，则α不能推导出以FOLLOW(A) 中任何<strong>终结符号开头</strong>的串</p>
+</li>
+</ul>
+</li>
+<li>
+<p>等价于</p>
+<ul>
+<li>
+<p><strong>FIRST(α)与FIRST(β)不相交</strong>(条件一、二)</p>
+</li>
+<li>
+<p>如果 𝜖 ∈ 𝐹𝐼𝑅𝑆𝑇(𝛽) ，即𝛽 *⇒ 𝜖，那么<strong>FOLLOW(A)与FIRST(α)不相交</strong>；反之亦然(条件三)</p>
+<ul>
+<li>
+<p>任何情况下只能选一个展开</p>
+</li>
+<li>
+<p>a不是独立的，外部可能包括其他东西</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>示例：</p>
+</li>
+<li>
+<p>==<strong>预测分析表构造算法</strong>==</p>
+<ul>
+<li>
+<p>输入：文法G</p>
+</li>
+<li>
+<p>输出：预测分析表</p>
+<ul>
+<li>
+<p>二维表，非终结符 (行) × 终结符 (列) → 产生式</p>
+</li>
+<li>
+<p>展开非终结符时，根据输入终结符选择相应产生式</p>
+</li>
+</ul>
+</li>
+<li>
+<p>方法：对于文法G的每个产生式A -&gt; α</p>
+<ul>
+<li>
+<p>对于FIRST(α)中的<strong>每个终结符号</strong>a，将<strong>A -&gt; α</strong>加入到**M[A, a]**中</p>
+</li>
+<li>
+<p>如果<strong>ε</strong>在FIRST(<strong>α</strong>)，那么对于<strong>FOLLOW(A)<strong>中的</strong>每个符号b</strong>，将<strong>A -&gt; ε</strong>加入到**M[A, b]**中</p>
+</li>
+<li>
+<p>最后在所有的<strong>空白条目</strong>中填入<strong>error</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>示例：</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/images/1697096167034.jpg" alt="1697096167034" style="zoom: 33%;" />
+<img src="/images/image-20231012153644474.png" alt="image-20231012153644474" style="zoom:33%;" />
+<ul>
+<li>
+<p>LL(1)文法的递归下降分析</p>
+<ul>
+<li>
+<p>递归下降语法分析程序由一组过程组成</p>
+</li>
+<li>
+<p>每个非终结符号对应于一个过程，该过程负责扫描该非终结符号对应的结构</p>
+</li>
+<li>
+<p>可以使用当前的输入符号来唯一地选择产生式</p>
+</li>
+<li>
+<p>示例：A → X | Y | Z</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20231225201123239.png" alt="image-20231225201123239" style="zoom:50%;" />
+<ul>
+<li>
+<p>非递归的预测分析</p>
+<ul>
+<li>
+<p>递归下降分析的输入太大时，易导致(调用)栈溢出</p>
+</li>
+<li>
+<p>可以用<strong>栈模拟</strong>递归过程，实现非递归的分析</p>
+</li>
+<li>
+<p>在自顶向下分析的过程中，我们总是</p>
+<ul>
+<li>
+<p>匹配掉句型中<strong>左边的所有终结符号</strong></p>
+</li>
+<li>
+<p>对于<strong>最左边的非终结符号</strong>，选择适当的产生式<strong>展开</strong></p>
+</li>
+<li>
+<p>匹配成功的终结符号不会再被考虑，因此只需要记住句型的余下部分，以及尚未匹配的输入终结符号串</p>
+</li>
+<li>
+<p>由于展开的动作总是发生在余下部分的左端，我们可以用栈来存放这些符号</p>
+</li>
+</ul>
+</li>
+<li>
+<p>分析时的处理过程</p>
+<ul>
+<li>
+<p>初始化时，栈中仅包含<strong>开始符号S和$</strong></p>
+</li>
+<li>
+<p>如果栈顶元素是<strong>终结符号</strong>，那么跟输入进行<strong>匹配</strong></p>
+</li>
+<li>
+<p>如果栈顶元素是<strong>非终结符号</strong></p>
+<ul>
+<li>
+<p>使用<strong>预测分析表</strong>来选择适当的<strong>产生式</strong></p>
+</li>
+<li>
+<p>在栈顶用产生式右部替换产生式左部</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>预测分析算法</p>
+<ul>
+<li>初始化：输入缓冲区中为w$，栈中为S$，ip指向w的第一个符号</li>
+<li>令X = 栈顶符号，ip指向输入符号a</li>
+<li>不断执行第二步，直到要么报错，要么栈中为空</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\1697096505800.jpg" alt="1697096505800" style="zoom:33%;" />
+<ul>
+<li>示例
+<ul>
+<li>输入为id+id*id，预测表如下：</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\1697096541641.jpg" alt="1697096541641" style="zoom:50%;" />
+<p>​									                         见PPT ch4-3的5-9页</p>
+<img src="/images/image-20231225201836213.png" alt="image-20231225201836213" style="zoom:50%;" />
+<h3 id="自顶向下语法分析的局限">自顶向下语法分析的局限</h3>
+<ul>
+<li>
+<p>根据<strong>极为有限的信息</strong>预测 (猜) 产生式</p>
+</li>
+<li>
+<p>能识别的文法有局限性</p>
+<ul>
+<li>
+<p>需要改造文法消除左递归</p>
+</li>
+<li>
+<p>改造后的文法不直观</p>
+</li>
+<li>
+<p>生成的语法树不易理解和处理</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="语法分析技术-自底向上">语法分析技术-自底向上</h2>
+<h3 id="自底向上的语法分析">自底向上的语法分析</h3>
+<ul>
+<li>
+<p>为一个输入串构造语法分析树的过程</p>
+</li>
+<li>
+<p>从<strong>叶子</strong> (输入串中的<strong>终结符号</strong>，将位于分析树的底端) 开始，向上到达根结点</p>
+<ul>
+<li>在实际的语法分析过程中并不一定会构造出相应的分析树，但是用分析树的<br>
+概念可以方便理解</li>
+</ul>
+</li>
+<li>
+<p>重要的自底向上语法分析的通用框架</p>
+<ul>
+<li><strong>移入-归约</strong> (shift-reduce)</li>
+</ul>
+</li>
+<li>
+<p>多种LR技术</p>
+<ul>
+<li>
+<p>简单LR技术 (Simple LR)</p>
+</li>
+<li>
+<p>向前看LR技术(Look-Ahead LR)</p>
+</li>
+<li>
+<p>……</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20231225203823822.png" alt="image-20231225203823822" style="zoom:50%;" />
+<h3 id="归约">归约</h3>
+<ul>
+<li>
+<p>自底向上的语法分析过程可以看成是从<strong>串w归约为文法开始符号S</strong>的过程</p>
+</li>
+<li>
+<p>归约步骤：一个与某<strong>产生式体</strong>匹配的特定<strong>子串</strong>被替换为该<strong>产生式头</strong>的非终结符号</p>
+</li>
+<li>
+<p>归约过程等于一个反向最右推导</p>
+</li>
+</ul>
+<img src="/images/image-20231225203859468.png" alt="image-20231225203859468" style="zoom:50%;" />
+<h3 id="句柄">句柄</h3>
+<ul>
+<li><strong>最右句型</strong>(由<strong>最右推导</strong>或<strong>最左规约</strong>得到的句型)中和某个<strong>产生式体 (右部)<strong>相匹配的子串，对它的归约代表了该</strong>最右句型的最右推导</strong>的<strong>最后一步</strong></li>
+<li>正式定义
+<ul>
+<li>
+<p>在一个最右句型中，句柄<strong>右边只有终结符号</strong>（右边只有终结符号的不一定是句柄）</p>
+</li>
+<li>
+<p>如果文法是无二义性的，那么 每个句型<strong>有且只有一个</strong>句柄</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20231225204124135.png" alt="image-20231225204124135" style="zoom: 45%;" />
+<ul>
+<li>自底向上分析的过程就是<strong>识别</strong>和<strong>归约句柄</strong>的过程</li>
+<li>示例：
+<ul>
+<li>符号T并不是最右句型T*id~2~的句柄，因为若T替换为E，接下来不能进一步进行规约</li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20231225204311159.png" alt="image-20231225204311159" style="zoom: 33%;" />
+<h3 id="移入-归约分析技术">移入-归约分析技术</h3>
+<ul>
+<li>
+<p>使用一个<strong>栈</strong>来保存归约/扫描移入的文法符号</p>
+</li>
+<li>
+<p>栈中符号 (从底向上) 和待扫描的符号组成了一个<strong>最右句型</strong></p>
+</li>
+<li>
+<p>开始时刻：栈中只包含$，而输入为w$</p>
+</li>
+<li>
+<p>结束时刻：栈中为S$，而输入为$</p>
+</li>
+<li>
+<p>在分析过程中，不断<strong>移入符号</strong>，并在<strong>识别到句柄时</strong>进行归约</p>
+</li>
+<li>
+<p>句柄被识别时总是出现在栈的顶部</p>
+</li>
+<li>
+<p>四种状态：</p>
+<ul>
+<li>移入：将下一个输入符号移入到栈顶</li>
+<li>归约：将句柄归约为相应的非终结符号
+<ul>
+<li>句柄总是在栈顶</li>
+<li>具体操作时<strong>弹出句柄</strong>，压入被归约到的<strong>非终结符号</strong></li>
+</ul>
+</li>
+<li>接受：宣布分析过程成功完成</li>
+<li>报错：发现语法错误，调用错误恢复子程序</li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20231225205608369.png" alt="image-20231225205608369" style="zoom:50%;" />
+<h3 id="LR语法分析技术">LR语法分析技术</h3>
+<ul>
+<li>
+<p>LR(k)的语法分析概念</p>
+<ul>
+<li>
+<p>L 表示<strong>最左扫描</strong>，R 表示<strong>反向</strong>构造出<strong>最右推导</strong></p>
+</li>
+<li>
+<p>k 表示最多向前看 k 个符号</p>
+</li>
+</ul>
+</li>
+<li>
+<p>当k增大时，相应的语法分析器的规模急剧增大</p>
+</li>
+<li>
+<p>只考虑k &lt;= 1的情况</p>
+</li>
+</ul>
+<h3 id="LR语法分析器的优点">LR语法分析器的优点</h3>
+<ul>
+<li>由<strong>表格驱动</strong>，虽然手工构造表格工作量很大，但表格可以自动生成</li>
+<li>对于几乎所有的程序设计语言，只要写出上下文无关文法，就能够构造出识别该语言的LR语法分析器</li>
+<li>最通用的<strong>无回溯</strong>移入-归约分析技术</li>
+<li>能分析的文法比LL(k)文法<strong>更多</strong></li>
+</ul>
+<h3 id="LR语法分析思路">LR语法分析思路</h3>
+<ul>
+<li>
+<p>核心任务：<strong>识别</strong>句柄，<strong>归约</strong>句柄</p>
+</li>
+<li>
+<p>如何知道栈中内容可以归约了？</p>
+<ul>
+<li>维护一个<strong>状态</strong>，记录当前句柄识别的<strong>进度</strong></li>
+</ul>
+</li>
+<li>
+<p>==<strong>项</strong>==</p>
+<ul>
+<li>
+<p>一个文法产生式加上在其中某处的<strong>一个点</strong></p>
+<ul>
+<li>
+<p>A -&gt; ·XYZ，A -&gt; X·YZ，A -&gt; XY·Z，A -&gt; XYZ·</p>
+</li>
+<li>
+<p>A -&gt; α·β表示<strong>已扫描/归约到了α</strong>，并<strong>期望</strong>在接下来的输入中经过扫描/归约<strong>得到β</strong>，然后<strong>把αβ归约到A</strong></p>
+</li>
+<li>
+<p>A -&gt; αβ·表示<strong>已扫描/归约得到了αβ</strong>，可以把αβ归约为A</p>
+</li>
+<li>
+<p>注意：A -&gt; ε只对应一个项A -&gt; ·</p>
+</li>
+</ul>
+</li>
+<li>
+<p>一个项读入一个符号后，可变为另一个项</p>
+<ul>
+<li>
+<p>A -&gt; ·xyz 读入x变为 A -&gt; x·yz，类似状态间的跳转</p>
+</li>
+<li>
+<p>类似词法分析DFA的状态</p>
+</li>
+</ul>
+</li>
+<li>
+<p>文法产生式是有限的，每个产生式右部的长度也是有限的</p>
+<ul>
+<li>项的数量也是有限的</li>
+</ul>
+</li>
+<li>
+<p>同一时刻只识别一个句柄，因此只需关注一个项</p>
+<ul>
+<li>有穷自动机，被称为LR(0)自动机</li>
+</ul>
+</li>
+<li>
+<p>项既表示过去（已扫描/归约的串） 也预示未来（想要扫描/归约的串）</p>
+</li>
+<li>
+<p>识别句柄的过程中，可能有多个可选的产生式，因此可能同时满足多个项(同时处于多个状态：NFA)</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\1697097423695.jpg" alt="1697097423695" style="zoom:33%;" />
+<ul>
+<li>
+<p>LR(0)项集规范族的构造</p>
+<ul>
+<li>
+<p>==<strong>增广文法(引入起始状态)</strong>==</p>
+<ul>
+<li>
+<p>G的增广文法G’是在G中<strong>增加新开始符号S’</strong>，并加入<strong>产生式S’ -&gt; S</strong>而得到的</p>
+</li>
+<li>
+<p>显然G’和G接受相同的语言，且按照S’ -&gt; S进行归约实际上就表示已经将输入符号串归约成为开始符号</p>
+</li>
+<li>
+<p>方便引入S的项，表示<strong>识别的起始(S’ -&gt; ·S)/结束(S’ -&gt; S·)</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>==<strong>项集闭包CLOSURE(状态机确定化)</strong>==</p>
+<ul>
+<li>
+<p>根据一个项(状态)，扩充读取<strong>相同输入</strong>后可能<strong>同时处于的多个项(状态)</strong>–类似NFA的ε-CLOSURE</p>
+</li>
+<li>
+<p>如果<strong>I</strong>是文法G的一个项集，**CLOSURE(I)**是根据下列两条规则从I构造得到的项集</p>
+<ul>
+<li>将<strong>I中的各项加入</strong>CLOSURE(I)中</li>
+<li>如果A -&gt; α·Bβ在CLOSURE(I)中，而B -&gt; γ 是一个产生式，且项B -&gt; ·γ不在CLOSURE(I)中，就将该项加入其中，不断应用该规则到<strong>无新项可加入</strong></li>
+</ul>
+</li>
+<li>
+<p>意义</p>
+<ul>
+<li>A -&gt; α·Bβ，表示希望看到<strong>由Bβ推导出的串</strong>，那要先看到<strong>由B推导</strong>出的串，因此加上<strong>B的各个产生式</strong>对应的<strong>项</strong></li>
+</ul>
+</li>
+<li>
+<p>示例：</p>
+<img src="/images/image-20231225210050155.png" alt="image-20231225210050155" style="zoom: 33%;" />
+</li>
+</ul>
+</li>
+<li>
+<p>==<strong>GOTO函数(定义状态跳转)</strong>==</p>
+<ul>
+<li>
+<p>I 是一个项集，X 是一个文法符号，则<strong>GOTO(I, X)<strong>定义为I中所有形如</strong>[A -&gt; α·Xβ]的项</strong>所对应的项**[A -&gt; αX·β]<strong>的集合的</strong>闭包**</p>
+</li>
+<li>
+<p>示例：</p>
+<img src="/images/image-20231225210528072.png" alt="image-20231225210528072" style="zoom:50%;" />
+</li>
+</ul>
+</li>
+<li>
+<p>求规范LR(0)项集族的算法</p>
+<ul>
+<li>从<strong>初始项集</strong>(增广文法的第一个产生式的第一个项)开始，不断计算各种可能的后继，直到生成所有的项集
+<ul>
+<li>输入：增广文法</li>
+<li>输出：跳转表GOTO</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>LR(0)自动机的构造</p>
+<ul>
+<li>
+<p>基于规范LR(0)项集族可以构造LR(0)自动机</p>
+</li>
+<li>
+<p>规范LR(0)项集族中的每个<strong>项集</strong>对应于LR(0)自动机的一个状态</p>
+</li>
+<li>
+<p><strong>状态转换</strong>：如果GOTO(I, X) = J，则从 I 到 J有一个标号为 X的转换</p>
+</li>
+<li>
+<p><strong>开始状态</strong>为CLOSURE({ S’ -&gt; ·S })对应的项集</p>
+</li>
+</ul>
+</li>
+<li>
+<p>LR(0)自动机的作用</p>
+</li>
+<li>
+<p>示例：</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20231225210657269.png" alt="image-20231225210657269" style="zoom: 50%;" />
+<ul>
+<li>
+<p>Simple LR 语法分析表的构造</p>
+<ul>
+<li>
+<p>以LR(0)自动机为基础的SLR语法分析表构造算法</p>
+<ul>
+<li>
+<p>构造增广文法G’的LR(0)项集规范族{I~0~, I~1~, …, I~n~}</p>
+</li>
+<li>
+<p>状态i对应项集I~i~，相关的ACTION/GOTO表条目如下：</p>
+<ul>
+<li>[A → α·aβ]在Ii中，且GOTO(I~i~, a) = I~j~，则ACTION[i, a] = “移入j”</li>
+<li>[A → α·]在Ii中，那么<strong>对FOLLOW(A)中所有a</strong>(注意这里对规约条件进行了约束)，ACTION[i, a] = “按A → α归约”</li>
+<li>如果[S’ → S·]在I~i~中，那么将ACTION[i, $]设为&quot;<strong>接受</strong>&quot;</li>
+<li>如果GOTO(I~i~, A) = I~j~，那么在GOTO表中，GOTO[i, A] = j</li>
+</ul>
+</li>
+<li>
+<p>空白的条目设为error</p>
+</li>
+<li>
+<p>如果SLR分析表没有冲突，该文法就是SLR的</p>
+</li>
+<li>
+<p>思想：把α规约成A，后面需是FOLLOW(A)中的终结符号，否则只能移入</p>
+</li>
+</ul>
+</li>
+<li>
+<p>SLR语法分析器的弱点</p>
+<ul>
+<li>
+<p>SLR技术解决冲突的方法</p>
+<ul>
+<li>项集中包含[A → α·]时，按照A → α进行归约的条件是下一个输入符号<br>
+x可以在某个句型中跟在A之后</li>
+</ul>
+</li>
+<li>
+<p>如果此时对于x还有其它的移入/归约操作，则出现冲突</p>
+</li>
+</ul>
+</li>
+<li>
+<p>假设此时栈中的符号串为βα</p>
+<ul>
+<li>如果βAx不是任何最右句型的前缀，那么即使x在某个句型中跟在A之后，仍不应该按A → α归约</li>
+</ul>
+</li>
+<li>
+<p>进行归约的条件更加严格可以降低冲突的可能性</p>
+</li>
+</ul>
+</li>
+<li>
+<p>更强大的LR语法分析器</p>
+<ul>
+<li>
+<p>规范LR方法</p>
+<ul>
+<li>
+<p>添加项[A → ·α]时，把<strong>期望的向前看符号也加入项</strong>中，成为LR(1)项集</p>
+</li>
+<li>
+<p>向前看符号(串)的长度即为LR(k)中的k</p>
+</li>
+<li>
+<p>这个做法可以充分利用向前看符号，但是<strong>状态很多</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>向前看LR(LALR)</p>
+<ul>
+<li>
+<p>基于LR(0)项集族，但<strong>每个LR(0)项都带有向前看符号</strong></p>
+</li>
+<li>
+<p>分析能力<strong>强</strong>于SLR方法，且分析表和SLR分析表<strong>一样大</strong></p>
+</li>
+<li>
+<p>LALR已经可以处理大部分的程序设计语言</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>LR(1)项</p>
+<ul>
+<li>
+<p>LR(1)项中包含更多信息来<strong>消除</strong>一些归约动作</p>
+</li>
+<li>
+<p>实际的做法相当于“分裂”一些LR(0)状态，<strong>精确指明</strong>何时应该<strong>归约</strong></p>
+</li>
+<li>
+<p>LR(1)项的形式</p>
+<ul>
+<li>LR(1)项的形式[A → α·β, a]
+<ul>
+<li>
+<p>a ∈FOLLOW(A)  ，称为<strong>向前看符号</strong>，可以是终结符号或者$</p>
+</li>
+<li>
+<p>a表示如果将来要按照A → αβ进行归约，归约时的下一个输入符号必须是a</p>
+</li>
+<li>
+<p>当 β 非空时，移入动作不考虑 a，a 传递到下一状态</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<h2 id="LR-1-项和可行前缀">LR(1)项和可行前缀</h2>
+</li>
+<li>
+<h2 id="LR-1-项的作用">LR(1)项的作用</h2>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="语法分析器生成工具">语法分析器生成工具</h2>
+<p>略</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/09/05/CF_1/" rel="prev" title="编译原理1：引论">
+                  <i class="fa fa-angle-left"></i> 编译原理1：引论
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/10/05/DIP_2/" rel="next" title="直方图均衡化">
+                  直方图均衡化 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ZhangChengWei</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>
