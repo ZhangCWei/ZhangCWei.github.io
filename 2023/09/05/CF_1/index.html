@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="编译原理是计算机专业的一门重要专业课，旨在介绍编译程序构造的一般原理和基本方法。内容包括语言和文法、词法分析、语法分析、语法制导翻译、中间代码生成、存储管理、代码优化和目标代码生成等...">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译原理：引论">
+<meta property="og:url" content="http://example.com/2023/09/05/CF_1/index.html">
+<meta property="og:site_name" content="Methods for DIP">
+<meta property="og:description" content="编译原理是计算机专业的一门重要专业课，旨在介绍编译程序构造的一般原理和基本方法。内容包括语言和文法、词法分析、语法分析、语法制导翻译、中间代码生成、存储管理、代码优化和目标代码生成等...">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/image-20240105183300572.png">
+<meta property="og:image" content="http://example.com/images/image-20240105183321665.png">
+<meta property="og:image" content="http://example.com/images/image-20240105183552435.png">
+<meta property="og:image" content="http://example.com/images/image-20240105184241031.png">
+<meta property="article:published_time" content="2023-09-05T09:03:07.000Z">
+<meta property="article:modified_time" content="2024-02-12T09:35:28.225Z">
+<meta property="article:author" content="ZhangChengWei">
+<meta property="article:tag" content="Introduction">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/image-20240105183300572.png">
+
+
+<link rel="canonical" href="http://example.com/2023/09/05/CF_1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/09/05/CF_1/","path":"2023/09/05/CF_1/","title":"编译原理：引论"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>编译原理：引论 | Methods for DIP</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Methods for DIP</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">By ZhangCW & WeiGP & JiangT</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">引论</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E7%AE%80%E4%BB%8B"><span class="nav-text">编译器简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E8%AF%AD%E8%A8%80%E5%8F%8A%E7%BC%96%E8%AF%91"><span class="nav-text">计算机程序设计语言及编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E5%9C%A8%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-text">编译器在语言处理系统中的位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%8E%E8%A7%A3%E9%87%8A%E5%99%A8"><span class="nav-text">编译器与解释器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E7%BB%93%E6%9E%84"><span class="nav-text">编译器结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E9%83%A8%E5%88%86%EF%BC%9A%E4%B8%8E%E6%BA%90%E8%AF%AD%E8%A8%80%E7%9B%B8%E5%85%B3"><span class="nav-text">分析部分：与源语言相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%BC%E5%90%88%E9%83%A8%E5%88%86%EF%BC%9A%E4%B8%8E%E7%9B%AE%E6%A0%87%E8%AF%AD%E8%A8%80%E7%9B%B8%E5%85%B3"><span class="nav-text">综合部分：与目标语言相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-text">词法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-text">语法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90"><span class="nav-text">语义分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90"><span class="nav-text">中间代码生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96"><span class="nav-text">代码优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90"><span class="nav-text">代码生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%A6%E5%8F%B7%E8%A1%A8%E7%AE%A1%E7%90%86"><span class="nav-text">符号表管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%9F"><span class="nav-text">趟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E6%9E%84%E9%80%A0%E5%B7%A5%E5%85%B7"><span class="nav-text">编译器构造工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E8%AF%AD%E8%A8%80%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2"><span class="nav-text">程序设计语言发展历史</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%86%E7%A8%8B"><span class="nav-text">历程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E8%AF%AD%E8%A8%80%E5%88%86%E7%B1%BB"><span class="nav-text">程序设计语言分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80%E4%B8%8E%E7%BC%96%E8%AF%91%E5%99%A8"><span class="nav-text">语言与编译器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E4%B8%8E%E5%8A%A8%E6%80%81"><span class="nav-text">静态与动态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-text">作用域</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E4%B8%8E%E7%8A%B6%E6%80%81"><span class="nav-text">环境与状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F-2"><span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E6%8E%A7%E5%88%B6%E8%AE%BF%E9%97%AE"><span class="nav-text">显示控制访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8D%E5%AD%97%E3%80%81%E6%A0%87%E8%AF%86%E7%AC%A6%E5%92%8C%E5%8F%98%E9%87%8F"><span class="nav-text">名字、标识符和变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92%E6%9C%BA%E5%88%B6"><span class="nav-text">参数传递机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%80%BC%E8%B0%83%E7%94%A8"><span class="nav-text">值调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E8%B0%83%E7%94%A8"><span class="nav-text">引用调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8D%E8%B0%83%E7%94%A8"><span class="nav-text">名调用</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ZhangChengWei</p>
+  <div class="site-description" itemprop="description">paper analysis</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/05/CF_1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Methods for DIP">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="编译原理：引论 | Methods for DIP">
+      <meta itemprop="description" content="编译原理是计算机专业的一门重要专业课，旨在介绍编译程序构造的一般原理和基本方法。内容包括语言和文法、词法分析、语法分析、语法制导翻译、中间代码生成、存储管理、代码优化和目标代码生成等...">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          编译原理：引论
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-09-05 17:03:07" itemprop="dateCreated datePublished" datetime="2023-09-05T17:03:07+08:00">2023-09-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-12 17:35:28" itemprop="dateModified" datetime="2024-02-12T17:35:28+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CF/" itemprop="url" rel="index"><span itemprop="name">CF</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">编译原理是计算机专业的一门重要专业课，旨在介绍编译程序构造的一般原理和基本方法。内容包括语言和文法、词法分析、语法分析、语法制导翻译、中间代码生成、存储管理、代码优化和目标代码生成等...</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1>引论</h1>
+<h2 id="编译器简介">编译器简介</h2>
+<h3 id="计算机程序设计语言及编译">计算机程序设计语言及编译</h3>
+<ul>
+<li>
+<p>高级语言</p>
+</li>
+<li>
+<p>汇编语言</p>
+</li>
+<li>
+<p>机器语言</p>
+</li>
+</ul>
+<h3 id="编译器在语言处理系统中的位置">编译器在语言处理系统中的位置</h3>
+<ul>
+<li>
+<p>预处理器</p>
+<ul>
+<li>
+<p>把存储在不同文件中的源程序聚合在一起</p>
+</li>
+<li>
+<p>把称作宏的缩写语句转换为原始语句</p>
+</li>
+</ul>
+</li>
+<li>
+<p>可重定位</p>
+<ul>
+<li>在内存中存放的起始位置L不是固定的</li>
+</ul>
+</li>
+<li>
+<p>链接器</p>
+<ul>
+<li>
+<p>将多个可重定位的机器代码文件(包括库文件)连接到一起</p>
+</li>
+<li>
+<p>解决外部内存地址问题</p>
+</li>
+</ul>
+</li>
+<li>
+<p>加载器</p>
+<ul>
+<li>
+<p>修改可重定位地址</p>
+</li>
+<li>
+<p>将修改后的指令和数据放到内存中的适当位置</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="编译器与解释器">编译器与解释器</h3>
+<ul>
+<li>
+<p>编译器</p>
+<ul>
+<li>
+<p>一个编译器 = 一个程序</p>
+</li>
+<li>
+<p>读入以某种语言编写的程序(源程序)</p>
+</li>
+<li>
+<p>输出等价的用另一种语言编写的程序(目标语言)</p>
+</li>
+<li>
+<p>通常，目标程序是可执行的</p>
+</li>
+</ul>
+</li>
+<li>
+<p>解释器</p>
+<ul>
+<li>
+<p>直接利用用户提供的输入，执行源程序中指定的操作</p>
+</li>
+<li>
+<p>不生成目标程序，而是根据源程序语义直接运行</p>
+</li>
+<li>
+<p>速度较慢，但错误诊断效果通常比编译器更好</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20240105183300572.png" alt="image-20240105183300572" style="zoom:50%;" />
+<ul>
+<li>
+<p>混合编译器</p>
+<ul>
+<li>
+<p>Java语言的处理结合了编译和解释</p>
+</li>
+<li>
+<p>Java源程序编译成 字节码 中间表示，然后在虚拟机上解释执行</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20240105183321665.png" alt="image-20240105183321665" style="zoom:50%;" />
+<ul>
+<li>
+<p>因此一台机器上编译得到的字节码可在另一台机器上解释执行</p>
+<ul>
+<li>
+<p>移植性好</p>
+</li>
+<li>
+<p>效率高</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="编译器结构">编译器结构</h2>
+<h3 id="分析部分：与源语言相关">分析部分：与源语言相关</h3>
+<ul>
+<li>
+<p>把源程序分解成组成要素，以及相应的语法结构</p>
+</li>
+<li>
+<p>使用这个结构创建源程序的中间表示</p>
+</li>
+<li>
+<p>同时收集和源程序相关的信息，存放到符号表</p>
+</li>
+</ul>
+<h3 id="综合部分：与目标语言相关">综合部分：与目标语言相关</h3>
+<ul>
+<li>
+<p>根据中间表示和符号表信息构造目标程序</p>
+</li>
+<li>
+<p>同时对目标程序进行分析、优化</p>
+</li>
+</ul>
+<img src="/images/image-20240105183552435.png" alt="image-20240105183552435" style="zoom:50%;" />
+<h3 id="词法分析">词法分析</h3>
+<ul>
+<li>
+<p>词法分析器读入组成源程序的字符流，并将它们组织成为有意义的词素的序列。对于每个词素，词法分析器产生词法单元token作为输出</p>
+</li>
+<li>
+<p>词法单元token：&lt;token-name,attribute-value&gt;</p>
+</li>
+<li>
+<p>第一个条目token-name：是在语法分析步骤中使用的抽象符号</p>
+</li>
+<li>
+<p>第二个条目attribute-value：是指向符号表中关于这个词法单元的条目</p>
+</li>
+<li>
+<p>词素-&gt;词法单元</p>
+<ul>
+<li>
+<p>position  -&gt;  &lt;id,l&gt;</p>
+<ul>
+<li>
+<p>id 是标识符的抽象符号</p>
+</li>
+<li>
+<p>l 是符号表中position对应的条目(存放对应标识符的信息，如名字、类型)</p>
+</li>
+</ul>
+</li>
+<li>
+<p>=  -&gt;  &lt;=&gt;</p>
+<ul>
+<li>不需要属性值，忽略第二个分量</li>
+</ul>
+</li>
+<li>
+<p>60  -&gt;  &lt;60&gt;</p>
+<ul>
+<li>建立形如&lt;number,60&gt;的token，(数字的词法单元会有特殊处理)</li>
+</ul>
+</li>
+<li>
+<p>分割词素的空格会被词法分析器忽略</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="语法分析">语法分析</h3>
+<ul>
+<li>
+<p>语法分析器根据各词法单元的第一个分量来创建树型的中间表示形式，通常是语法树</p>
+</li>
+<li>
+<p>中间表示形式指出了词法单元流的语法结构</p>
+</li>
+<li>
+<p>通常每个内部节点表示一个运算，而该节点的子节点表示该运算的分量</p>
+</li>
+</ul>
+<h3 id="语义分析">语义分析</h3>
+<ul>
+<li>
+<p>使用语法树和符号表中的信息，检查源程序是否满足语言定义的语义约束</p>
+</li>
+<li>
+<p>同时收集类型信息，存放于语法树和符号表中，用于代码生成、类型检查、类型转换</p>
+</li>
+<li>
+<p>语义分析的主要任务</p>
+<ul>
+<li>
+<p>收集标识符的属性信息</p>
+<ul>
+<li>
+<p>种属</p>
+<ul>
+<li>简单变量、复合变量(数组…)、过程…</li>
+</ul>
+</li>
+<li>
+<p>类型</p>
+<ul>
+<li>整型、实型、指针型…</li>
+</ul>
+</li>
+<li>
+<p>存储位置、长度</p>
+</li>
+<li>
+<p>值</p>
+</li>
+<li>
+<p>作用域</p>
+</li>
+<li>
+<p>参数和返回值信息</p>
+</li>
+</ul>
+</li>
+<li>
+<p>语义检查</p>
+</li>
+</ul>
+</li>
+<li>
+<p>符号表</p>
+<ul>
+<li>
+<p>用于存放标识符的属性信息的数据结构</p>
+</li>
+<li>
+<p>包含字符串表</p>
+<ul>
+<li>字符串表可以节省空间</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="中间代码生成">中间代码生成</h3>
+<ul>
+<li>
+<p>根据语义分析输出，生成类及其语言的中间表达</p>
+</li>
+<li>
+<p>常见的中间表示形式是三地址代码，即每个指令最多包含三个运算分量</p>
+</li>
+<li>
+<p>利于代码优化、可扩展性好</p>
+</li>
+</ul>
+<h3 id="代码优化">代码优化</h3>
+<ul>
+<li>
+<p>等价程序变换</p>
+</li>
+<li>
+<p>更快、 更短、 能耗更低</p>
+</li>
+</ul>
+<h3 id="代码生成">代码生成</h3>
+<ul>
+<li>
+<p>目标代码生成以源程序的中间表示形式作为输入，并把它映射到目标语言</p>
+<ul>
+<li>
+<p>指令选择</p>
+</li>
+<li>
+<p>寄存器的分配</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="符号表管理">符号表管理</h3>
+<ul>
+<li>
+<p>记录源程序中使用的标识符 (变量名、函数名、…)，收集各种属性，提供一个名字的：</p>
+<ul>
+<li>存储分配、类型、作用域、参数数量和类型、每个参数的传递方法（如传值或传引用）、返回类型</li>
+</ul>
+</li>
+</ul>
+<h3 id="趟">趟</h3>
+<ul>
+<li>
+<p>每趟读入一个输入文件，产生一个输出文件</p>
+</li>
+<li>
+<p>“步骤” (Phase) 是逻辑组织方式</p>
+</li>
+<li>
+<p>“趟”和具体的实现相关，可将多个步骤组合成趟</p>
+</li>
+</ul>
+<h3 id="编译器构造工具">编译器构造工具</h3>
+<ul>
+<li>略…</li>
+</ul>
+<h2 id="程序设计语言发展历史">程序设计语言发展历史</h2>
+<h3 id="历程">历程</h3>
+<ul>
+<li>
+<p>机器语言：40年代</p>
+</li>
+<li>
+<p>汇编语言：50年代早期</p>
+</li>
+<li>
+<p>高级语言：50年代后期</p>
+</li>
+</ul>
+<h3 id="程序设计语言分类">程序设计语言分类</h3>
+<ul>
+<li>
+<p>基于语言的代</p>
+<ul>
+<li>第一代：机器语言</li>
+<li>第二代：汇编语言</li>
+<li>第三代：高级程序设计语言</li>
+<li>第四代：DSL（Domain Specific Language，领域特定语言）</li>
+<li>第五代：基于逻辑和约束的语言</li>
+</ul>
+</li>
+<li>
+<p>基于编程范式</p>
+<ul>
+<li>
+<p>命令式/强制式语言</p>
+<ul>
+<li>
+<p>C、C++、C#、Java</p>
+</li>
+<li>
+<p>利用命令式语言进行编程的方式，支持四种基本的语句：运算语句、循环语句、条件分支语句、无条件分支语句。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>声明式/函数式/逻辑式语言</p>
+<ul>
+<li>
+<p>描述目标性质，让计算机明白目标，而非流程</p>
+</li>
+<li>
+<p>ML、Haskell、Prolog</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>冯诺依曼语言</p>
+<ul>
+<li>Fortran、C</li>
+</ul>
+</li>
+<li>
+<p>面向对象语言</p>
+<ul>
+<li>Simula 67、Smalltalk、C++、C#、Java、Ruby</li>
+</ul>
+</li>
+<li>
+<p>脚本语言</p>
+<ul>
+<li>
+<p>具有高层次运算符的解释型语言，通常比用其他语言写的程序短很多</p>
+</li>
+<li>
+<p>Awk、JavaScript、Perl、PHP、Python、Ruby、Tcl</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="语言与编译器">语言与编译器</h2>
+<h2 id="静态与动态">静态与动态</h2>
+<ul>
+<li>静态：支持编译器静态决定某个问题（编译期 compile time）</li>
+<li>动态：只允许在程序运行时刻作出决定（运行时 run time）</li>
+</ul>
+<h3 id="作用域">作用域</h3>
+<ul>
+<li>
+<p>x的作用域：程序的一个区域中，对x的使用都指向这个声明</p>
+</li>
+<li>
+<p>静态作用域</p>
+<ul>
+<li>
+<p>编译期即可决定作用域(仅通过阅读程序)</p>
+</li>
+<li>
+<p>也称词法作用域(C,Java使用)</p>
+</li>
+</ul>
+</li>
+<li>
+<p>动态作用域</p>
+<ul>
+<li>
+<p>运行时才可决定作用域</p>
+</li>
+<li>
+<p>程序运行时，同一个对x的使用会指向x的几个声明中的某一个</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="环境与状态">环境与状态</h2>
+<ul>
+<li>环境：从名字到存储位置的映射</li>
+<li>状态：从存储位置到值的映射</li>
+</ul>
+<h2 id="作用域-2">作用域</h2>
+<ul>
+<li>
+<p>C语言使用静态作用域</p>
+<ul>
+<li>C语言程序由顶层的变量、函数声明组成</li>
+<li>函数内部可以声明变量(局部变量/参数)，这些声明的作用域 在它出现的函数内</li>
+<li>一个顶层声明的作用域包括其后的所有程序</li>
+</ul>
+</li>
+<li>
+<p>作用域规则基于程序结构，声明的作用域由它在程序 中的位置决定</p>
+</li>
+<li>
+<p>后面出现的语言（如C++, Java, C#)，也通过public、private、protected进行明确控制</p>
+</li>
+<li>
+<p><strong>块</strong>是声明和语句的一个组合</p>
+<ul>
+<li>
+<p>C使用括号 { 和 } 来界定一个块。</p>
+</li>
+<li>
+<p>如果名字x的声明D属于块B，那么D的作用域包括整个B，但是嵌套在B中的B’如果重新声明了x，则不在此作用域中。</p>
+</li>
+<li>
+<p>需要掌握</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/images/image-20240105184241031.png" alt="image-20240105184241031" style="zoom:50%;" />
+<h2 id="显示控制访问">显示控制访问</h2>
+<ul>
+<li>通过public、private和protected这样的关键字，OOP语言提供了对超类中的成员名字的显式访问控制
+<ul>
+<li>private：作用域仅包含该类和“友类”（C++术语）</li>
+<li>protected：也可由子类访问</li>
+<li>public：也可从类外访问</li>
+</ul>
+</li>
+</ul>
+<h2 id="名字、标识符和变量">名字、标识符和变量</h2>
+<ul>
+<li>
+<p>标识符是一个字符串，通常由字母和数字组成</p>
+</li>
+<li>
+<p>所有的标识符都是名字，但名字不一定是标识符</p>
+</li>
+<li>
+<p>变量指向存储中的某个特定的位置</p>
+<ul>
+<li>
+<p>同一个标识符可以被多次声明，每个声明引入一个新的变量</p>
+</li>
+<li>
+<p>即使只声明一次，递归中的局部标识符将在不同时刻指向不同的存储位置</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="参数传递机制">参数传递机制</h2>
+<h3 id="值调用">值调用</h3>
+<ul>
+<li>
+<p>对实参求值(如果它是表达式)或拷贝(如果它是变量)，放在相应形参的内存位置上</p>
+</li>
+<li>
+<p>改变形参的值不影响实参</p>
+</li>
+</ul>
+<h3 id="引用调用">引用调用</h3>
+<ul>
+<li>
+<p>实参的地址作为相应的形参的值传递给被调用者</p>
+</li>
+<li>
+<p>改变形参看起来就像是改变了实在参数一样</p>
+</li>
+</ul>
+<h3 id="名调用">名调用</h3>
+<ul>
+<li>
+<p>被调用者的运行方式好像是用实参以字面方式替换了被调用者的代码中的形参一样</p>
+</li>
+<li>
+<p>形参是一个代表了实参的宏</p>
+</li>
+<li>
+<p>若父函数定义局部变量，可能造成名冲突</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Introduction/" rel="tag"># Introduction</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/09/05/DIP_1/" rel="next" title="图像插值算法实现">
+                  图像插值算法实现 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ZhangChengWei</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>
