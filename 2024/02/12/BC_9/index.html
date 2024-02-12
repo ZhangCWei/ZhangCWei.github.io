@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="以太坊概述 以太坊简介 以太坊与比特币   比特币和以太坊是两种最主要的加密货币   以太坊优势   技术：支持智能合约   性能：增加叔块奖励，减少出块时间；Ghost共识机制   社区：更加活跃的社区；超过25万的开发者       比特币是区块链1.0，以太坊是区块链2.0   以太坊基于比特币的一些运行问题进行了改进   出块时间15s左右，减小交易延迟   mining puzzle 对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Blog of ZhangCW">
+<meta property="og:url" content="http://example.com/2024/02/12/BC_9/index.html">
+<meta property="og:site_name" content="Blog of ZhangCW">
+<meta property="og:description" content="以太坊概述 以太坊简介 以太坊与比特币   比特币和以太坊是两种最主要的加密货币   以太坊优势   技术：支持智能合约   性能：增加叔块奖励，减少出块时间；Ghost共识机制   社区：更加活跃的社区；超过25万的开发者       比特币是区块链1.0，以太坊是区块链2.0   以太坊基于比特币的一些运行问题进行了改进   出块时间15s左右，减小交易延迟   mining puzzle 对">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231113161528325.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231113161700334.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231113161944221.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231225150044260.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231113162717764.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231225150302886.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231113165218946.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231113165104232.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231113165452899.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231115165306231.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231120142900887.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231120145249396.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\a914563df26fadebf7a787e27c82d09.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231120150520245.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231120152913739.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231120153407805.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231120155033731.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\9aad4c7f221b9c86f8590c1d4066e2e.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231120160006896.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231120160054859.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231120170227023.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231204113839339.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231204114052016.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231204114836084.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231204142633313.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\d5d4579b01434da289a9808e7f0079fb.png">
+<meta property="og:image" content="d:%5CTypora_picture%5C10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0%5C10debd412c5c4426924ad77bcbf76faf.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231204143728910.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231204144313914.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231204144353807.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231204144458884.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231204144520038.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231204144543312.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231204144609351.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231204144705999.png">
+<meta property="og:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231204144742080.png">
+<meta property="article:published_time" content="2024-02-12T14:59:37.460Z">
+<meta property="article:modified_time" content="2023-12-25T08:57:42.948Z">
+<meta property="article:author" content="ZhangChengWei">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:\Typora_picture\10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0\image-20231113161528325.png">
+
+
+<link rel="canonical" href="http://example.com/2024/02/12/BC_9/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/02/12/BC_9/","path":"2024/02/12/BC_9/","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | Blog of ZhangCW</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Blog of ZhangCW</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">By ZhangCW</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">以太坊概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%AE%80%E4%BB%8B"><span class="nav-text">以太坊简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E4%B8%8E%E6%AF%94%E7%89%B9%E5%B8%81"><span class="nav-text">以太坊与比特币</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6"><span class="nav-text">智能合约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84%E8%AF%9E%E7%94%9F%E5%92%8C%E5%8F%91%E5%B1%95"><span class="nav-text">以太坊的诞生和发展</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%8C%BA%E5%9D%97%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-text">以太坊区块数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84%E5%8C%BA%E5%9D%97%E5%A4%B4"><span class="nav-text">以太坊的区块头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84%E5%8C%BA%E5%9D%97"><span class="nav-text">以太坊的区块</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84%E8%B4%A6%E6%88%B7%E6%A8%A1%E5%BC%8F"><span class="nav-text">以太坊的账户模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A6%E6%88%B7%E5%9C%B0%E5%9D%80%E7%9A%84%E7%94%9F%E6%88%90"><span class="nav-text">账户地址的生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A6%E6%88%B7%E7%BB%93%E6%9E%84"><span class="nav-text">账户结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84%E4%B8%A4%E7%A7%8D%E8%B4%A6%E6%88%B7"><span class="nav-text">定义以太坊的两种账户</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84%E7%8A%B6%E6%80%81%E6%A0%91"><span class="nav-text">以太坊的状态树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84%E8%B4%A6%E6%88%B7%E7%8A%B6%E6%80%81"><span class="nav-text">定义以太坊的账户状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E7%BA%A6%E5%AD%98%E5%82%A8%E6%A0%91"><span class="nav-text">合约存储树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84%E7%8A%B6%E6%80%81%E7%BB%B4%E6%8A%A4"><span class="nav-text">以太坊的状态维护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Merkle-Patricia-Trie-MPT"><span class="nav-text">Merkle Patricia Trie (MPT)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84%E6%94%B6%E6%8D%AE%E3%80%81%E4%BA%A4%E6%98%93%E6%A0%91%E3%80%81Bloom-Filter"><span class="nav-text">以太坊的收据、交易树、Bloom Filter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B6%E6%8D%AE"><span class="nav-text">收据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E6%98%93%E6%A0%91%E5%92%8C%E6%94%B6%E6%8D%AE%E6%A0%91"><span class="nav-text">交易树和收据树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bloom-Filter"><span class="nav-text">Bloom Filter</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9F%BA%E6%9C%AC%E6%9E%B6%E6%9E%84%E5%8F%8A%E5%8E%9F%E7%90%86"><span class="nav-text">以太坊基本架构及原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B"><span class="nav-text">状态模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E8%BD%AC%E7%A7%BB"><span class="nav-text">状态转移</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%AE%80%E6%98%93%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="nav-text">以太坊简易架构图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E4%BA%A4%E6%98%93"><span class="nav-text">以太坊交易</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%85%B1%E8%AF%86%E6%9C%BA%E5%88%B6"><span class="nav-text">以太坊共识机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%8C%96%E7%9F%BF%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4"><span class="nav-text">以太坊挖矿难度调整</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ZhangChengWei</p>
+  <div class="site-description" itemprop="description">paper analysis</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Blog of ZhangCW">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-12 22:59:37" itemprop="dateCreated datePublished" datetime="2024-02-12T22:59:37+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-12-25 16:57:42" itemprop="dateModified" datetime="2023-12-25T16:57:42+08:00">2023-12-25</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1>以太坊概述</h1>
+<h2 id="以太坊简介">以太坊简介</h2>
+<h3 id="以太坊与比特币">以太坊与比特币</h3>
+<ul>
+<li>
+<p>比特币和以太坊是两种最主要的<strong>加密货币</strong></p>
+<ul>
+<li>
+<p>以太坊优势</p>
+<ul>
+<li>
+<p>技术：支持<strong>智能合约</strong></p>
+</li>
+<li>
+<p>性能：增加叔块奖励，减少出块时间；Ghost共识机制</p>
+</li>
+<li>
+<p>社区：更加活跃的社区；超过25万的开发者</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>比特币是区块链1.0，<strong>以太坊是区块链2.0</strong></p>
+</li>
+<li>
+<p>以太坊基于比特币的一些运行问题进行了改进</p>
+<ul>
+<li>
+<p>出块时间15s左右，减小交易延迟</p>
+</li>
+<li>
+<p>mining puzzle 对内存要求高（限制ASIC使用）</p>
+</li>
+<li>
+<p>2022年9月升级后采用 PoS，代替 PoW</p>
+</li>
+</ul>
+</li>
+<li>
+<p>以太坊是<strong>第一个支持智能合约的区块链系统</strong></p>
+<ul>
+<li>
+<p>使用 Ether 作为加密数字货币</p>
+</li>
+<li>
+<p>是生态社区最活跃的区块链系统，出现了大量去中心化自治组织(DAOs)和 去中心化应用(DApps)，促进了区块链技术在 发币以外的应用</p>
+</li>
+</ul>
+</li>
+<li>
+<p>以太坊特色与应用</p>
+<ul>
+<li>
+<p>溯源存证</p>
+</li>
+<li>
+<p>数字资产发行和流通</p>
+</li>
+<li>
+<p>数据共享</p>
+</li>
+<li>
+<p>游戏</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="智能合约">智能合约</h3>
+<ul>
+<li>
+<p>智能合约指能够<strong>自动执行合约条款的计算机程序</strong>，其概念由尼克·萨博在1994年提出</p>
+</li>
+<li>
+<p>具有<strong>事件驱动、价值转移、自动执行</strong>等特性</p>
+</li>
+<li>
+<p>智能合约依赖于<strong>环境的可靠性</strong></p>
+</li>
+<li>
+<p>中心化环境的弊端</p>
+<ul>
+<li>
+<p>容易受到篡改</p>
+</li>
+<li>
+<p>出错后难以追溯恢复</p>
+</li>
+</ul>
+</li>
+<li>
+<p>部署在区块链上的智能合约</p>
+<ul>
+<li>更高的可靠性</li>
+</ul>
+</li>
+<li>
+<p>以太坊上的智能合约</p>
+<ul>
+<li>
+<p>以太坊在多个节点组成的<strong>点对点网络</strong>中，维护共同的区块链数据，通过区块链上的交易来进行智能合约的 创建、调用、结束 等操作</p>
+</li>
+<li>
+<p>由于多个节点所维护的区块链状态是一致的，因此，多个节点上所运行的智能合约的<strong>过程和结果</strong>也是<strong>一致</strong>的</p>
+</li>
+</ul>
+</li>
+<li>
+<p>将自动售货机视为智能合约</p>
+<ul>
+<li>
+<p>事件驱动：合约以投币等动作作为输入，触发其动作执行</p>
+</li>
+<li>
+<p>价值转移：外部以钱币为输入，合约输出饮料等商品，完成了价值的交换或转移</p>
+</li>
+<li>
+<p>自动执行：这一履约行为是完全自动的，不需要人在其中干预（投币动作除外）</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="以太坊的诞生和发展">以太坊的诞生和发展</h3>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113161528325.png" alt="image-20231113161528325" style="zoom:50%;" />
+<h2 id="以太坊区块数据结构">以太坊区块数据结构</h2>
+<h3 id="以太坊的区块头">以太坊的区块头</h3>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113161700334.png" alt="image-20231113161700334" style="zoom:50%;" />
+<pre><code>- 父块哈希
+- ☆叔块哈希
+- 矿工地址
+- ☆状态树哈希
+- ☆交易树哈希
+- ☆收据树哈希
+- ☆Bloom Filter
+- 挖矿难度
+- 区块号
+- ☆Gas上限
+- ☆所有交易gas之和
+- 区块时间戳
+- 可变长度字段
+- 工作量证明摘要
+- 挖矿Nonce值
+</code></pre>
+<h3 id="以太坊的区块">以太坊的区块</h3>
+<ul>
+<li>==<strong>主要功能与结构</strong>==
+<ul>
+<li>
+<p>打包一批执行后的交易</p>
+</li>
+<li>
+<p>​                                                                                                                                                                                                                    它的数据结构同样分成了<strong>区块头</strong>和<strong>区块体</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113161944221.png" alt="image-20231113161944221" style="zoom:50%;" />
+<ul>
+<li>
+<p>以太坊<strong>区块头</strong>内容</p>
+<ul>
+<li>
+<p>记录以太坊状态的<strong>状态根</strong></p>
+</li>
+<li>
+<p>交易列表、收据列表和叔块列表对应的<strong>哈希值</strong></p>
+</li>
+<li>
+<p>最长不超过100 KB的<strong>额外数据</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>以太坊<strong>区块体</strong>内容</p>
+<ul>
+<li>
+<p>由交易组成的 <strong>tx 列表</strong></p>
+</li>
+<li>
+<p>由交易执行信息组成的<strong>收据列表</strong></p>
+</li>
+<li>
+<p>用于改进以太坊共识过程的<strong>叔块列表</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="以太坊的账户模式">以太坊的账户模式</h2>
+<h3 id="背景">背景</h3>
+<ul>
+<li>
+<p>地址与账户：类似银行系统</p>
+</li>
+<li>
+<p>区别：账本状态在所有区块链节点<strong>分布式存储</strong></p>
+</li>
+</ul>
+<h3 id="账户地址的生成">账户地址的生成</h3>
+<ul>
+<li>
+<p>计算椭圆曲线下的<strong>私钥与公钥</strong></p>
+</li>
+<li>
+<p>对<strong>公钥</strong>使用 KECCAK256 哈希算法，计算得到一个64位的16进制哈希值(256个比特长)</p>
+</li>
+<li>
+<p>截取这个<strong>哈希值的最后40 位</strong>作为一个以太坊上的<strong>账户地址</strong></p>
+</li>
+</ul>
+<h3 id="账户结构">账户结构</h3>
+<ul>
+<li>用户账户结构保存了用户地址对应账户的<strong>数据信息</strong></li>
+<li>余额：记录了当前地址持有的<strong>以太币的数额</strong>，单位是 Wei</li>
+<li>Nonce：记录了这个地址创建以来累计发起的<strong>交易次数</strong>
+<ul>
+<li>
+<p>计算交易的次数和序列</p>
+<ul>
+<li>以太坊中，交易合法性的检验在于交易发起者的账户余额，<strong>数字签名始终有效</strong>，交易可能可以被无限次发起而<strong>不经过发起者同意</strong>。为了防止这样的恶意攻击，以太坊增加了计算交易次数和序列的Nonce计数器，只有<strong>账户</strong>的 Nonce 和<strong>交易</strong>的 Nonce 能够对应的情况下，交易才是合法的</li>
+<li>当一个交易<strong>执行完毕之后</strong>，账户的 Nonce 值<strong>增加</strong>，原本执行完毕的交易中的 Nonce 值就无法与现在账户的 Nonce 值匹配</li>
+<li><strong>因为交易有签名的保护，所以nonce的值，别人是改不了的</strong>。如果要修改对应的 Nonce 值，意味着原有交易的签名失效</li>
+</ul>
+</li>
+<li>
+<p>其他用途</p>
+<ul>
+<li>
+<p>控制账户发起的交易的顺序，从而实现一些相对复杂的功能</p>
+</li>
+<li>
+<p>通过重复提交一个<strong>相同 Nonce 值的交易</strong>来使得一个「<strong>已经提交但是尚未被确认</strong>」的交易变得不合法，从而实现一定程度的<strong>撤销</strong>功能</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231225150044260.png" alt="image-20231225150044260" style="zoom:50%;" />
+<h3 id="定义以太坊的两种账户">定义以太坊的两种账户</h3>
+<ul>
+<li>外部账户
+<ul>
+<li>由公私钥控制的，本地产生一个公私钥对，私钥掌握账户的控制权（类似于比特币中的账户），也叫普通账户</li>
+<li>外部账户的状态：
+<ul>
+<li>balance（账户余额）</li>
+<li>nonce（计数器）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>合约账户
+<ul>
+<li>合约账户不是通过公私钥对控制的</li>
+<li><strong>合约账户不能主动发起一个交易。以太坊中规定，所有的交易只能由外部账户发起</strong></li>
+<li>外部账户发起一个交易如果调用了一个合约账户，这个合约账户可以发送一个message调用另外一个合约，所以要通过nonce值记录一下调用的次数</li>
+<li>创建合约会返回一个地址，<strong>知道这个合约的地址，就可以调用这个合约</strong>，调用的过程当中<strong>状态会发生变化</strong>，代码（code）不会变，<strong>存储（storage）会变</strong></li>
+<li>合约账户状态
+<ul>
+<li>balance（账户余额）</li>
+<li>nonce（计数器）</li>
+<li>code（代码）</li>
+<li>storage（相关状态存储，包括每个变量的取值）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113162717764.png" alt="image-20231113162717764" style="zoom:50%;" />
+<p>思考：比特币的 UTXOs 模型更有利于隐私保护，那为什么以太坊还要使用账户模型？</p>
+<ul>
+<li>
+<p>为了<strong>支持智能合约</strong>，要求参与者要有<strong>稳定的身份</strong></p>
+</li>
+<li>
+<p>智能合约可以实现一些金融衍生品，利于参与者进行<strong>投资</strong></p>
+</li>
+</ul>
+<h2 id="以太坊的状态树">以太坊的状态树</h2>
+<h3 id="定义以太坊的账户状态">定义以太坊的账户状态</h3>
+<ul>
+<li>
+<p>Nonce：累计发起的交易次数</p>
+</li>
+<li>
+<p>Balance：账户余额</p>
+</li>
+<li>
+<p>CodeHash：<strong>智能合约代码</strong>的哈希值</p>
+</li>
+<li>
+<p>StorageRoot：<strong>合约存储树</strong>的<strong>根节点哈希值</strong>(维护智能合约状态)</p>
+</li>
+</ul>
+<h3 id="合约存储树">合约存储树</h3>
+<ul>
+<li>
+<p>合约账户下的存储也是一个<strong>映射表</strong>，它记录了从<strong>存储地址</strong>到<strong>存储值</strong>的一个映射关系</p>
+<ul>
+<li>
+<p><strong>存储地址</strong>：即账户地址，以太坊中用的账户地址是160位，也就是20个字节，一般表示成40个十六进制的数</p>
+</li>
+<li>
+<p><strong>存储值</strong>：即状态，外部账户和合约账户的状态，包括余额、交易次数；合约账户还包括CodeHash、StorageRoot</p>
+</li>
+</ul>
+</li>
+<li>
+<p>在合约账户的数据结构中存储了这个<strong>映射表的哈希值</strong>，这个哈希值被称作存储根(Storage Root)，它同样是<strong>由一棵 MPT 来维护和计算</strong></p>
+</li>
+</ul>
+<h3 id="以太坊的状态维护">以太坊的状态维护</h3>
+<ul>
+<li>
+<p>系统全节点需维护账户状态，若只用哈希表实现账户地址到状态的映射，有什么弊端？</p>
+</li>
+<li>
+<p>为何以太坊不用Merkle Tree来存储账户状态？</p>
+<ul>
+<li>如果使用 Merkle Tree 的场景：如果要证明某个账户有多少钱，需要将哈希表的内容组织成一个Merkle Tree, 计算出根哈希值，将根哈希值存储在 Block Header 中（参考比特币）。只要根哈希值正确，就能保证 Merkle Tree 不被篡改。</li>
+<li>但是，当一个新的区块发布，执行了<strong>新的交易</strong>必然导致<strong>哈希表</strong>（Merkle Tree）<strong>的内容</strong>发生变化，则每次发布新的区块都需要将哈希表的内容重新组织一次 Merkle Tree, 计算代价太大（因为 以太坊账户数量多达上亿个）。</li>
+<li>然而实际上，真正发生变化的账户状态只是一小部分，因为只有那个区块里的交易所关联的账户才会发生变化，大多数账户的状态是不变的。</li>
+<li>另外，利用哈希表构建的 Merkle Tree <strong>不利于更新</strong><br>
+（新增一个账户要重构 Merkle Tree）</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231225150302886.png" alt="image-20231225150302886" style="zoom:50%;" />
+<h3 id="Merkle-Patricia-Trie-MPT">Merkle Patricia Trie (MPT)</h3>
+<ul>
+<li>
+<p>Trie 字典树</p>
+<ul>
+<li>Trie 来源于 Retrieval 单词
+<ul>
+<li>分叉数目取决于 Key 的元素取值范围<br>
+(以太坊地址<strong>分叉数目</strong>是17，<strong>16进制</strong>的0~f加上结束标志位)</li>
+<li>Trie 的查找效率取决于 Key 长度，键值越长，查找需要访问内存的次数就越多在以太坊中，地址为<strong>160位</strong>，对应40个16进制数</li>
+<li>单词/地址不同就不会出现碰撞</li>
+<li>不同的节点，不论按照什么<strong>顺序</strong>插入这些账户，最后构造出来的树是一样的</li>
+<li>更新效率高，只需要局部更新(<strong>更新操作的局部性很好</strong>)</li>
+</ul>
+</li>
+<li>缺点：存储浪费（树的高度太高）</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113165218946.png" alt="image-20231113165218946" style="zoom:33%;" />
+<ul>
+<li>Patricia Trie 压缩前缀树
+<ul>
+<li>对<strong>路径进行压缩</strong>，树的<strong>高度大大缩短</strong>，访问内存的次数变小，<strong>效率提高</strong></li>
+<li><strong>键值路径比较稀疏</strong>的时候，压缩效果比较好<br>
+(以太坊地址分布非常稀疏的，因为<strong>这是去中心化的系统防止账户冲突的唯一办法</strong>)</li>
+<li>新插入一个单词时，原来压缩的路径可能需要<strong>扩展</strong>开</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113165104232.png" alt="image-20231113165104232" style="zoom:33%;" />
+<ul>
+<li>
+<p>背景</p>
+<ul>
+<li>如果把单词都换成<strong>哈希值</strong>，然后<strong>计算每个中间节点的哈希值</strong>，便得到了MPT</li>
+</ul>
+</li>
+<li>
+<p>MPT的构造</p>
+<ul>
+<li>
+<p>按照<strong>所有数据的地址</strong>或<strong>键值</strong>来构建一棵<strong>压缩前缀树</strong></p>
+<ul>
+<li>地址是以16进制为编码的, 故使用 0123456789abcdef 作为每一个编码的单元</li>
+</ul>
+</li>
+<li>
+<p>按照构建得到的压缩前缀树，从叶子节点开始，逐步计算每一层的哈希值，并将其汇合到父节点中，与 Merkle Tree 的计算过程类似</p>
+</li>
+</ul>
+</li>
+<li>
+<p>示例</p>
+<ul>
+<li>由shared nibbles + branch node + key-end得到keys</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113165452899.png" alt="image-20231113165452899" style="zoom: 67%;" />
+<ul>
+<li>实例：以太坊中<strong>状态树的变换</strong>
+<ul>
+<li><strong>每次发布一个新的区块的时候，状态树中有一些节点的值会发生变化，这些改变不是在原地改，而是新建一些分支，原来的状态其实是保留下来的</strong>
+<ul>
+<li>当前的区块的世界观中有状态为A、B和C三个账户</li>
+<li>经过交易T之后，账户C的状态变成了C’，计算下一个状态树的根S’</li>
+<li>以太坊将交易T和状态树根S’记录在<strong>下一个区块</strong>之中</li>
+<li><strong>局部更新</strong>：只是改变<strong>对应分支的状态</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231115165306231.png" alt="image-20231115165306231" style="zoom: 50%;" />
+<ul>
+<li>当新区块形成时，区块链节点存储的是什么？
+<ul>
+<li><strong>生成</strong>的一个<strong>新</strong>的状态树，而不是修改原来的状态树</li>
+<li>虽然每一个区块都有一个状态树，但是这两棵树的<strong>大部分节点是共享的</strong>。左边这棵树主要都是指向右边这棵树的节点，只有<strong>发生改变的节点</strong>是需要新建一个分支</li>
+<li>目的是 —— 有利于解决<strong>分叉</strong>时，对<strong>状态的回滚</strong>
+<ul>
+<li>与比特币不同，比特币的转账可以通过<strong>简单的反向推算</strong></li>
+<li>而以太坊有智能合约，实现的功能很复杂，<strong>很难推算出之前的状态</strong>。所以为了回滚，必须<strong>保存之前的状态</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="以太坊的收据、交易树、Bloom-Filter">以太坊的收据、交易树、Bloom Filter</h2>
+<h3 id="收据">收据</h3>
+<ul>
+<li>
+<p>定义</p>
+<ul>
+<li>收据是对应<strong>交易</strong>的数据结构，代表了交易执行的一些<strong>中间状态的写入</strong>和交易的<strong>执行结果</strong>等信息</li>
+<li>每个交易执行完之后会形成一个收据，记录交易的相关信息</li>
+</ul>
+</li>
+<li>
+<p>内容</p>
+<ul>
+<li>以太坊的智能合约向虚拟机输出的一些<strong>执行日志</strong></li>
+<li>智能合约运行的 <strong>Gas 信息</strong></li>
+<li>单个交易执行完毕后以太坊的<strong>状态根</strong></li>
+<li>交易<strong>创建智能合约</strong>的时候，如果执行成功会把<strong>新建合约的地址</strong>写到一个<strong>收据</strong>之中</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120142900887.png" alt="image-20231120142900887" style="zoom: 50%;" />
+<h3 id="交易树和收据树">交易树和收据树</h3>
+<ul>
+<li>与比特币中的 Merkle Tree 类似的，对于以太坊区块中的所有<strong>交易</strong>和<strong>交易的收据</strong>，都可以使用 <strong>MPT</strong> 进行<strong>组织和证明</strong></li>
+<li>MPT 的构建不是通过账户地址来进行，而是通过<strong>交易</strong>或者<strong>收据在区块中的序号</strong>来构建</li>
+<li>收据树和交易的信息一一对应。主要是考虑到智能合约的执行比较复杂，收据树可以有利于<strong>快速查询</strong>，<strong>证明交易结果</strong></li>
+<li>为什么 交易树与收据树也使用 MPT，而不是普通的 Merkle Tree？
+<ul>
+<li>代码复用：以太坊其他数据结构都采用 MPT， 代码统一，利于管理</li>
+<li>查找效率高</li>
+</ul>
+</li>
+<li>三种树的异同
+<ul>
+<li>交易树和收据树都是只把当前发布的这个<strong>区块里的交易组织</strong>起来的，而状态树是把系统中<strong>所有账户的状态</strong>都要包含进去，不管这些账户跟当前区块的交易有没有关系</li>
+<li>多个区块的状态树是<strong>共享</strong>节点的，每次新发布一个区块的时候，只有这个区块中的交易改变了状态的那些节点需要新建一个分支，其他节点都是沿用原来状态树上的节点。而每个区块的交易树和收据树都是<strong>独立</strong>的，是不会共享节点的，一个区块跟另一个区块发布的交易本身也认为是独立的</li>
+</ul>
+</li>
+</ul>
+<h3 id="Bloom-Filter">Bloom Filter</h3>
+<ul>
+<li>
+<p>Bloom Filter(布隆过滤器)的用途</p>
+<ul>
+<li>支持比较高效的查找<strong>某个元素</strong>是不是在一个<strong>比较大的集合</strong>里</li>
+<li>以太坊中通过布隆过滤器对收据的日志进行<strong>索引、查找</strong>，比如：
+<ul>
+<li>Client 找到过去十天和某个智能合约有关的交易</li>
+<li>Client 找到过去十天当中符合某种类型的所有事件<br>
+(e.g., 众筹事件 or 发行新币的事件)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>优点</p>
+<ul>
+<li>布隆过滤器可以用于检索一个值是否在一个集合中。在容忍<strong>一定的误识别率</strong>的条件下，它有着<strong>远超过一般算法的空间效率和时间效率</strong>。</li>
+</ul>
+</li>
+<li>
+<p>原理</p>
+<ul>
+<li>
+<p>Bloom Filter 使用一个哈希函数与数组(初始化为0)，假设集合内有 a 的值，则计算 a 的哈希值，然后将数组的该位置为1。当需要查询某个值是否在集合中时，就可以做哈希运算，判断该位置是否为1。如果为1，则<strong>可能</strong>在；如果为0，则<strong>一定</strong>不在。</p>
+</li>
+<li>
+<p>以太坊的 Bloom Filter 通过使用<strong>多个哈希函数</strong>将键值映射到<strong>位图</strong>之中，并在位图中合并集合中所有键值的映射结果</p>
+</li>
+<li>
+<p>对于一个键值，如果经过同样的哈希函数映射之后，出现了<strong>在位图中没有出现的标记位</strong>，那么这个键值<strong>必定不存在</strong>于集合之中</p>
+</li>
+<li>
+<p>可以保证某个元素<strong>一定不在</strong>集合里，但不能保证元素<strong>一定在</strong>集合中。<br>
+即，会误报但不会漏报</p>
+</li>
+<li>
+<p>Bloom Filter <strong>不支持删除操作</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>使用案例</p>
+<ul>
+<li>每个交易执行完之后会形成一个<strong>收据</strong>，这个收据里面就包含一个 Bloom Filter，记录交易的类型、地址等其他信息。</li>
+<li>发布的区块，在他的块头里也有一个总的 Bloom Filter，这个总的 Bloom Filter 是这个区块里所有交易的一个 Bloom Filter 的并集</li>
+<li>Bloom Filter 用于快速查找一个 TX 所在的历史区块
+<ul>
+<li>在进行 哈希方式 B 之后，若日志地址 Y 的哈希出现了<strong>新的标记位</strong>，那么日志地址 Y <strong>必然不存在</strong>于原有四个日志地址之中</li>
+<li>好处：client 可以快速过滤，迅速查找</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120145249396.png" alt="image-20231120145249396" style="zoom: 50%;" />
+<h2 id="以太坊基本架构及原理">以太坊基本架构及原理</h2>
+<h3 id="状态模型">状态模型</h3>
+<ul>
+<li>背景
+<ul>
+<li>在<strong>账户模型</strong>中，用户的<strong>余额</strong>通过<strong>地址上的账户数据</strong>来表示，具体为账户数据结构中的一个余额的数值</li>
+<li>在<strong>转账交易</strong>的过程中，通过转账预先定义好的语义，在发起者的账户中减去交易中定义好的转账金额，在接受者的账户中增加相应的金额</li>
+<li>可以把<strong>账户的余额</strong>泛化成一种<strong>账户的状态</strong>，而把<strong>转账交易</strong>当作<strong>改变状态的一个方法</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="状态转移">状态转移</h3>
+<ul>
+<li>状态转移：由<strong>交易驱动</strong>的状态机
+<ul>
+<li>在区块 N 执行前状态为 S ，经过区块 N 的交易进行状态转换后，转换为状态 S’ ，再经过区块 N+1 的转换后，转换为状态 S’’</li>
+</ul>
+</li>
+<li>以太坊状态转移
+<ul>
+<li>智能合约：作用于该状态机转换的<strong>代码</strong></li>
+<li>以太坊虚拟机（Ethereum Virtual Machine，EVM）：<strong>执行状态转换代码</strong>的虚拟机</li>
+<li>只要约定好的变换规则是固定的，就可以不断地通过变换规则不停地<strong>作用到原有状态</strong>上<strong>产生新的状态</strong></li>
+<li>对于有着<strong>相同的初始状态</strong>的参与者们来说，经过<strong>完全相同的变换过程</strong>，最后必然得到<strong>完全相同的当前状态</strong></li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\a914563df26fadebf7a787e27c82d09.png" alt="a914563df26fadebf7a787e27c82d09" style="zoom:50%;" />
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120150520245.png" alt="image-20231120150520245" style="zoom:67%;" />
+<h3 id="以太坊简易架构图">以太坊简易架构图</h3>
+<ul>
+<li>定义
+<ul>
+<li>区块链数据
+<ul>
+<li>以太坊区块链</li>
+<li><strong>状态数据，收据数据</strong>等</li>
+</ul>
+</li>
+<li>智能合约
+<ul>
+<li>存储在以太坊上的一段<strong>代码</strong></li>
+</ul>
+</li>
+<li>节点
+<ul>
+<li>保存有区块链数据的节点</li>
+<li>每个节点<strong>独立</strong>地维护区块链数据</li>
+<li>节点间采用<strong>共识机制</strong>达成共识，维护全网的状态一致</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120152913739.png" alt="image-20231120152913739" style="zoom:50%;" />
+<ul>
+<li>交易执行概述
+<ul>
+<li>每个节点独立维护数据</li>
+<li>节点独立地在EVM中执行合约</li>
+<li>将执行结果<strong>写回区块链数据</strong></li>
+<li>节点之间执行共识机制，达成共识</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120153407805.png" alt="image-20231120153407805" style="zoom:50%;" />
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120155033731.png" alt="image-20231120155033731" style="zoom:50%;" />
+<h2 id="以太坊交易">以太坊交易</h2>
+<ul>
+<li>
+<p>背景</p>
+<ul>
+<li>在以太坊中，交易承载了<strong>账户转账</strong>和<strong>合约创建</strong>、<strong>调用合约</strong>等功能</li>
+<li>TX 数据的内容更为复杂，大体上可以粗略的分为三个部分，即<strong>基本的交易</strong>、<strong>交易的执行参数</strong>和<strong>交易的签名</strong></li>
+</ul>
+</li>
+<li>
+<p>基本交易内容</p>
+<ul>
+<li><strong>from：交易发送者的地址</strong>。发送者地址可以通过合约的签名信息&lt;r, s, v&gt;计算得到，实现上交易的数据结构中<u>并不会存储发送者地址</u></li>
+<li><strong>to：交易接收者的地址</strong>。在进行转账时是接受转账金额的地址，在<u>创建合约时设置为0x0000…000</u>，在调用合约时则是合约的地址</li>
+<li><strong>value：交易的金额</strong>，单位是Wei。Wei是以太币最小单位，我们常说的1个以太币是单位Ether，1 Ether =10^18 Wei</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\9aad4c7f221b9c86f8590c1d4066e2e.png" alt="9aad4c7f221b9c86f8590c1d4066e2e" style="zoom: 50%;" />
+<ul>
+<li>交易的执行参数
+<ul>
+<li>input data：交易附带数据，传递创建合约的代码和构造函数，或调用合约的函数及参数</li>
+<li>nonce：交易发送者累计发出的交易数量，用于区分一个账户的不同交易及顺序</li>
+<li>gasPrice：发送者支付给矿工的gas的价格，用于实现从Gas到以太坊货币单位的转换，从而计算使用的Gas的总价格</li>
+<li>gasLimit：该交易允许消耗的最大的gas，用于解决智能合约不能停机的问题</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120160006896.png" alt="image-20231120160006896" style="zoom:50%;" />
+<ul>
+<li>交易的签名
+<ul>
+<li>hash：由<strong>以上字段</strong>生成的哈希值，也作为<strong>交易的 id</strong></li>
+<li>r、s、v：用于<strong>ECDSA</strong>验证的参数，由<strong>发送者的私钥</strong>对交易的哈希做数字签名生成，用于确认转账的合法性</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120160054859.png" alt="image-20231120160054859" style="zoom: 50%;" />
+<ul>
+<li>交易的周期
+<ul>
+<li>发起</li>
+<li>广播</li>
+<li>打包与执行</li>
+<li>验证与执行</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120170227023.png" alt="image-20231120170227023" style="zoom:50%;" />
+<ul>
+<li>交易的发起
+<ul>
+<li>
+<p>设定交易内容</p>
+<ul>
+<li>
+<p>用户在本地的以太坊钱包软件中选择要发</p>
+<p>送交易的地址（from），输入目标地址（to）、金额（value）、是否部署或调用合约（data）、**手续费单价（gasPrice）**等</p>
+</li>
+</ul>
+</li>
+<li>
+<p>发起交易</p>
+<ul>
+<li>用户确认发送至以太坊节点，多个用户各自保有钱包私钥，而通过同一个以太坊节点广播交易</li>
+</ul>
+</li>
+<li>
+<p>以太坊钱包软件补充内容</p>
+<ul>
+<li>以太坊钱包软件将自动为用户得出交易所需的<strong>燃料上限（gasLimit）</strong>，并给出用户地址对应的 nonce 值，最后使用私钥得到 r、s、v，最终将交易序列化后发送到网络中</li>
+<li>部分客户端中，gasLimit 与 nonce 也可以是用户自定义的</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>交易的广播
+<ul>
+<li>节点收到（或自己发起）交易后，对交易进行验证</li>
+<li>节点验证交易为合法交易后，将交易加入节点的交易池中</li>
+<li>节点验证交易通过后，除了加入节点的交易池中，还会根据 P2P 网络广播的策略向相邻节点继续广播该交易</li>
+</ul>
+</li>
+<li>交易的打包和执行
+<ul>
+<li>交易进入内存池后，具有挖矿功能的全节点，开始打包下一个区块</li>
+<li>节点将交易打包时，对交易逐个执行，每笔以太坊交易都是对以太坊状态的修改</li>
+<li>在所有需要打包的交易执行后，交易、状态以及收据的信息也会打包到区块中</li>
+<li>记账节点在打包交易并获得合法的区块后，将区块（包含交易数据）广播到网络中的相邻节点</li>
+<li>交易的类型：根据 to 值的不同，将交易的执行类型分为如下3种
+<ul>
+<li>创建合约交易：to 为<strong>空</strong>的交易
+<ul>
+<li>EVM 根据 from 值及 nonce 值生成合约地址</li>
+<li>执行 data 中对应的智能合约代码</li>
+<li>将合约 EVM 代码存储到合约地址中</li>
+</ul>
+</li>
+<li>调用合约交易：to 为<strong>合约账户</strong>的交易
+<ul>
+<li>EVM 将从世界状态中获取 to 地址中存储的 EVM 代码
+<ul>
+<li>to 地址中存储的是合约本身</li>
+</ul>
+</li>
+<li>执行交易的 data 字段中包含的代码
+<ul>
+<li>data 中则包含了调用合约的相应函数及其参数</li>
+</ul>
+</li>
+<li>本质上讲，对合约的调用，是对合约状态的修改</li>
+</ul>
+</li>
+<li>普通转账交易：to 为<strong>外部账户</strong>的交易
+<ul>
+<li>直接将以太币金额从 from 转到 to</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204113839339.png" alt="image-20231204113839339" style="zoom:50%;" />
+<ul>
+<li>交易的验证和执行
+<ul>
+<li>没有获得记账权的节点，在收到广播的区块后，对区块进行合法性的验证，并进行交易的执行</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204114052016.png" alt="image-20231204114052016" style="zoom:50%;" />
+<h2 id="以太坊共识机制">以太坊共识机制</h2>
+<ul>
+<li>
+<p>基于PoW机制</p>
+<ul>
+<li>ASIC resistance: memory hard puzzle</li>
+<li>以太坊采用的哈希算法是 ethash 算法，对内存有要求（ASIC resistance)</li>
+<li>抑制硬件挖矿</li>
+</ul>
+</li>
+<li>
+<p>以太坊<strong>升级后</strong>的共识机制：PoS</p>
+<ul>
+<li>Proof-of-Stake  权益证明：<strong>按照所占的权益进行投票来形成共识</strong></li>
+<li>通过计算<strong>持有币数占总币数的百分比</strong>，包括<strong>占有币数的时间</strong>来决定获得本次记账权利的<strong>概率</strong>。持有越多，获得记账权力概率越大</li>
+<li>代表币种：如 Qtum 币，以太坊也部分采用POS机制</li>
+<li>优点：相比 PoW 缩短了达成共识时间；节省能源</li>
+<li>缺点：容易分叉；易中心化（马太效应）</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204114836084.png" alt="image-20231204114836084" style="zoom:67%;" />
+<ul>
+<li>新PoW共识：以太坊的分叉
+<ul>
+<li>以太坊的出块时间被定为 15s 左右</li>
+<li>在 15 秒的时间内，一个新发布的区块很很大可能还没有扩散到整个区块链网络，导致以太坊的分叉是常态
+<ul>
+<li>分叉上的块被废弃，打击积极性</li>
+<li>安全上的考虑，有什么坏处？</li>
+</ul>
+</li>
+<li>为了鼓励分叉的合并，太坊的设计中引入了 Ghost 协议
+<ul>
+<li><strong>GHOST</strong> (Greedy Heaviest Observed SubTree)</li>
+<li>由Yonatan Sompolinsky 和 Aviv Zohar在2013年12月引入的创新</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204142633313.png" alt="image-20231204142633313" style="zoom: 50%;" />
+<ul>
+<li>==<strong>叔父块</strong>==
+<ul>
+<li>定义
+<ul>
+<li>矿工挖到一个区块，但由于最长链机制，这个区块最后作废了，以太坊中这些作废的区块可以成为叔父块。<strong>最长合法链的下一个区块在发布的时候可以把叔父区块包含进来，这样，该区块与包含的叔父区块都能获得一定奖励</strong>。</li>
+<li>以太坊定义了<strong>不在主链</strong>但<strong>被主链区块记录</strong>的<strong>满足难度</strong>的区块为叔块</li>
+<li>在以太坊中叔父不是严格意义上的叔父，在以太坊中规定在<strong>当前区块的7代以内有共同祖先</strong>的都可以认为是叔父块</li>
+</ul>
+</li>
+<li>作用
+<ul>
+<li>在尽可能减少两个相邻区块产生时间的条件下，尽量<strong>收缩和统一整个区块链的主链</strong>，同时通过<strong>叔块的激励</strong>来维护矿工的积极性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\d5d4579b01434da289a9808e7f0079fb.png" alt="img" style="zoom: 33%;" />
+<ul>
+<li><strong>叔父块奖励</strong>
+<ul>
+<li>区块1如果没有包含叔父区块（区块2），往下再有一个区块（区块3），按道理来说区块2就不是区块3的叔父区块了，因为区块2跟区块3的爷爷来说是一辈的，但是以太坊规定<strong>不能论资排辈</strong>，区块2还可以当做区块3的叔父区块。如果再往下挖一个区块4，区块2还是区块4的叔父区块。
+<ul>
+<li>这么规定的好处，如果某个矿池（挖出区块1的矿工）出于竞争关系故意不把这个叔父区块（区块2）包含进去，你不包含没关系，别人可以包含，下一个区块可能不是该矿池挖出来的，同时不可能最长合法链上都是该矿池挖出来的吧。</li>
+<li>甚至有可能下一个区块是跟挖出区块2的是一家的，就是挖出区块2的矿工看到最长合法链之后会切换到这里来挖，然后把自己之前挖出的区块2给包含进去</li>
+</ul>
+</li>
+<li>如下图所示，M为区块链上一个区块，F是M严格意义上的叔父，E为其严格意义上的爷爷辈。</li>
+<li>以太坊中规定，如果M包含F辈区块，则F获得<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>7</mn><mn>8</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{7}{8}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">7</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>出块奖励；如果M包含E辈区块，则F获得$\frac{6}{8} <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>出块奖励，以此类推向前。直到包含</mtext><mi>A</mi><mtext>辈区块，</mtext><mi>A</mi><mtext>获得</mtext></mrow><annotation encoding="application/x-tex">出块奖励，以此类推向前。直到包含A辈区块，A获得</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord cjk_fallback">出块奖励，以此类推向前。直到包含</span><span class="mord mathnormal">A</span><span class="mord cjk_fallback">辈区块，</span><span class="mord mathnormal">A</span><span class="mord cjk_fallback">获得</span></span></span></span>\frac{2}{8} $ 出块奖励，再往前的叔父区块，对于M来说就不再认为是M的叔父了（<strong>合法的叔父只有6个辈分</strong>）</li>
+</ul>
+</li>
+</ul>
+<p><img src="D:%5CTypora_picture%5C10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0%5C10debd412c5c4426924ad77bcbf76faf.png" alt="img"></p>
+<ul>
+<li><strong>叔父块特点</strong>
+<ul>
+<li>某个区块最多只能接纳<strong>2个叔父块</strong>，也可以不接纳任何叔父块。接纳了 n 个叔父块的区块，可以获得出块奖励的 n *<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mn>32</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac1{32}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">32</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>
+<ul>
+<li>解决系统中出现的临时性分叉</li>
+</ul>
+</li>
+<li>叔父块必须是区块的前2层～前7层的祖先的<strong>直接子块</strong>
+<ul>
+<li><strong>必须跟当前区块在7代以内有共同的祖先</strong></li>
+</ul>
+</li>
+<li>被接纳过的叔父块不能再重复接纳</li>
+<li>被引用了的叔父块，随着距离越远，得到的奖励递减 1/8</li>
+</ul>
+</li>
+<li>叔父块设计的优点
+<ul>
+<li>如果不限制叔父的辈分，不限制隔多少代的话，那么实现起来，对于全节点来说，要维护的状态的就太多了</li>
+<li>有利于鼓励出现分叉之后尽早进行合并</li>
+</ul>
+</li>
+<li>叔父区块中的交易会被执行吗?
+<ul>
+<li>不需要</li>
+<li>原因：叔父区块中的交易很可能与当前区块之间的交易是<strong>存在冲突</strong>，但实际上以太坊中不会执行叔父区块中的交易，而是只<strong>检查</strong>这个叔父区块是不是<strong>符合挖矿难度要求</strong>的合法区块</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204143728910.png" alt="image-20231204143728910" style="zoom:67%;" />
+<ul>
+<li>叔块奖励示例</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144313914.png" alt="image-20231204144313914" style="zoom: 33%;" />
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144353807.png" alt="image-20231204144353807" style="zoom: 33%;" />
+<h2 id="以太坊挖矿难度调整">以太坊挖矿难度调整</h2>
+<p><img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144458884.png" alt="image-20231204144458884" style="zoom: 30%;" /><img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144520038.png" alt="image-20231204144520038" style="zoom: 30%;" /></p>
+<p><img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144543312.png" alt="image-20231204144543312" style="zoom: 30%;" /><img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144609351.png" alt="image-20231204144609351" style="zoom: 30%;" /></p>
+<ul>
+<li>以太坊发展的四个阶段</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144705999.png" alt="image-20231204144705999" style="zoom:50%;" />
+<ul>
+<li>难度炸弹的调整对出块的影响</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144742080.png" alt="image-20231204144742080" style="zoom:50%;" />
+<ul>
+<li>早期的难度调整，主要是为了<strong>稳定出块时间</strong></li>
+<li>出块时间<strong>大幅度增长</strong>，是因为<strong>难度炸弹的效应</strong></li>
+<li>调整后总的出块时间又<strong>恢复</strong>到原来的水平</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/02/12/BC_6/" rel="prev" title="">
+                  <i class="fa fa-angle-left"></i> 
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/02/12/BC_8/" rel="next" title="">
+                   <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ZhangChengWei</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>

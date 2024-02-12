@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="分叉背后原理 硬分叉与软分叉 硬分叉 硬分叉定义   增加new feature、扩展新功能   旧节点不兼容升级后的新节点产生的区块   区块链发生永久性分歧，在新共识规则发布后，部分没有升级的节点无法验证已经升级的节点生产的区块，通常硬分叉就会发生   规则改变，产生一个不同的链  如：升级block size，从1M更新到4M      历史上的硬分叉 ​		攻击者从The DAO的智能合约">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Blog of ZhangCW">
+<meta property="og:url" content="http://example.com/2024/02/12/BC_7/index.html">
+<meta property="og:site_name" content="Blog of ZhangCW">
+<meta property="og:description" content="分叉背后原理 硬分叉与软分叉 硬分叉 硬分叉定义   增加new feature、扩展新功能   旧节点不兼容升级后的新节点产生的区块   区块链发生永久性分歧，在新共识规则发布后，部分没有升级的节点无法验证已经升级的节点生产的区块，通常硬分叉就会发生   规则改变，产生一个不同的链  如：升级block size，从1M更新到4M      历史上的硬分叉 ​		攻击者从The DAO的智能合约">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="d:\Typora_picture\8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86\image-20231030144315159.png">
+<meta property="og:image" content="d:%5CTypora_picture%5C8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86%5Cimage-20231030144925529.png">
+<meta property="og:image" content="d:\Typora_picture\8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86\image-20231030144550069.png">
+<meta property="og:image" content="d:\Typora_picture\8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86\image-20231030144355720.png">
+<meta property="og:image" content="d:%5CTypora_picture%5C8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86%5Cimage-20231030144859476.png">
+<meta property="og:image" content="d:\Typora_picture\8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86\image-20231030150624586.png">
+<meta property="og:image" content="d:%5CTypora_picture%5C8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86%5Cimage-20231030150850249.png">
+<meta property="og:image" content="d:\Typora_picture\8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86\image-20231030151641653.png">
+<meta property="og:image" content="d:\Typora_picture\8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86\image-20231030151242167.png">
+<meta property="article:published_time" content="2024-02-12T15:05:17.588Z">
+<meta property="article:modified_time" content="2024-02-12T15:04:18.232Z">
+<meta property="article:author" content="ZhangChengWei">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:\Typora_picture\8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86\image-20231030144315159.png">
+
+
+<link rel="canonical" href="http://example.com/2024/02/12/BC_7/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/02/12/BC_7/","path":"2024/02/12/BC_7/","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | Blog of ZhangCW</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Blog of ZhangCW</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">By ZhangCW</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">分叉背后原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AC%E5%88%86%E5%8F%89%E4%B8%8E%E8%BD%AF%E5%88%86%E5%8F%89"><span class="nav-text">硬分叉与软分叉</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E5%88%86%E5%8F%89"><span class="nav-text">硬分叉</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E5%88%86%E5%8F%89"><span class="nav-text">软分叉</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%81%B6%E6%84%8F%E7%9A%84%E5%88%86%E5%8F%89"><span class="nav-text">恶意的分叉</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E7%A7%81%E6%8C%96%E7%9F%BF"><span class="nav-text">自私挖矿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E5%A0%82%E6%80%9D%E8%80%83"><span class="nav-text">课堂思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OP-RETURN%E6%8C%87%E4%BB%A4%E4%B8%BA%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E6%8F%90%E4%BE%9B%E4%BA%86%E4%B8%80%E4%B8%AA%E5%90%91%E6%AF%94%E7%89%B9%E5%B8%81%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%86%99%E5%85%A5%E6%83%B3%E8%A6%81%E4%B8%80%E7%9B%B4%E4%BF%9D%E5%AD%98%E7%9A%84%E5%86%85%E5%AE%B9%E3%80%82%E4%BD%86OP-RETURN%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E6%98%AF%E6%97%A0%E6%9D%A1%E4%BB%B6%E8%BF%94%E5%9B%9E%E9%94%99%E8%AF%AF%EF%BC%8C-%E8%80%8C%E4%BA%A4%E6%98%93%E8%BF%94%E5%9B%9E%E9%94%99%E8%AF%AF%EF%BC%8C-%E5%8C%BA%E5%9D%97%E5%8F%88%E6%80%8E%E4%B9%88%E4%BC%9A%E5%8C%85%E5%90%AB%E5%AE%83%EF%BC%9F-%E5%8C%BA%E5%9D%97%E9%93%BE%E5%8F%88%E5%A6%82%E4%BD%95%E4%BC%9A%E6%8E%A5%E6%94%B6%E8%BF%99%E4%B8%AA%E5%8C%BA%E5%9D%97%EF%BC%9F"><span class="nav-text">OP_RETURN指令为普通用户提供了一个向比特币网络中写入想要一直保存的内容。但OP_RETURN执行结果是无条件返回错误， 而交易返回错误， 区块又怎么会包含它？ 区块链又如何会接收这个区块？</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ZhangChengWei</p>
+  <div class="site-description" itemprop="description">paper analysis</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Blog of ZhangCW">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-02-12 23:05:17 / 修改时间：23:04:18" itemprop="dateCreated datePublished" datetime="2024-02-12T23:05:17+08:00">2024-02-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1>分叉背后原理</h1>
+<h2 id="硬分叉与软分叉">硬分叉与软分叉</h2>
+<h3 id="硬分叉">硬分叉</h3>
+<p><strong>硬分叉定义</strong></p>
+<ul>
+<li>
+<p>增加new feature、<strong>扩展</strong>新功能</p>
+</li>
+<li>
+<p>旧节点<strong>不兼容</strong>升级后的新节点产生的区块</p>
+</li>
+<li>
+<p>区块链发生<strong>永久性分歧</strong>，在新共识规则发布后，部分<strong>没有升级的节点无法验证已经升级的节点生产的区块</strong>，通常硬分叉就会发生</p>
+</li>
+<li>
+<p>规则改变，产生一个不同的链</p>
+<ul>
+<li>如：升级block size，从1M更新到4M</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\8_分叉背后原理\image-20231030144315159.png" alt="image-20231030144315159" style="zoom:50%;" />
+<p><img src="D:%5CTypora_picture%5C8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86%5Cimage-20231030144925529.png" alt="image-20231030144925529"></p>
+<p><strong>历史上的硬分叉</strong></p>
+<p>​		攻击者从<strong>The DAO</strong>的智能合约中盗走了价值超过5000万美元的以太币</p>
+<p>​		通过硬分叉，以太坊产生了一条新链</p>
+<img src="D:\Typora_picture\8_分叉背后原理\image-20231030144550069.png" alt="image-20231030144550069" style="zoom:33%;" />
+<h3 id="软分叉">软分叉</h3>
+<p><strong>软分叉定义</strong></p>
+<ul>
+<li>
+<p>对协议加一些<strong>限制</strong></p>
+</li>
+<li>
+<p>旧节点<strong>兼容</strong>升级后的新节点产生的区块</p>
+</li>
+<li>
+<p>当新共识规则发布后，没有升级的节点会因为<strong>不知道新规则</strong>，而<strong>生产不合法的区块</strong>，就会产生<strong>临时性分叉</strong></p>
+</li>
+<li>
+<p><strong>老版本节点</strong>可能做无用功</p>
+<ul>
+<li>
+<p>挖到无效块，因为这些块中包含了<strong>在新规则下无法被验证</strong>的交易</p>
+</li>
+<li>
+<p>转发给其他新节点，新块不会被接受</p>
+</li>
+<li>
+<p>这会<strong>强迫老节点更新协议/规则</strong></p>
+</li>
+<li>
+<p>老节点转而扩展最长的链：分叉消失</p>
+</li>
+</ul>
+</li>
+<li>
+<p>如：block size 从1M更新到0.5M</p>
+</li>
+</ul>
+<img src="D:\Typora_picture\8_分叉背后原理\image-20231030144355720.png" alt="image-20231030144355720" style="zoom:50%;" />
+<p><img src="D:%5CTypora_picture%5C8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86%5Cimage-20231030144859476.png" alt="image-20231030144859476"></p>
+<p><strong>历史上的软分叉</strong></p>
+<p>​		Pay to Script Hash</p>
+<p>==<strong>核心区别</strong>==</p>
+<ul>
+<li>旧节点<strong>不兼容</strong>，产生硬分叉</li>
+<li>旧节点<strong>兼容</strong>，产生软分叉</li>
+</ul>
+<p>+++</p>
+<p><strong>示例</strong></p>
+<ul>
+<li>题目背景
+<ul>
+<li>要证明某个账户上有多少钱，目前在比特币系统上证明不出来。
+<ul>
+<li>全节点会维护一个UTXO集合，但是这个信息没有写在链上。</li>
+<li>全节点可以算一下，但是比特币钱包要知道账户的余额，只能问全节点</li>
+<li>有人提议把UTXO集合的<strong>root hash写进coinbase</strong>里</li>
+<li><strong>Coinbase 字段中添加UTXO的merkel tree root</strong></li>
+<li>这样就可以用merkel proof来证明某个账户有多少钱了</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>问题：这是硬分叉还是软分叉？</strong></li>
+</ul>
+<p>​		答：软分叉。软分叉是对协议<strong>向后兼容</strong>的升级。本题的情况中，新节点会对所挖出节点coinbase域中的UTXO根哈希进行检验，确保其存在**(新节点不接受旧版本)<strong>；旧节点通过只验证传统coinbase域，而不验证coinbase域中的UTXO根哈希值的方式，继续生成并接受新节点生成的区块</strong>(旧节点对新旧版本都接收)**。因此，旧节点和新节点之间的交互是向后兼容的，故将UTXO集合的根哈希写入coinbase会产生软分叉。</p>
+<h2 id="恶意的分叉">恶意的分叉</h2>
+<p>​		分叉攻击 —— 最长链机制带来的副作用</p>
+<img src="D:\Typora_picture\8_分叉背后原理\image-20231030150624586.png" alt="image-20231030150624586" style="zoom: 67%;" />
+<h2 id="自私挖矿">自私挖矿</h2>
+<p><strong>定义与动机</strong></p>
+<ul>
+<li>一个自私的矿工隐藏了刚刚开采的新区块，并继续开采下一个隐藏区块。</li>
+<li>只有其自己知道刚刚开采了一个新区块，所以其他人都在前一个旧区块后面开采</li>
+<li>一旦发布出去， 大家都会在新区块后边平等地开始竞争</li>
+</ul>
+<p><img src="D:%5CTypora_picture%5C8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86%5Cimage-20231030150850249.png" alt="image-20231030150850249"></p>
+<p><strong>风险</strong></p>
+<ul>
+<li><strong>不发布的块</strong>有可能会<strong>浪费</strong>掉，所以不如赶紧发布出去获取当前的出块奖励（落袋为安）</li>
+</ul>
+<img src="D:\Typora_picture\8_分叉背后原理\image-20231030151641653.png" alt="image-20231030151641653" style="zoom: 67%;" />
+<p><strong>收益曲线</strong></p>
+<ul>
+<li>研究表明，若某矿工的算力<strong>超过全网的三分之一</strong>，他很可能为更多收益而选择自私挖矿</li>
+</ul>
+<img src="D:\Typora_picture\8_分叉背后原理\image-20231030151242167.png" alt="image-20231030151242167" style="zoom: 50%;" />
+<h2 id="课堂思考">课堂思考</h2>
+<ol>
+<li><strong>转账交易时候，如果接收者不在线(没有连在比特币网络上)怎么办？</strong>
+<ul>
+<li>答：转账交易只需要<strong>在区块链上记录</strong>，将某账户比特币转到另一账户，而接收方是否在线并无影响。</li>
+</ul>
+</li>
+<li><strong>假设某全节点收到转账交易，有没有可能该全节点从未听过转账交易的收款人地址？</strong>
+<ul>
+<li>答：可能，因为<strong>比特币账户只需要本地产生</strong>即可。只有该账户<strong>第一次收到钱</strong>时，其他节点才能知道该节点的存在。</li>
+</ul>
+</li>
+<li><strong>如果账户私钥丢失怎么办？</strong>
+<ul>
+<li>答：没有办法。因为比特币是去中心化货币，<strong>没有第三方中心机构可以重置密码</strong>，所以账户上的钱也就变成了死钱。</li>
+</ul>
+</li>
+<li><strong>私钥泄露怎么办？</strong>
+<ul>
+<li>答：尽快<strong>将剩余BTC转移</strong>到其他安全账户上，没有第三方中心机构重置密码或冻结账户，只能自己对自己负责。BTC系统中账户是公私钥对，密码是私钥，无法更改。</li>
+</ul>
+</li>
+<li><strong>转账写错地址怎么办？</strong>
+<ul>
+<li>答：无法取消已经发布的交易。如果转入不存在地址，则该部分比特币便成为了死钱。比特币系统中UTXO会永久保存该交易，记录该并不存在的地址。因此，对全节点来说，这是不友好的。</li>
+</ul>
+</li>
+<li>
+<h2 id="OP-RETURN指令为普通用户提供了一个向比特币网络中写入想要一直保存的内容。但OP-RETURN执行结果是无条件返回错误，-而交易返回错误，-区块又怎么会包含它？-区块链又如何会接收这个区块？"><strong>OP_RETURN指令</strong>为普通用户提供了一个向比特币网络中写入想要一直保存的内容。但OP_RETURN执行结果是无条件返回错误， 而交易返回错误， 区块又怎么会包含它？ 区块链又如何会接收这个区块？</h2>
+</li>
+<li><strong>BTC系统挖矿，会不会有矿工“偷”答案？例如：某个矿工发现其他矿工发布了nonce，收到后验证该区块合法，将该nonce作为自己找到的nonce发布出去</strong>
+<ul>
+<li>实际上这是<strong>不可能</strong>的。发布的区块中包含<strong>铸币交易</strong>，其收款人地址为挖到矿的矿工地址，如果要偷答案，需要修改该收款地址，而<strong>地址改变，铸币交易内容也发生改变，从而引发Merkle Tree根哈希值改变</strong>。从而导致<strong>原本的nonce作废</strong>。也就是说，不可能会“偷”答案。</li>
+</ul>
+</li>
+<li><strong>交易费是交易者为了交易上链而给出的“小费”，那么如何得知哪个矿工可以挖到矿？</strong>
+<ul>
+<li>事先无需知道谁会挖到矿，<strong>交易中总输入和总输出差额</strong>就是交易费。哪个矿工挖到矿，在打包交易时，可以将这些<strong>交易费收集</strong>起来作为自己获得的交易费。</li>
+</ul>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/02/12/BC_8/" rel="prev" title="">
+                  <i class="fa fa-angle-left"></i> 
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ZhangChengWei</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>

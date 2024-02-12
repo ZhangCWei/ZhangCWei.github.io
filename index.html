@@ -122,12 +122,12 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
@@ -148,6 +148,3093 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Blog of ZhangCW">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/12/BC_7/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-02-12 23:05:17 / 修改时间：23:04:18" itemprop="dateCreated datePublished" datetime="2024-02-12T23:05:17+08:00">2024-02-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1>分叉背后原理</h1>
+<h2 id="硬分叉与软分叉">硬分叉与软分叉</h2>
+<h3 id="硬分叉">硬分叉</h3>
+<p><strong>硬分叉定义</strong></p>
+<ul>
+<li>
+<p>增加new feature、<strong>扩展</strong>新功能</p>
+</li>
+<li>
+<p>旧节点<strong>不兼容</strong>升级后的新节点产生的区块</p>
+</li>
+<li>
+<p>区块链发生<strong>永久性分歧</strong>，在新共识规则发布后，部分<strong>没有升级的节点无法验证已经升级的节点生产的区块</strong>，通常硬分叉就会发生</p>
+</li>
+<li>
+<p>规则改变，产生一个不同的链</p>
+<ul>
+<li>如：升级block size，从1M更新到4M</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\8_分叉背后原理\image-20231030144315159.png" alt="image-20231030144315159" style="zoom:50%;" />
+<p><img src="D:%5CTypora_picture%5C8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86%5Cimage-20231030144925529.png" alt="image-20231030144925529"></p>
+<p><strong>历史上的硬分叉</strong></p>
+<p>​		攻击者从<strong>The DAO</strong>的智能合约中盗走了价值超过5000万美元的以太币</p>
+<p>​		通过硬分叉，以太坊产生了一条新链</p>
+<img src="D:\Typora_picture\8_分叉背后原理\image-20231030144550069.png" alt="image-20231030144550069" style="zoom:33%;" />
+<h3 id="软分叉">软分叉</h3>
+<p><strong>软分叉定义</strong></p>
+<ul>
+<li>
+<p>对协议加一些<strong>限制</strong></p>
+</li>
+<li>
+<p>旧节点<strong>兼容</strong>升级后的新节点产生的区块</p>
+</li>
+<li>
+<p>当新共识规则发布后，没有升级的节点会因为<strong>不知道新规则</strong>，而<strong>生产不合法的区块</strong>，就会产生<strong>临时性分叉</strong></p>
+</li>
+<li>
+<p><strong>老版本节点</strong>可能做无用功</p>
+<ul>
+<li>
+<p>挖到无效块，因为这些块中包含了<strong>在新规则下无法被验证</strong>的交易</p>
+</li>
+<li>
+<p>转发给其他新节点，新块不会被接受</p>
+</li>
+<li>
+<p>这会<strong>强迫老节点更新协议/规则</strong></p>
+</li>
+<li>
+<p>老节点转而扩展最长的链：分叉消失</p>
+</li>
+</ul>
+</li>
+<li>
+<p>如：block size 从1M更新到0.5M</p>
+</li>
+</ul>
+<img src="D:\Typora_picture\8_分叉背后原理\image-20231030144355720.png" alt="image-20231030144355720" style="zoom:50%;" />
+<p><img src="D:%5CTypora_picture%5C8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86%5Cimage-20231030144859476.png" alt="image-20231030144859476"></p>
+<p><strong>历史上的软分叉</strong></p>
+<p>​		Pay to Script Hash</p>
+<p>==<strong>核心区别</strong>==</p>
+<ul>
+<li>旧节点<strong>不兼容</strong>，产生硬分叉</li>
+<li>旧节点<strong>兼容</strong>，产生软分叉</li>
+</ul>
+<p>+++</p>
+<p><strong>示例</strong></p>
+<ul>
+<li>题目背景
+<ul>
+<li>要证明某个账户上有多少钱，目前在比特币系统上证明不出来。
+<ul>
+<li>全节点会维护一个UTXO集合，但是这个信息没有写在链上。</li>
+<li>全节点可以算一下，但是比特币钱包要知道账户的余额，只能问全节点</li>
+<li>有人提议把UTXO集合的<strong>root hash写进coinbase</strong>里</li>
+<li><strong>Coinbase 字段中添加UTXO的merkel tree root</strong></li>
+<li>这样就可以用merkel proof来证明某个账户有多少钱了</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>问题：这是硬分叉还是软分叉？</strong></li>
+</ul>
+<p>​		答：软分叉。软分叉是对协议<strong>向后兼容</strong>的升级。本题的情况中，新节点会对所挖出节点coinbase域中的UTXO根哈希进行检验，确保其存在**(新节点不接受旧版本)<strong>；旧节点通过只验证传统coinbase域，而不验证coinbase域中的UTXO根哈希值的方式，继续生成并接受新节点生成的区块</strong>(旧节点对新旧版本都接收)**。因此，旧节点和新节点之间的交互是向后兼容的，故将UTXO集合的根哈希写入coinbase会产生软分叉。</p>
+<h2 id="恶意的分叉">恶意的分叉</h2>
+<p>​		分叉攻击 —— 最长链机制带来的副作用</p>
+<img src="D:\Typora_picture\8_分叉背后原理\image-20231030150624586.png" alt="image-20231030150624586" style="zoom: 67%;" />
+<h2 id="自私挖矿">自私挖矿</h2>
+<p><strong>定义与动机</strong></p>
+<ul>
+<li>一个自私的矿工隐藏了刚刚开采的新区块，并继续开采下一个隐藏区块。</li>
+<li>只有其自己知道刚刚开采了一个新区块，所以其他人都在前一个旧区块后面开采</li>
+<li>一旦发布出去， 大家都会在新区块后边平等地开始竞争</li>
+</ul>
+<p><img src="D:%5CTypora_picture%5C8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86%5Cimage-20231030150850249.png" alt="image-20231030150850249"></p>
+<p><strong>风险</strong></p>
+<ul>
+<li><strong>不发布的块</strong>有可能会<strong>浪费</strong>掉，所以不如赶紧发布出去获取当前的出块奖励（落袋为安）</li>
+</ul>
+<img src="D:\Typora_picture\8_分叉背后原理\image-20231030151641653.png" alt="image-20231030151641653" style="zoom: 67%;" />
+<p><strong>收益曲线</strong></p>
+<ul>
+<li>研究表明，若某矿工的算力<strong>超过全网的三分之一</strong>，他很可能为更多收益而选择自私挖矿</li>
+</ul>
+<img src="D:\Typora_picture\8_分叉背后原理\image-20231030151242167.png" alt="image-20231030151242167" style="zoom: 50%;" />
+<h2 id="课堂思考">课堂思考</h2>
+<ol>
+<li><strong>转账交易时候，如果接收者不在线(没有连在比特币网络上)怎么办？</strong>
+<ul>
+<li>答：转账交易只需要<strong>在区块链上记录</strong>，将某账户比特币转到另一账户，而接收方是否在线并无影响。</li>
+</ul>
+</li>
+<li><strong>假设某全节点收到转账交易，有没有可能该全节点从未听过转账交易的收款人地址？</strong>
+<ul>
+<li>答：可能，因为<strong>比特币账户只需要本地产生</strong>即可。只有该账户<strong>第一次收到钱</strong>时，其他节点才能知道该节点的存在。</li>
+</ul>
+</li>
+<li><strong>如果账户私钥丢失怎么办？</strong>
+<ul>
+<li>答：没有办法。因为比特币是去中心化货币，<strong>没有第三方中心机构可以重置密码</strong>，所以账户上的钱也就变成了死钱。</li>
+</ul>
+</li>
+<li><strong>私钥泄露怎么办？</strong>
+<ul>
+<li>答：尽快<strong>将剩余BTC转移</strong>到其他安全账户上，没有第三方中心机构重置密码或冻结账户，只能自己对自己负责。BTC系统中账户是公私钥对，密码是私钥，无法更改。</li>
+</ul>
+</li>
+<li><strong>转账写错地址怎么办？</strong>
+<ul>
+<li>答：无法取消已经发布的交易。如果转入不存在地址，则该部分比特币便成为了死钱。比特币系统中UTXO会永久保存该交易，记录该并不存在的地址。因此，对全节点来说，这是不友好的。</li>
+</ul>
+</li>
+<li>
+<h2 id="OP-RETURN指令为普通用户提供了一个向比特币网络中写入想要一直保存的内容。但OP-RETURN执行结果是无条件返回错误，-而交易返回错误，-区块又怎么会包含它？-区块链又如何会接收这个区块？"><strong>OP_RETURN指令</strong>为普通用户提供了一个向比特币网络中写入想要一直保存的内容。但OP_RETURN执行结果是无条件返回错误， 而交易返回错误， 区块又怎么会包含它？ 区块链又如何会接收这个区块？</h2>
+</li>
+<li><strong>BTC系统挖矿，会不会有矿工“偷”答案？例如：某个矿工发现其他矿工发布了nonce，收到后验证该区块合法，将该nonce作为自己找到的nonce发布出去</strong>
+<ul>
+<li>实际上这是<strong>不可能</strong>的。发布的区块中包含<strong>铸币交易</strong>，其收款人地址为挖到矿的矿工地址，如果要偷答案，需要修改该收款地址，而<strong>地址改变，铸币交易内容也发生改变，从而引发Merkle Tree根哈希值改变</strong>。从而导致<strong>原本的nonce作废</strong>。也就是说，不可能会“偷”答案。</li>
+</ul>
+</li>
+<li><strong>交易费是交易者为了交易上链而给出的“小费”，那么如何得知哪个矿工可以挖到矿？</strong>
+<ul>
+<li>事先无需知道谁会挖到矿，<strong>交易中总输入和总输出差额</strong>就是交易费。哪个矿工挖到矿，在打包交易时，可以将这些<strong>交易费收集</strong>起来作为自己获得的交易费。</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Blog of ZhangCW">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/12/BC_8/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-12 22:59:37" itemprop="dateCreated datePublished" datetime="2024-02-12T22:59:37+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-12-12 10:29:02" itemprop="dateModified" datetime="2023-12-12T10:29:02+08:00">2023-12-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1>比特币社区</h1>
+<h2 id="Bitcoin匿名性">Bitcoin匿名性</h2>
+<h3 id="BTC匿名性的破坏">BTC匿名性的破坏</h3>
+<ul>
+<li>
+<p>一个交易包含多个输入和输出</p>
+<ul>
+<li>
+<p>可以通过输入和输出金额关联地址</p>
+<ul>
+<li>示例：</li>
+<li>
+<img src="D:\Typora_picture\1698651135654.jpg" alt="1698651135654" style="zoom:33%;" />
+</li>
+<li>答：<strong>地址1和地址2</strong>向<strong>地址3</strong>支付六个比特币，然后<strong>地址4找零</strong>3个比特币。所以地址1、2、4属于同一个人</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>地址账户与个人在真实社会中的身份也可能会产生关联</p>
+<ul>
+<li>
+<p>买卖BTC</p>
+</li>
+<li>
+<p>BTC支付时候</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="匿名性提高">匿名性提高</h3>
+<ul>
+<li>
+<p>从网络层看，可以采用<strong>多路径转发</strong>的方法，数据不直接发送出去，而是<strong>经过很多跳</strong>（洋葱路由的基本思想）</p>
+</li>
+<li>
+<p>从应用层看，可以<strong>将各个不同用户的BTC混合</strong>在一起，使得追查变得混乱</p>
+</li>
+</ul>
+<p><strong>混币</strong></p>
+<ul>
+<li>
+<p>让交易图谱分析变得无效</p>
+</li>
+<li>
+<p>混币模式</p>
+<ul>
+<li>
+<p>中介</p>
+</li>
+<li>
+<p>混币在线钱包</p>
+</li>
+<li>
+<p>专项混币服务</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\1698651291263.jpg" alt="1698651291263" style="zoom:50%;" />
+<ul>
+<li>
+<p>多重混币</p>
+<ul>
+<li>
+<p>不能将用户<strong>最初发送</strong>的BTC关联到<strong>最终接受</strong>的BTC</p>
+</li>
+<li>
+<p>风险：Service Provider跑路</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\1698651323389.jpg" alt="1698651323389" style="zoom: 50%;" />
+<p><strong>分布式混币</strong></p>
+<ul>
+<li>
+<p>特点</p>
+<ul>
+<li>
+<p>用户之间的<strong>P2P模式</strong>实现混币交易</p>
+</li>
+<li>
+<p>没有自举过程：用户<strong>不需要等待一个有公信力的Service Provider</strong></p>
+</li>
+<li>
+<p>盗币行为在分布式混币模式下impossible</p>
+</li>
+<li>
+<p>提供<strong>更好的匿名性</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>主要方案</p>
+<ul>
+<li>
+<p>合币</p>
+<ul>
+<li>
+<p><strong>不同用户</strong>共同创建一个<strong>单一TX</strong></p>
+</li>
+<li>
+<p>每人<strong>独立签名</strong></p>
+</li>
+<li>
+<p>输入与输出Addr的<strong>顺序都是随机</strong>的</p>
+</li>
+<li>
+<p>发现彼此，<strong>交换input/output</strong>，构造TX，轮流签名，广播TX</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="零知识证明">零知识证明</h2>
+<ul>
+<li>
+<p>一方(证明者)向另一方(验证者)<strong>证明某一个陈述是正确的</strong>，但<strong>不需要透露其他任何信息</strong></p>
+</li>
+<li>
+<p>例：A想要向B证明某一账户属于A，这说明A知道该账户的私钥。但不可能通过A公布私钥的方法来证明，该账户确实属于A。因此， A可以产生一个<strong>账户签名</strong>， B通过<strong>公钥</strong>对签名进行验证。</p>
+</li>
+</ul>
+<h3 id="同态隐藏">同态隐藏</h3>
+<img src="D:\Typora_picture\1698651743818.jpg" alt="1698651743818" style="zoom:50%;" />
+<ul>
+<li>
+<p>示例</p>
+<ul>
+<li>
+<p>A 向 B 证明她知道一组数 x 和 y 使得 x+y=7，同时不让 B 知道 x 和 y 的具体数值</p>
+<ul>
+<li>A 向 B 发送 E(x) 和 E(y)，B 计算 E(7) 和 E(x+y)，验证是否相同即可</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="盲签">盲签</h2>
+<ul>
+<li>
+<p>盲签名是一种<strong>特殊的数字签名技术</strong>。盲签名因<strong>签名的人看不到所签署文件的具体内容</strong>而闻名，它有两个显著的特点：</p>
+<ul>
+<li>
+<p><strong>签名者</strong>对<strong>消息的内容</strong>是不可见的</p>
+</li>
+<li>
+<p><strong>签名被公开</strong>后，<strong>签名者不能追踪</strong>签名</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="示例">示例</h3>
+<ul>
+<li>
+<p>电子交易中，我们的交易信息依赖于银行等第三方机构。第三方机构需要<strong>防范其他人伪造</strong>， 就需要对电子货币进行签名。</p>
+</li>
+<li>
+<p>而签名的过程中，必然会导致其了解到交易内容。如果想要银行等第三方机构负责相应工作，但不知道交易具体内容，就可以采用盲签的方法</p>
+</li>
+</ul>
+<h3 id="盲签方法">盲签方法</h3>
+<img src="D:\Typora_picture\1698651720181.jpg" alt="1698651720181" style="zoom:50%;" />
+<h2 id="量子计算">量子计算</h2>
+<ul>
+<li>
+<p><strong>问：BTC这种建立在密码学上的加密货币，在量子计算出来后会不会变得不安全?</strong></p>
+</li>
+<li>
+<p>答：相比之下，传统方法风险更大。</p>
+</li>
+</ul>
+<h2 id="挖矿的策略">挖矿的策略</h2>
+<p><strong>需要包括的交易</strong></p>
+<ul>
+<li>
+<p>矿工可以选择将哪些交易放进他的区块里</p>
+</li>
+<li>
+<p>默认的规则是选择那些<strong>交易费比较高</strong>的交易</p>
+</li>
+</ul>
+<p><strong>区块挖矿运算选择</strong></p>
+<ul>
+<li>
+<p>矿工可以选择在哪个区块上进行挖矿</p>
+</li>
+<li>
+<p>默认的做法是在<strong>最长的那条链</strong>上继续挖下去</p>
+</li>
+</ul>
+<p><strong>同一高度的多个区块选择</strong></p>
+<ul>
+<li>
+<p>如果两个不同的区块在同一时间被宣布发现，这就造成了一个区块的分叉，每个分叉的区块都是可以被延续下去的，因为它们都符合最长区块链原则</p>
+</li>
+<li>
+<p>矿工必须选择其中一个区块接龙下去</p>
+</li>
+<li>
+<p>默认的做法是<strong>选择最先被监听到的那一个区块</strong></p>
+</li>
+</ul>
+<p><strong>宣布新区块的时机</strong></p>
+<ul>
+<li>
+<p>矿工找到一个有效区块之后，他们要决定什么时候向比特币网络宣布这一个区块。</p>
+</li>
+<li>
+<p>默认的做法是<strong>立刻宣布</strong></p>
+</li>
+<li>
+<p>但他们也可以等一下：自私挖矿 或 block withholding attack</p>
+</li>
+</ul>
+<p><strong>挖到新块采取的策略</strong></p>
+<ul>
+<li>
+<p>挖空块现象</p>
+</li>
+<li>
+<p>Fork Attack</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Blog of ZhangCW">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/12/BC_9/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-12 22:59:37" itemprop="dateCreated datePublished" datetime="2024-02-12T22:59:37+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-12-25 16:57:42" itemprop="dateModified" datetime="2023-12-25T16:57:42+08:00">2023-12-25</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1>以太坊概述</h1>
+<h2 id="以太坊简介">以太坊简介</h2>
+<h3 id="以太坊与比特币">以太坊与比特币</h3>
+<ul>
+<li>
+<p>比特币和以太坊是两种最主要的<strong>加密货币</strong></p>
+<ul>
+<li>
+<p>以太坊优势</p>
+<ul>
+<li>
+<p>技术：支持<strong>智能合约</strong></p>
+</li>
+<li>
+<p>性能：增加叔块奖励，减少出块时间；Ghost共识机制</p>
+</li>
+<li>
+<p>社区：更加活跃的社区；超过25万的开发者</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>比特币是区块链1.0，<strong>以太坊是区块链2.0</strong></p>
+</li>
+<li>
+<p>以太坊基于比特币的一些运行问题进行了改进</p>
+<ul>
+<li>
+<p>出块时间15s左右，减小交易延迟</p>
+</li>
+<li>
+<p>mining puzzle 对内存要求高（限制ASIC使用）</p>
+</li>
+<li>
+<p>2022年9月升级后采用 PoS，代替 PoW</p>
+</li>
+</ul>
+</li>
+<li>
+<p>以太坊是<strong>第一个支持智能合约的区块链系统</strong></p>
+<ul>
+<li>
+<p>使用 Ether 作为加密数字货币</p>
+</li>
+<li>
+<p>是生态社区最活跃的区块链系统，出现了大量去中心化自治组织(DAOs)和 去中心化应用(DApps)，促进了区块链技术在 发币以外的应用</p>
+</li>
+</ul>
+</li>
+<li>
+<p>以太坊特色与应用</p>
+<ul>
+<li>
+<p>溯源存证</p>
+</li>
+<li>
+<p>数字资产发行和流通</p>
+</li>
+<li>
+<p>数据共享</p>
+</li>
+<li>
+<p>游戏</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="智能合约">智能合约</h3>
+<ul>
+<li>
+<p>智能合约指能够<strong>自动执行合约条款的计算机程序</strong>，其概念由尼克·萨博在1994年提出</p>
+</li>
+<li>
+<p>具有<strong>事件驱动、价值转移、自动执行</strong>等特性</p>
+</li>
+<li>
+<p>智能合约依赖于<strong>环境的可靠性</strong></p>
+</li>
+<li>
+<p>中心化环境的弊端</p>
+<ul>
+<li>
+<p>容易受到篡改</p>
+</li>
+<li>
+<p>出错后难以追溯恢复</p>
+</li>
+</ul>
+</li>
+<li>
+<p>部署在区块链上的智能合约</p>
+<ul>
+<li>更高的可靠性</li>
+</ul>
+</li>
+<li>
+<p>以太坊上的智能合约</p>
+<ul>
+<li>
+<p>以太坊在多个节点组成的<strong>点对点网络</strong>中，维护共同的区块链数据，通过区块链上的交易来进行智能合约的 创建、调用、结束 等操作</p>
+</li>
+<li>
+<p>由于多个节点所维护的区块链状态是一致的，因此，多个节点上所运行的智能合约的<strong>过程和结果</strong>也是<strong>一致</strong>的</p>
+</li>
+</ul>
+</li>
+<li>
+<p>将自动售货机视为智能合约</p>
+<ul>
+<li>
+<p>事件驱动：合约以投币等动作作为输入，触发其动作执行</p>
+</li>
+<li>
+<p>价值转移：外部以钱币为输入，合约输出饮料等商品，完成了价值的交换或转移</p>
+</li>
+<li>
+<p>自动执行：这一履约行为是完全自动的，不需要人在其中干预（投币动作除外）</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="以太坊的诞生和发展">以太坊的诞生和发展</h3>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113161528325.png" alt="image-20231113161528325" style="zoom:50%;" />
+<h2 id="以太坊区块数据结构">以太坊区块数据结构</h2>
+<h3 id="以太坊的区块头">以太坊的区块头</h3>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113161700334.png" alt="image-20231113161700334" style="zoom:50%;" />
+<pre><code>- 父块哈希
+- ☆叔块哈希
+- 矿工地址
+- ☆状态树哈希
+- ☆交易树哈希
+- ☆收据树哈希
+- ☆Bloom Filter
+- 挖矿难度
+- 区块号
+- ☆Gas上限
+- ☆所有交易gas之和
+- 区块时间戳
+- 可变长度字段
+- 工作量证明摘要
+- 挖矿Nonce值
+</code></pre>
+<h3 id="以太坊的区块">以太坊的区块</h3>
+<ul>
+<li>==<strong>主要功能与结构</strong>==
+<ul>
+<li>
+<p>打包一批执行后的交易</p>
+</li>
+<li>
+<p>​                                                                                                                                                                                                                    它的数据结构同样分成了<strong>区块头</strong>和<strong>区块体</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113161944221.png" alt="image-20231113161944221" style="zoom:50%;" />
+<ul>
+<li>
+<p>以太坊<strong>区块头</strong>内容</p>
+<ul>
+<li>
+<p>记录以太坊状态的<strong>状态根</strong></p>
+</li>
+<li>
+<p>交易列表、收据列表和叔块列表对应的<strong>哈希值</strong></p>
+</li>
+<li>
+<p>最长不超过100 KB的<strong>额外数据</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>以太坊<strong>区块体</strong>内容</p>
+<ul>
+<li>
+<p>由交易组成的 <strong>tx 列表</strong></p>
+</li>
+<li>
+<p>由交易执行信息组成的<strong>收据列表</strong></p>
+</li>
+<li>
+<p>用于改进以太坊共识过程的<strong>叔块列表</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="以太坊的账户模式">以太坊的账户模式</h2>
+<h3 id="背景">背景</h3>
+<ul>
+<li>
+<p>地址与账户：类似银行系统</p>
+</li>
+<li>
+<p>区别：账本状态在所有区块链节点<strong>分布式存储</strong></p>
+</li>
+</ul>
+<h3 id="账户地址的生成">账户地址的生成</h3>
+<ul>
+<li>
+<p>计算椭圆曲线下的<strong>私钥与公钥</strong></p>
+</li>
+<li>
+<p>对<strong>公钥</strong>使用 KECCAK256 哈希算法，计算得到一个64位的16进制哈希值(256个比特长)</p>
+</li>
+<li>
+<p>截取这个<strong>哈希值的最后40 位</strong>作为一个以太坊上的<strong>账户地址</strong></p>
+</li>
+</ul>
+<h3 id="账户结构">账户结构</h3>
+<ul>
+<li>用户账户结构保存了用户地址对应账户的<strong>数据信息</strong></li>
+<li>余额：记录了当前地址持有的<strong>以太币的数额</strong>，单位是 Wei</li>
+<li>Nonce：记录了这个地址创建以来累计发起的<strong>交易次数</strong>
+<ul>
+<li>
+<p>计算交易的次数和序列</p>
+<ul>
+<li>以太坊中，交易合法性的检验在于交易发起者的账户余额，<strong>数字签名始终有效</strong>，交易可能可以被无限次发起而<strong>不经过发起者同意</strong>。为了防止这样的恶意攻击，以太坊增加了计算交易次数和序列的Nonce计数器，只有<strong>账户</strong>的 Nonce 和<strong>交易</strong>的 Nonce 能够对应的情况下，交易才是合法的</li>
+<li>当一个交易<strong>执行完毕之后</strong>，账户的 Nonce 值<strong>增加</strong>，原本执行完毕的交易中的 Nonce 值就无法与现在账户的 Nonce 值匹配</li>
+<li><strong>因为交易有签名的保护，所以nonce的值，别人是改不了的</strong>。如果要修改对应的 Nonce 值，意味着原有交易的签名失效</li>
+</ul>
+</li>
+<li>
+<p>其他用途</p>
+<ul>
+<li>
+<p>控制账户发起的交易的顺序，从而实现一些相对复杂的功能</p>
+</li>
+<li>
+<p>通过重复提交一个<strong>相同 Nonce 值的交易</strong>来使得一个「<strong>已经提交但是尚未被确认</strong>」的交易变得不合法，从而实现一定程度的<strong>撤销</strong>功能</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231225150044260.png" alt="image-20231225150044260" style="zoom:50%;" />
+<h3 id="定义以太坊的两种账户">定义以太坊的两种账户</h3>
+<ul>
+<li>外部账户
+<ul>
+<li>由公私钥控制的，本地产生一个公私钥对，私钥掌握账户的控制权（类似于比特币中的账户），也叫普通账户</li>
+<li>外部账户的状态：
+<ul>
+<li>balance（账户余额）</li>
+<li>nonce（计数器）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>合约账户
+<ul>
+<li>合约账户不是通过公私钥对控制的</li>
+<li><strong>合约账户不能主动发起一个交易。以太坊中规定，所有的交易只能由外部账户发起</strong></li>
+<li>外部账户发起一个交易如果调用了一个合约账户，这个合约账户可以发送一个message调用另外一个合约，所以要通过nonce值记录一下调用的次数</li>
+<li>创建合约会返回一个地址，<strong>知道这个合约的地址，就可以调用这个合约</strong>，调用的过程当中<strong>状态会发生变化</strong>，代码（code）不会变，<strong>存储（storage）会变</strong></li>
+<li>合约账户状态
+<ul>
+<li>balance（账户余额）</li>
+<li>nonce（计数器）</li>
+<li>code（代码）</li>
+<li>storage（相关状态存储，包括每个变量的取值）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113162717764.png" alt="image-20231113162717764" style="zoom:50%;" />
+<p>思考：比特币的 UTXOs 模型更有利于隐私保护，那为什么以太坊还要使用账户模型？</p>
+<ul>
+<li>
+<p>为了<strong>支持智能合约</strong>，要求参与者要有<strong>稳定的身份</strong></p>
+</li>
+<li>
+<p>智能合约可以实现一些金融衍生品，利于参与者进行<strong>投资</strong></p>
+</li>
+</ul>
+<h2 id="以太坊的状态树">以太坊的状态树</h2>
+<h3 id="定义以太坊的账户状态">定义以太坊的账户状态</h3>
+<ul>
+<li>
+<p>Nonce：累计发起的交易次数</p>
+</li>
+<li>
+<p>Balance：账户余额</p>
+</li>
+<li>
+<p>CodeHash：<strong>智能合约代码</strong>的哈希值</p>
+</li>
+<li>
+<p>StorageRoot：<strong>合约存储树</strong>的<strong>根节点哈希值</strong>(维护智能合约状态)</p>
+</li>
+</ul>
+<h3 id="合约存储树">合约存储树</h3>
+<ul>
+<li>
+<p>合约账户下的存储也是一个<strong>映射表</strong>，它记录了从<strong>存储地址</strong>到<strong>存储值</strong>的一个映射关系</p>
+<ul>
+<li>
+<p><strong>存储地址</strong>：即账户地址，以太坊中用的账户地址是160位，也就是20个字节，一般表示成40个十六进制的数</p>
+</li>
+<li>
+<p><strong>存储值</strong>：即状态，外部账户和合约账户的状态，包括余额、交易次数；合约账户还包括CodeHash、StorageRoot</p>
+</li>
+</ul>
+</li>
+<li>
+<p>在合约账户的数据结构中存储了这个<strong>映射表的哈希值</strong>，这个哈希值被称作存储根(Storage Root)，它同样是<strong>由一棵 MPT 来维护和计算</strong></p>
+</li>
+</ul>
+<h3 id="以太坊的状态维护">以太坊的状态维护</h3>
+<ul>
+<li>
+<p>系统全节点需维护账户状态，若只用哈希表实现账户地址到状态的映射，有什么弊端？</p>
+</li>
+<li>
+<p>为何以太坊不用Merkle Tree来存储账户状态？</p>
+<ul>
+<li>如果使用 Merkle Tree 的场景：如果要证明某个账户有多少钱，需要将哈希表的内容组织成一个Merkle Tree, 计算出根哈希值，将根哈希值存储在 Block Header 中（参考比特币）。只要根哈希值正确，就能保证 Merkle Tree 不被篡改。</li>
+<li>但是，当一个新的区块发布，执行了<strong>新的交易</strong>必然导致<strong>哈希表</strong>（Merkle Tree）<strong>的内容</strong>发生变化，则每次发布新的区块都需要将哈希表的内容重新组织一次 Merkle Tree, 计算代价太大（因为 以太坊账户数量多达上亿个）。</li>
+<li>然而实际上，真正发生变化的账户状态只是一小部分，因为只有那个区块里的交易所关联的账户才会发生变化，大多数账户的状态是不变的。</li>
+<li>另外，利用哈希表构建的 Merkle Tree <strong>不利于更新</strong><br>
+（新增一个账户要重构 Merkle Tree）</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231225150302886.png" alt="image-20231225150302886" style="zoom:50%;" />
+<h3 id="Merkle-Patricia-Trie-MPT">Merkle Patricia Trie (MPT)</h3>
+<ul>
+<li>
+<p>Trie 字典树</p>
+<ul>
+<li>Trie 来源于 Retrieval 单词
+<ul>
+<li>分叉数目取决于 Key 的元素取值范围<br>
+(以太坊地址<strong>分叉数目</strong>是17，<strong>16进制</strong>的0~f加上结束标志位)</li>
+<li>Trie 的查找效率取决于 Key 长度，键值越长，查找需要访问内存的次数就越多在以太坊中，地址为<strong>160位</strong>，对应40个16进制数</li>
+<li>单词/地址不同就不会出现碰撞</li>
+<li>不同的节点，不论按照什么<strong>顺序</strong>插入这些账户，最后构造出来的树是一样的</li>
+<li>更新效率高，只需要局部更新(<strong>更新操作的局部性很好</strong>)</li>
+</ul>
+</li>
+<li>缺点：存储浪费（树的高度太高）</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113165218946.png" alt="image-20231113165218946" style="zoom:33%;" />
+<ul>
+<li>Patricia Trie 压缩前缀树
+<ul>
+<li>对<strong>路径进行压缩</strong>，树的<strong>高度大大缩短</strong>，访问内存的次数变小，<strong>效率提高</strong></li>
+<li><strong>键值路径比较稀疏</strong>的时候，压缩效果比较好<br>
+(以太坊地址分布非常稀疏的，因为<strong>这是去中心化的系统防止账户冲突的唯一办法</strong>)</li>
+<li>新插入一个单词时，原来压缩的路径可能需要<strong>扩展</strong>开</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113165104232.png" alt="image-20231113165104232" style="zoom:33%;" />
+<ul>
+<li>
+<p>背景</p>
+<ul>
+<li>如果把单词都换成<strong>哈希值</strong>，然后<strong>计算每个中间节点的哈希值</strong>，便得到了MPT</li>
+</ul>
+</li>
+<li>
+<p>MPT的构造</p>
+<ul>
+<li>
+<p>按照<strong>所有数据的地址</strong>或<strong>键值</strong>来构建一棵<strong>压缩前缀树</strong></p>
+<ul>
+<li>地址是以16进制为编码的, 故使用 0123456789abcdef 作为每一个编码的单元</li>
+</ul>
+</li>
+<li>
+<p>按照构建得到的压缩前缀树，从叶子节点开始，逐步计算每一层的哈希值，并将其汇合到父节点中，与 Merkle Tree 的计算过程类似</p>
+</li>
+</ul>
+</li>
+<li>
+<p>示例</p>
+<ul>
+<li>由shared nibbles + branch node + key-end得到keys</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231113165452899.png" alt="image-20231113165452899" style="zoom: 67%;" />
+<ul>
+<li>实例：以太坊中<strong>状态树的变换</strong>
+<ul>
+<li><strong>每次发布一个新的区块的时候，状态树中有一些节点的值会发生变化，这些改变不是在原地改，而是新建一些分支，原来的状态其实是保留下来的</strong>
+<ul>
+<li>当前的区块的世界观中有状态为A、B和C三个账户</li>
+<li>经过交易T之后，账户C的状态变成了C’，计算下一个状态树的根S’</li>
+<li>以太坊将交易T和状态树根S’记录在<strong>下一个区块</strong>之中</li>
+<li><strong>局部更新</strong>：只是改变<strong>对应分支的状态</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231115165306231.png" alt="image-20231115165306231" style="zoom: 50%;" />
+<ul>
+<li>当新区块形成时，区块链节点存储的是什么？
+<ul>
+<li><strong>生成</strong>的一个<strong>新</strong>的状态树，而不是修改原来的状态树</li>
+<li>虽然每一个区块都有一个状态树，但是这两棵树的<strong>大部分节点是共享的</strong>。左边这棵树主要都是指向右边这棵树的节点，只有<strong>发生改变的节点</strong>是需要新建一个分支</li>
+<li>目的是 —— 有利于解决<strong>分叉</strong>时，对<strong>状态的回滚</strong>
+<ul>
+<li>与比特币不同，比特币的转账可以通过<strong>简单的反向推算</strong></li>
+<li>而以太坊有智能合约，实现的功能很复杂，<strong>很难推算出之前的状态</strong>。所以为了回滚，必须<strong>保存之前的状态</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="以太坊的收据、交易树、Bloom-Filter">以太坊的收据、交易树、Bloom Filter</h2>
+<h3 id="收据">收据</h3>
+<ul>
+<li>
+<p>定义</p>
+<ul>
+<li>收据是对应<strong>交易</strong>的数据结构，代表了交易执行的一些<strong>中间状态的写入</strong>和交易的<strong>执行结果</strong>等信息</li>
+<li>每个交易执行完之后会形成一个收据，记录交易的相关信息</li>
+</ul>
+</li>
+<li>
+<p>内容</p>
+<ul>
+<li>以太坊的智能合约向虚拟机输出的一些<strong>执行日志</strong></li>
+<li>智能合约运行的 <strong>Gas 信息</strong></li>
+<li>单个交易执行完毕后以太坊的<strong>状态根</strong></li>
+<li>交易<strong>创建智能合约</strong>的时候，如果执行成功会把<strong>新建合约的地址</strong>写到一个<strong>收据</strong>之中</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120142900887.png" alt="image-20231120142900887" style="zoom: 50%;" />
+<h3 id="交易树和收据树">交易树和收据树</h3>
+<ul>
+<li>与比特币中的 Merkle Tree 类似的，对于以太坊区块中的所有<strong>交易</strong>和<strong>交易的收据</strong>，都可以使用 <strong>MPT</strong> 进行<strong>组织和证明</strong></li>
+<li>MPT 的构建不是通过账户地址来进行，而是通过<strong>交易</strong>或者<strong>收据在区块中的序号</strong>来构建</li>
+<li>收据树和交易的信息一一对应。主要是考虑到智能合约的执行比较复杂，收据树可以有利于<strong>快速查询</strong>，<strong>证明交易结果</strong></li>
+<li>为什么 交易树与收据树也使用 MPT，而不是普通的 Merkle Tree？
+<ul>
+<li>代码复用：以太坊其他数据结构都采用 MPT， 代码统一，利于管理</li>
+<li>查找效率高</li>
+</ul>
+</li>
+<li>三种树的异同
+<ul>
+<li>交易树和收据树都是只把当前发布的这个<strong>区块里的交易组织</strong>起来的，而状态树是把系统中<strong>所有账户的状态</strong>都要包含进去，不管这些账户跟当前区块的交易有没有关系</li>
+<li>多个区块的状态树是<strong>共享</strong>节点的，每次新发布一个区块的时候，只有这个区块中的交易改变了状态的那些节点需要新建一个分支，其他节点都是沿用原来状态树上的节点。而每个区块的交易树和收据树都是<strong>独立</strong>的，是不会共享节点的，一个区块跟另一个区块发布的交易本身也认为是独立的</li>
+</ul>
+</li>
+</ul>
+<h3 id="Bloom-Filter">Bloom Filter</h3>
+<ul>
+<li>
+<p>Bloom Filter(布隆过滤器)的用途</p>
+<ul>
+<li>支持比较高效的查找<strong>某个元素</strong>是不是在一个<strong>比较大的集合</strong>里</li>
+<li>以太坊中通过布隆过滤器对收据的日志进行<strong>索引、查找</strong>，比如：
+<ul>
+<li>Client 找到过去十天和某个智能合约有关的交易</li>
+<li>Client 找到过去十天当中符合某种类型的所有事件<br>
+(e.g., 众筹事件 or 发行新币的事件)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>优点</p>
+<ul>
+<li>布隆过滤器可以用于检索一个值是否在一个集合中。在容忍<strong>一定的误识别率</strong>的条件下，它有着<strong>远超过一般算法的空间效率和时间效率</strong>。</li>
+</ul>
+</li>
+<li>
+<p>原理</p>
+<ul>
+<li>
+<p>Bloom Filter 使用一个哈希函数与数组(初始化为0)，假设集合内有 a 的值，则计算 a 的哈希值，然后将数组的该位置为1。当需要查询某个值是否在集合中时，就可以做哈希运算，判断该位置是否为1。如果为1，则<strong>可能</strong>在；如果为0，则<strong>一定</strong>不在。</p>
+</li>
+<li>
+<p>以太坊的 Bloom Filter 通过使用<strong>多个哈希函数</strong>将键值映射到<strong>位图</strong>之中，并在位图中合并集合中所有键值的映射结果</p>
+</li>
+<li>
+<p>对于一个键值，如果经过同样的哈希函数映射之后，出现了<strong>在位图中没有出现的标记位</strong>，那么这个键值<strong>必定不存在</strong>于集合之中</p>
+</li>
+<li>
+<p>可以保证某个元素<strong>一定不在</strong>集合里，但不能保证元素<strong>一定在</strong>集合中。<br>
+即，会误报但不会漏报</p>
+</li>
+<li>
+<p>Bloom Filter <strong>不支持删除操作</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>使用案例</p>
+<ul>
+<li>每个交易执行完之后会形成一个<strong>收据</strong>，这个收据里面就包含一个 Bloom Filter，记录交易的类型、地址等其他信息。</li>
+<li>发布的区块，在他的块头里也有一个总的 Bloom Filter，这个总的 Bloom Filter 是这个区块里所有交易的一个 Bloom Filter 的并集</li>
+<li>Bloom Filter 用于快速查找一个 TX 所在的历史区块
+<ul>
+<li>在进行 哈希方式 B 之后，若日志地址 Y 的哈希出现了<strong>新的标记位</strong>，那么日志地址 Y <strong>必然不存在</strong>于原有四个日志地址之中</li>
+<li>好处：client 可以快速过滤，迅速查找</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120145249396.png" alt="image-20231120145249396" style="zoom: 50%;" />
+<h2 id="以太坊基本架构及原理">以太坊基本架构及原理</h2>
+<h3 id="状态模型">状态模型</h3>
+<ul>
+<li>背景
+<ul>
+<li>在<strong>账户模型</strong>中，用户的<strong>余额</strong>通过<strong>地址上的账户数据</strong>来表示，具体为账户数据结构中的一个余额的数值</li>
+<li>在<strong>转账交易</strong>的过程中，通过转账预先定义好的语义，在发起者的账户中减去交易中定义好的转账金额，在接受者的账户中增加相应的金额</li>
+<li>可以把<strong>账户的余额</strong>泛化成一种<strong>账户的状态</strong>，而把<strong>转账交易</strong>当作<strong>改变状态的一个方法</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="状态转移">状态转移</h3>
+<ul>
+<li>状态转移：由<strong>交易驱动</strong>的状态机
+<ul>
+<li>在区块 N 执行前状态为 S ，经过区块 N 的交易进行状态转换后，转换为状态 S’ ，再经过区块 N+1 的转换后，转换为状态 S’’</li>
+</ul>
+</li>
+<li>以太坊状态转移
+<ul>
+<li>智能合约：作用于该状态机转换的<strong>代码</strong></li>
+<li>以太坊虚拟机（Ethereum Virtual Machine，EVM）：<strong>执行状态转换代码</strong>的虚拟机</li>
+<li>只要约定好的变换规则是固定的，就可以不断地通过变换规则不停地<strong>作用到原有状态</strong>上<strong>产生新的状态</strong></li>
+<li>对于有着<strong>相同的初始状态</strong>的参与者们来说，经过<strong>完全相同的变换过程</strong>，最后必然得到<strong>完全相同的当前状态</strong></li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\a914563df26fadebf7a787e27c82d09.png" alt="a914563df26fadebf7a787e27c82d09" style="zoom:50%;" />
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120150520245.png" alt="image-20231120150520245" style="zoom:67%;" />
+<h3 id="以太坊简易架构图">以太坊简易架构图</h3>
+<ul>
+<li>定义
+<ul>
+<li>区块链数据
+<ul>
+<li>以太坊区块链</li>
+<li><strong>状态数据，收据数据</strong>等</li>
+</ul>
+</li>
+<li>智能合约
+<ul>
+<li>存储在以太坊上的一段<strong>代码</strong></li>
+</ul>
+</li>
+<li>节点
+<ul>
+<li>保存有区块链数据的节点</li>
+<li>每个节点<strong>独立</strong>地维护区块链数据</li>
+<li>节点间采用<strong>共识机制</strong>达成共识，维护全网的状态一致</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120152913739.png" alt="image-20231120152913739" style="zoom:50%;" />
+<ul>
+<li>交易执行概述
+<ul>
+<li>每个节点独立维护数据</li>
+<li>节点独立地在EVM中执行合约</li>
+<li>将执行结果<strong>写回区块链数据</strong></li>
+<li>节点之间执行共识机制，达成共识</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120153407805.png" alt="image-20231120153407805" style="zoom:50%;" />
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120155033731.png" alt="image-20231120155033731" style="zoom:50%;" />
+<h2 id="以太坊交易">以太坊交易</h2>
+<ul>
+<li>
+<p>背景</p>
+<ul>
+<li>在以太坊中，交易承载了<strong>账户转账</strong>和<strong>合约创建</strong>、<strong>调用合约</strong>等功能</li>
+<li>TX 数据的内容更为复杂，大体上可以粗略的分为三个部分，即<strong>基本的交易</strong>、<strong>交易的执行参数</strong>和<strong>交易的签名</strong></li>
+</ul>
+</li>
+<li>
+<p>基本交易内容</p>
+<ul>
+<li><strong>from：交易发送者的地址</strong>。发送者地址可以通过合约的签名信息&lt;r, s, v&gt;计算得到，实现上交易的数据结构中<u>并不会存储发送者地址</u></li>
+<li><strong>to：交易接收者的地址</strong>。在进行转账时是接受转账金额的地址，在<u>创建合约时设置为0x0000…000</u>，在调用合约时则是合约的地址</li>
+<li><strong>value：交易的金额</strong>，单位是Wei。Wei是以太币最小单位，我们常说的1个以太币是单位Ether，1 Ether =10^18 Wei</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\9aad4c7f221b9c86f8590c1d4066e2e.png" alt="9aad4c7f221b9c86f8590c1d4066e2e" style="zoom: 50%;" />
+<ul>
+<li>交易的执行参数
+<ul>
+<li>input data：交易附带数据，传递创建合约的代码和构造函数，或调用合约的函数及参数</li>
+<li>nonce：交易发送者累计发出的交易数量，用于区分一个账户的不同交易及顺序</li>
+<li>gasPrice：发送者支付给矿工的gas的价格，用于实现从Gas到以太坊货币单位的转换，从而计算使用的Gas的总价格</li>
+<li>gasLimit：该交易允许消耗的最大的gas，用于解决智能合约不能停机的问题</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120160006896.png" alt="image-20231120160006896" style="zoom:50%;" />
+<ul>
+<li>交易的签名
+<ul>
+<li>hash：由<strong>以上字段</strong>生成的哈希值，也作为<strong>交易的 id</strong></li>
+<li>r、s、v：用于<strong>ECDSA</strong>验证的参数，由<strong>发送者的私钥</strong>对交易的哈希做数字签名生成，用于确认转账的合法性</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120160054859.png" alt="image-20231120160054859" style="zoom: 50%;" />
+<ul>
+<li>交易的周期
+<ul>
+<li>发起</li>
+<li>广播</li>
+<li>打包与执行</li>
+<li>验证与执行</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231120170227023.png" alt="image-20231120170227023" style="zoom:50%;" />
+<ul>
+<li>交易的发起
+<ul>
+<li>
+<p>设定交易内容</p>
+<ul>
+<li>
+<p>用户在本地的以太坊钱包软件中选择要发</p>
+<p>送交易的地址（from），输入目标地址（to）、金额（value）、是否部署或调用合约（data）、**手续费单价（gasPrice）**等</p>
+</li>
+</ul>
+</li>
+<li>
+<p>发起交易</p>
+<ul>
+<li>用户确认发送至以太坊节点，多个用户各自保有钱包私钥，而通过同一个以太坊节点广播交易</li>
+</ul>
+</li>
+<li>
+<p>以太坊钱包软件补充内容</p>
+<ul>
+<li>以太坊钱包软件将自动为用户得出交易所需的<strong>燃料上限（gasLimit）</strong>，并给出用户地址对应的 nonce 值，最后使用私钥得到 r、s、v，最终将交易序列化后发送到网络中</li>
+<li>部分客户端中，gasLimit 与 nonce 也可以是用户自定义的</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>交易的广播
+<ul>
+<li>节点收到（或自己发起）交易后，对交易进行验证</li>
+<li>节点验证交易为合法交易后，将交易加入节点的交易池中</li>
+<li>节点验证交易通过后，除了加入节点的交易池中，还会根据 P2P 网络广播的策略向相邻节点继续广播该交易</li>
+</ul>
+</li>
+<li>交易的打包和执行
+<ul>
+<li>交易进入内存池后，具有挖矿功能的全节点，开始打包下一个区块</li>
+<li>节点将交易打包时，对交易逐个执行，每笔以太坊交易都是对以太坊状态的修改</li>
+<li>在所有需要打包的交易执行后，交易、状态以及收据的信息也会打包到区块中</li>
+<li>记账节点在打包交易并获得合法的区块后，将区块（包含交易数据）广播到网络中的相邻节点</li>
+<li>交易的类型：根据 to 值的不同，将交易的执行类型分为如下3种
+<ul>
+<li>创建合约交易：to 为<strong>空</strong>的交易
+<ul>
+<li>EVM 根据 from 值及 nonce 值生成合约地址</li>
+<li>执行 data 中对应的智能合约代码</li>
+<li>将合约 EVM 代码存储到合约地址中</li>
+</ul>
+</li>
+<li>调用合约交易：to 为<strong>合约账户</strong>的交易
+<ul>
+<li>EVM 将从世界状态中获取 to 地址中存储的 EVM 代码
+<ul>
+<li>to 地址中存储的是合约本身</li>
+</ul>
+</li>
+<li>执行交易的 data 字段中包含的代码
+<ul>
+<li>data 中则包含了调用合约的相应函数及其参数</li>
+</ul>
+</li>
+<li>本质上讲，对合约的调用，是对合约状态的修改</li>
+</ul>
+</li>
+<li>普通转账交易：to 为<strong>外部账户</strong>的交易
+<ul>
+<li>直接将以太币金额从 from 转到 to</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204113839339.png" alt="image-20231204113839339" style="zoom:50%;" />
+<ul>
+<li>交易的验证和执行
+<ul>
+<li>没有获得记账权的节点，在收到广播的区块后，对区块进行合法性的验证，并进行交易的执行</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204114052016.png" alt="image-20231204114052016" style="zoom:50%;" />
+<h2 id="以太坊共识机制">以太坊共识机制</h2>
+<ul>
+<li>
+<p>基于PoW机制</p>
+<ul>
+<li>ASIC resistance: memory hard puzzle</li>
+<li>以太坊采用的哈希算法是 ethash 算法，对内存有要求（ASIC resistance)</li>
+<li>抑制硬件挖矿</li>
+</ul>
+</li>
+<li>
+<p>以太坊<strong>升级后</strong>的共识机制：PoS</p>
+<ul>
+<li>Proof-of-Stake  权益证明：<strong>按照所占的权益进行投票来形成共识</strong></li>
+<li>通过计算<strong>持有币数占总币数的百分比</strong>，包括<strong>占有币数的时间</strong>来决定获得本次记账权利的<strong>概率</strong>。持有越多，获得记账权力概率越大</li>
+<li>代表币种：如 Qtum 币，以太坊也部分采用POS机制</li>
+<li>优点：相比 PoW 缩短了达成共识时间；节省能源</li>
+<li>缺点：容易分叉；易中心化（马太效应）</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204114836084.png" alt="image-20231204114836084" style="zoom:67%;" />
+<ul>
+<li>新PoW共识：以太坊的分叉
+<ul>
+<li>以太坊的出块时间被定为 15s 左右</li>
+<li>在 15 秒的时间内，一个新发布的区块很很大可能还没有扩散到整个区块链网络，导致以太坊的分叉是常态
+<ul>
+<li>分叉上的块被废弃，打击积极性</li>
+<li>安全上的考虑，有什么坏处？</li>
+</ul>
+</li>
+<li>为了鼓励分叉的合并，太坊的设计中引入了 Ghost 协议
+<ul>
+<li><strong>GHOST</strong> (Greedy Heaviest Observed SubTree)</li>
+<li>由Yonatan Sompolinsky 和 Aviv Zohar在2013年12月引入的创新</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204142633313.png" alt="image-20231204142633313" style="zoom: 50%;" />
+<ul>
+<li>==<strong>叔父块</strong>==
+<ul>
+<li>定义
+<ul>
+<li>矿工挖到一个区块，但由于最长链机制，这个区块最后作废了，以太坊中这些作废的区块可以成为叔父块。<strong>最长合法链的下一个区块在发布的时候可以把叔父区块包含进来，这样，该区块与包含的叔父区块都能获得一定奖励</strong>。</li>
+<li>以太坊定义了<strong>不在主链</strong>但<strong>被主链区块记录</strong>的<strong>满足难度</strong>的区块为叔块</li>
+<li>在以太坊中叔父不是严格意义上的叔父，在以太坊中规定在<strong>当前区块的7代以内有共同祖先</strong>的都可以认为是叔父块</li>
+</ul>
+</li>
+<li>作用
+<ul>
+<li>在尽可能减少两个相邻区块产生时间的条件下，尽量<strong>收缩和统一整个区块链的主链</strong>，同时通过<strong>叔块的激励</strong>来维护矿工的积极性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\d5d4579b01434da289a9808e7f0079fb.png" alt="img" style="zoom: 33%;" />
+<ul>
+<li><strong>叔父块奖励</strong>
+<ul>
+<li>区块1如果没有包含叔父区块（区块2），往下再有一个区块（区块3），按道理来说区块2就不是区块3的叔父区块了，因为区块2跟区块3的爷爷来说是一辈的，但是以太坊规定<strong>不能论资排辈</strong>，区块2还可以当做区块3的叔父区块。如果再往下挖一个区块4，区块2还是区块4的叔父区块。
+<ul>
+<li>这么规定的好处，如果某个矿池（挖出区块1的矿工）出于竞争关系故意不把这个叔父区块（区块2）包含进去，你不包含没关系，别人可以包含，下一个区块可能不是该矿池挖出来的，同时不可能最长合法链上都是该矿池挖出来的吧。</li>
+<li>甚至有可能下一个区块是跟挖出区块2的是一家的，就是挖出区块2的矿工看到最长合法链之后会切换到这里来挖，然后把自己之前挖出的区块2给包含进去</li>
+</ul>
+</li>
+<li>如下图所示，M为区块链上一个区块，F是M严格意义上的叔父，E为其严格意义上的爷爷辈。</li>
+<li>以太坊中规定，如果M包含F辈区块，则F获得<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>7</mn><mn>8</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{7}{8}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">7</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>出块奖励；如果M包含E辈区块，则F获得$\frac{6}{8} <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>出块奖励，以此类推向前。直到包含</mtext><mi>A</mi><mtext>辈区块，</mtext><mi>A</mi><mtext>获得</mtext></mrow><annotation encoding="application/x-tex">出块奖励，以此类推向前。直到包含A辈区块，A获得</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord cjk_fallback">出块奖励，以此类推向前。直到包含</span><span class="mord mathnormal">A</span><span class="mord cjk_fallback">辈区块，</span><span class="mord mathnormal">A</span><span class="mord cjk_fallback">获得</span></span></span></span>\frac{2}{8} $ 出块奖励，再往前的叔父区块，对于M来说就不再认为是M的叔父了（<strong>合法的叔父只有6个辈分</strong>）</li>
+</ul>
+</li>
+</ul>
+<p><img src="D:%5CTypora_picture%5C10-11_%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%A6%82%E8%BF%B0%5C10debd412c5c4426924ad77bcbf76faf.png" alt="img"></p>
+<ul>
+<li><strong>叔父块特点</strong>
+<ul>
+<li>某个区块最多只能接纳<strong>2个叔父块</strong>，也可以不接纳任何叔父块。接纳了 n 个叔父块的区块，可以获得出块奖励的 n *<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mn>32</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac1{32}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">32</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>
+<ul>
+<li>解决系统中出现的临时性分叉</li>
+</ul>
+</li>
+<li>叔父块必须是区块的前2层～前7层的祖先的<strong>直接子块</strong>
+<ul>
+<li><strong>必须跟当前区块在7代以内有共同的祖先</strong></li>
+</ul>
+</li>
+<li>被接纳过的叔父块不能再重复接纳</li>
+<li>被引用了的叔父块，随着距离越远，得到的奖励递减 1/8</li>
+</ul>
+</li>
+<li>叔父块设计的优点
+<ul>
+<li>如果不限制叔父的辈分，不限制隔多少代的话，那么实现起来，对于全节点来说，要维护的状态的就太多了</li>
+<li>有利于鼓励出现分叉之后尽早进行合并</li>
+</ul>
+</li>
+<li>叔父区块中的交易会被执行吗?
+<ul>
+<li>不需要</li>
+<li>原因：叔父区块中的交易很可能与当前区块之间的交易是<strong>存在冲突</strong>，但实际上以太坊中不会执行叔父区块中的交易，而是只<strong>检查</strong>这个叔父区块是不是<strong>符合挖矿难度要求</strong>的合法区块</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204143728910.png" alt="image-20231204143728910" style="zoom:67%;" />
+<ul>
+<li>叔块奖励示例</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144313914.png" alt="image-20231204144313914" style="zoom: 33%;" />
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144353807.png" alt="image-20231204144353807" style="zoom: 33%;" />
+<h2 id="以太坊挖矿难度调整">以太坊挖矿难度调整</h2>
+<p><img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144458884.png" alt="image-20231204144458884" style="zoom: 30%;" /><img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144520038.png" alt="image-20231204144520038" style="zoom: 30%;" /></p>
+<p><img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144543312.png" alt="image-20231204144543312" style="zoom: 30%;" /><img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144609351.png" alt="image-20231204144609351" style="zoom: 30%;" /></p>
+<ul>
+<li>以太坊发展的四个阶段</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144705999.png" alt="image-20231204144705999" style="zoom:50%;" />
+<ul>
+<li>难度炸弹的调整对出块的影响</li>
+</ul>
+<img src="D:\Typora_picture\10-11_以太坊概述\image-20231204144742080.png" alt="image-20231204144742080" style="zoom:50%;" />
+<ul>
+<li>早期的难度调整，主要是为了<strong>稳定出块时间</strong></li>
+<li>出块时间<strong>大幅度增长</strong>，是因为<strong>难度炸弹的效应</strong></li>
+<li>调整后总的出块时间又<strong>恢复</strong>到原来的水平</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Blog of ZhangCW">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/12/BC_6/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-12 22:59:37" itemprop="dateCreated datePublished" datetime="2024-02-12T22:59:37+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-12-11 23:05:12" itemprop="dateModified" datetime="2023-12-11T23:05:12+08:00">2023-12-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1>挖矿&amp;脚本</h1>
+<h2 id="挖矿">挖矿</h2>
+<h3 id="挖矿难度的定义">挖矿难度的定义</h3>
+<ul>
+<li>挖矿需满足<strong>区块头的哈希值</strong>小于等于<strong>target阈值</strong>，公式为</li>
+</ul>
+<img src="D:\Typora_picture\7_挖矿&脚本\image-20231211191411295.png" alt="image-20231211191411295" style="zoom: 50%;" />
+<ul>
+<li>挖矿难度与target成反比，<strong>target越小，挖矿难度约高</strong><br>
+(分子：挖矿难度为1时的阈值，非常小)</li>
+</ul>
+<img src="D:\Typora_picture\7_挖矿&脚本\dfda65430dc3cb9d32985dd13d77715.png" alt="dfda65430dc3cb9d32985dd13d77715" style="zoom: 33%;" />
+<ul>
+<li>
+<p>挖矿难度不能太低</p>
+<ul>
+<li>
+<p>通过降低难度，缩短出块时间会出现的问题</p>
+<ul>
+<li>因为网络传输也需要一定时间，造成不同节点收到的区块会不一样，那么会导致<strong>分叉成为常态</strong>，无法达成共识</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>造成分叉攻击更加容易</p>
+</li>
+</ul>
+<img src="D:\Typora_picture\7_挖矿&脚本\bfda951dc1d2006e1c312494b70f573.png" alt="bfda951dc1d2006e1c312494b70f573" style="zoom: 33%;" />
+<ul>
+<li>
+<p>挖矿难度调整策略</p>
+<ul>
+<li>
+<p>比特币规定<strong>每2016个</strong>区块调整一次难度，由于每个区块的产生时间大约是10min， 所以大约<strong>每14天调整一次</strong>难度：</p>
+</li>
+<li>
+<p>( 2016 * 10 min ) / ( 60 min * 24 h ) ≈ 14 天</p>
+</li>
+<li>
+<p>调整target阈值，即为调整挖矿难度， target阈值计算公式如下：<br>
+(expected time取值2016× 10min)</p>
+</li>
+<li>
+<p>target<strong>阈值调整比例</strong>不能太低 (低于1/4) ，也不能太高 (高于4倍)</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\7_挖矿&脚本\14c2ce23f8be498ea3b54af3f1bd263.png" alt="14c2ce23f8be498ea3b54af3f1bd263" style="zoom:33%;" />
+<ul>
+<li>
+<p>问题</p>
+<ul>
+<li>
+<p>比特币系统是分布式的，如何让所有节点同时调整目标阈值？</p>
+<ul>
+<li>比特币系统的代码写好了，每当2016个区块后，<strong>自动调整</strong>。</li>
+</ul>
+</li>
+<li>
+<p>由于代码是开源的，恶意节点不调整怎么办？</p>
+<ul>
+<li>这时检查区块的合法性就通不过。因为每个节点要独立验证发布的区块的合法性。检查的内容就包括：nBits，即目标阈值设的对不对。如果投机取巧设计一个过大的目标阈值，会使得你自己挖矿容易，但这个区块是不会被接受的。</li>
+<li>nBits是target一个<strong>编码的版本</strong>，在block header里没有直接存储target的域，因为target的域是256位，直接存target的话要32个字节。nBits在header里只有四个字节，可以认为是它的一个压缩编码</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="挖矿设备">挖矿设备</h3>
+<ul>
+<li>CPU -&gt; GPU -&gt; ASIC -&gt; 矿池</li>
+</ul>
+<h3 id="矿池挖矿">矿池挖矿</h3>
+<ul>
+<li>矿池组织</li>
+</ul>
+<img src="D:\Typora_picture\7_挖矿&脚本\3d34a0e1260599840181fc2b46a7250.png" alt="3d34a0e1260599840181fc2b46a7250" style="zoom: 33%;" />
+<ul>
+<li>
+<p>奖励机制</p>
+<ul>
+<li>Almost Valid Block</li>
+</ul>
+</li>
+<li>
+<p>如果在挖矿过程中，全节点监听到了其他矿工挖出新区块，应该怎么办？</p>
+<ul>
+<li><strong>重新组织新区块</strong>进行挖矿</li>
+</ul>
+</li>
+<li>
+<p>为什么不能沿用之前组装的区块继续进行挖矿？</p>
+<ul>
+<li><strong>交易</strong>有可能被包含到<strong>新区块链</strong>里</li>
+<li><strong>Hash指针</strong>发生变化</li>
+</ul>
+</li>
+</ul>
+<h2 id="比特币脚本">比特币脚本</h2>
+<h3 id="交易实例">交易实例</h3>
+<ul>
+<li>
+<p>输入脚本</p>
+<ul>
+<li>
+<p>也称解锁脚本</p>
+</li>
+<li>
+<p>输入脚本包含两个操作，分别将<strong>两个很长的数</strong>压入栈中</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="D:%5CTypora_picture%5C7_%E6%8C%96%E7%9F%BF&amp;%E8%84%9A%E6%9C%AC%5C72693033cf31ceb005902555c6a060b.png" alt="72693033cf31ceb005902555c6a060b"></p>
+<ul>
+<li>
+<p>输出脚本</p>
+<ul>
+<li>
+<p>也称锁定脚本</p>
+</li>
+<li>
+<p>输出脚本有<strong>两行</strong>，分别对应<strong>两个输出</strong>，即每个输出有自己单独的一段脚本</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="D:%5CTypora_picture%5C7_%E6%8C%96%E7%9F%BF&amp;%E8%84%9A%E6%9C%AC%5Cfc579958ae6990d75fda0a936e7dbd9.png" alt="fc579958ae6990d75fda0a936e7dbd9"></p>
+<h3 id="交易的结构">交易的结构</h3>
+<img src="D:\Typora_picture\7_挖矿&脚本\70d6c7e7d59a6c7fa6c6239aeb9fca2.png" alt="70d6c7e7d59a6c7fa6c6239aeb9fca2" style="zoom: 50%;" />
+<h3 id="交易的输入">交易的输入</h3>
+<img src="D:\Typora_picture\7_挖矿&脚本\9a776b791121fc8597180087ecf0439.png" alt="9a776b791121fc8597180087ecf0439" style="zoom: 50%;" />
+<h3 id="交易的输出">交易的输出</h3>
+<img src="D:\Typora_picture\7_挖矿&脚本\e5707dcd5698aa6dc4f966e44eba63b.png" alt="e5707dcd5698aa6dc4f966e44eba63b" style="zoom: 50%;" />
+<h2 id="输入-输出脚本的形式">输入/输出脚本的形式</h2>
+<h3 id="Pay-to-Public-Key-P2PK">Pay to Public Key (P2PK)</h3>
+<p>​		输入：签名→公钥→<strong>checksig函数，判断签名和公钥是否匹配</strong></p>
+<p>​		输出：True 或者 False</p>
+<img src="D:\Typora_picture\7_挖矿&脚本\473b3deaf2f9678048336245c650720.png" alt="473b3deaf2f9678048336245c650720" style="zoom: 25%;" />
+<img src="D:\Typora_picture\7_挖矿&脚本\bc7045716e75ae51a19afa81ee715ec.png" alt="bc7045716e75ae51a19afa81ee715ec" style="zoom:25%;" />
+<h3 id="Pay-to-Public-Key-Hash-P2PKH">Pay to Public Key Hash (P2PKH)</h3>
+<p>​		输入：签名→公钥→复制一份公钥→最上层公钥变为公钥哈希→输出脚本提供的公钥哈希→<strong>EquualVerify函数，判断两个公钥哈希是否相同</strong>→checksig函数</p>
+<p>​		输出：True 或者 False</p>
+<img src="D:\Typora_picture\7_挖矿&脚本\59a94768031dc23a012dd4ae8382c1b.png" alt="59a94768031dc23a012dd4ae8382c1b" style="zoom:25%;" />
+<img src="D:\Typora_picture\7_挖矿&脚本\444540a864c0e69d049dd8fd1c58a39.png" alt="444540a864c0e69d049dd8fd1c58a39" style="zoom:25%;" />
+<h3 id="Pay-to-Script-Hash-P2SH">Pay to Script Hash (P2SH)</h3>
+<img src="D:\Typora_picture\7_挖矿&脚本\image-20231211230444890.png" alt="image-20231211230444890" style="zoom: 33%;" />
+<img src="D:\Typora_picture\7_挖矿&脚本\image-20231211230503369.png" alt="image-20231211230503369" style="zoom:33%;" />
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Blog of ZhangCW">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/12/BC_5/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-12 22:59:37" itemprop="dateCreated datePublished" datetime="2024-02-12T22:59:37+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-12-11 17:19:56" itemprop="dateModified" datetime="2023-12-11T17:19:56+08:00">2023-12-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1>比特币的共识机制</h1>
+<h2 id="什么是共识">什么是共识</h2>
+<h3 id="共识">共识</h3>
+<p>​		共识是一种在不信任的节点之间就特定数据的最终状态达成一致的过程</p>
+<h3 id="分布式共识">分布式共识</h3>
+<p>​		分布式共识是<strong>在一些节点存在故障</strong>的情况下，在多个节点之间实现<strong>共同的状态/数值</strong></p>
+<h3 id="一致性">一致性</h3>
+<p>​		<strong>两个节点</strong>之间的一致性很容易实现：只需要一些同步消息，例如 TCP 的握手。</p>
+<p>​		然而，在多个分布式节点之间达成共识变得相当具有挑战性。</p>
+<h3 id="CAP定理">==CAP定理==</h3>
+<ul>
+<li>
+<p>一个分布式系统<strong>不能同时满足这3个性质</strong></p>
+<ul>
+<li>
+<p><strong>一致性</strong> Consistency</p>
+<ul>
+<li>一个节点改变，其他节点也同时改变</li>
+</ul>
+</li>
+<li>
+<p>**可用性 **Availability</p>
+<ul>
+<li>能够提供服务(不一定是正确的)</li>
+</ul>
+</li>
+<li>
+<p><strong>分区容错性</strong> Partition tolerance</p>
+</li>
+<li>
+<p>网络时好时坏，可能与其他<strong>网络断开</strong>，形成<strong>分区</strong>，此时系统还能为外部正常提供服务</p>
+</li>
+<li>
+<p>在分布式系统中，分区容错性是<strong>必须先满足</strong>的</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>方案一</strong></p>
+</li>
+<li>
+<p>数据全部都只存放在一个节点上，其他节点全部从这个节点上读取数据</p>
+<ul>
+<li>满足一致性、可用性</li>
+</ul>
+</li>
+<li>
+<p><strong>方案二</strong></p>
+<ul>
+<li>
+<p>每个节点都存放数据，首先保证一致性</p>
+<ul>
+<li>满足一致性，分区容错性</li>
+</ul>
+</li>
+<li>
+<p>每个节点都存放数据，首先保证可用性</p>
+<ul>
+<li>满足可用性，分区容错性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="共识机制的类型">共识机制的类型</h2>
+<ul>
+<li>BFT-based 基于<strong>拜占庭算法</strong>的容错机制
+<ul>
+<li>在没有计算密集型操作（例如比特币的挖矿机制）的情况下，它依赖于节点之间的简单方案。最终，当收到一定数量的消息时，就会达成一致意见。</li>
+<li>优势和劣势
+<ul>
+<li>在<strong>有限数量的节点</strong>上能够高效执行</li>
+<li>但是在<strong>规模上扩展性较差</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\5_比特币的共识机制\image-20231211164158042.png" alt="image-20231211164158042" style="zoom:50%;" />
+<ul>
+<li>Leader Election-based 基于<strong>选举</strong>的容错机制
+<ul>
+<li>它要求节点在领导者选举中<strong>竞争</strong>，只有<strong>获胜的节点</strong>才能提出最终值</li>
+<li>如比特币中的<strong>工作量证明</strong>（PoW）</li>
+<li>优势和劣势
+<ul>
+<li>在<strong>规模上扩展性</strong>非常好</li>
+<li>但是执行<strong>速度较慢</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="区块链的共识机制">区块链的共识机制</h2>
+<h3 id="不同区块链需要不同的共识机制">不同区块链需要不同的共识机制</h3>
+<ul>
+<li>
+<p>公有链</p>
+<ul>
+<li>
+<p>几乎<strong>人人都可以参与</strong>，每个参与者都是<strong>匿名</strong></p>
+</li>
+<li>
+<p>参与者之间<strong>不存在任何信任</strong></p>
+</li>
+<li>
+<p>采用<strong>算力敏感</strong>的“挖矿”共识作为激励机制</p>
+</li>
+</ul>
+</li>
+<li>
+<p>联盟链/私链</p>
+<ul>
+<li>
+<p>在一组已知的、 已识别的、 且经过审查的参与者中进行区块链的操作</p>
+</li>
+<li>
+<p>节点具有一定的<strong>信任基础</strong></p>
+</li>
+<li>
+<p>不需要算力敏感的共识机制， BFT 类型的共识机制比较适合</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="拜占庭将军问题与容错算法">拜占庭将军问题与容错算法</h3>
+<ul>
+<li>
+<p>分布式系统中</p>
+<ul>
+<li>
+<p>可能有恶意节点，也可能宕机</p>
+</li>
+<li>
+<p>如何保持分布式系统的一致性？</p>
+</li>
+</ul>
+</li>
+<li>
+<p>解决办法</p>
+<ul>
+<li>
+<p>简化为将军和副官模型</p>
+</li>
+<li>
+<p>忠诚的副官会遵守同一命令</p>
+</li>
+</ul>
+</li>
+<li>
+<p>BFT容错算法</p>
+<ul>
+<li>
+<p>恶意节点为 m</p>
+</li>
+<li>
+<p>总节点为 n</p>
+</li>
+<li>
+<p><strong>n &gt; 3m</strong>（恶意节点数不超过三分之一）， 是可解的</p>
+</li>
+</ul>
+</li>
+<li>
+<p>预设条件</p>
+<ul>
+<li>
+<p>至少4个以上参与者</p>
+</li>
+<li>
+<p>每轮次有一个<strong>发令者</strong></p>
+</li>
+<li>
+<p>少于1/3的参与者作恶或失效</p>
+</li>
+<li>
+<p>极大概率可达的网络(区块链网络)</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="比特币中的共识机制">比特币中的共识机制</h2>
+<ul>
+<li>区块链的共识算法本质上是为了解决拜占庭将军问题</li>
+<li>比特币是否适用拜占庭容错算法解决共识问题？
+<ul>
+<li>不适合。会受到女巫(Sybil)攻击。</li>
+</ul>
+</li>
+</ul>
+<h3 id="女巫攻击">女巫攻击</h3>
+<ul>
+<li>比特币作为<strong>无中心登记的匿名服务</strong>，创建多重身份代价极低，创建多重身份意味着获得多重的投票权利</li>
+<li>Gloria可以实行多重身份攻击， 从而允许她的双花行为</li>
+<li>取代用身份投票的机制，我们采用<strong>资源成本</strong>进行投票</li>
+</ul>
+<h3 id="工作量证明PoW">工作量证明PoW</h3>
+<ul>
+<li>工作量证明 (Proof-of-Work, PoW) 是一种对应服务与资源滥用、或是阻断服务攻击的经济对策。一般是要求用户进行一些<strong>耗时适当的复杂运算</strong>，且答案能被服务方<strong>快速验算</strong>，以此耗用的时间、设备与能源做为担保成本，以确保服务与资源是被真正的需求所使用
+<ul>
+<li>不容易完成</li>
+<li>容易验证</li>
+</ul>
+</li>
+</ul>
+<h3 id="比特币的共识机制——基于PoW的挖矿">比特币的共识机制——基于PoW的挖矿</h3>
+<ul>
+<li>通过<strong>消耗资源解决一个问题</strong>获得投票资格（即记账权）</li>
+<li>记账权必须通过<strong>花费计算资源</strong>来获得，比如说通过蛮力解决一个问题； 通过记账奖励鼓励投入资源</li>
+<li>具体挖矿过程：参与者综合<strong>上一个区块的 Hash 值</strong>，上一个区块生成之后的新的验证过的交易内容的Markle Root值，加上<strong>猜测的一个随机数Nonce</strong>， 再加上<strong>时间</strong>， 一起打包到一个候选新区块，让新区块的 Hash 值<strong>小于</strong>比特币网络中给定的一个数。</li>
+<li>挖矿成功： ==<strong>SHA(Markle Root+上一个区块Hash值+时间+Nonce) &lt; target</strong>==
+<ul>
+<li>“0000000000000f15673f1354”，其中，“0”的数目体现了挖矿难度</li>
+<li>这是一道面向全体矿工的“计算题”， <strong>target范围越小，计算出来就越难</strong>（基于Hash函数特性）</li>
+<li>系统每隔 <strong>2016 个</strong>区块，会根据上一周期的挖矿时间来调整挖矿难度（通过调整限制数“0”数目），来调节生成区块的时间稳定在 10 分钟左右</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\5_比特币的共识机制\image-20231211165952363.png" alt="image-20231211165952363" style="zoom:50%;" />
+<ul>
+<li>
+<p>整个<strong>争夺记账</strong>的过程就是<strong>挖矿的过程</strong>， 也就是<strong>比特币发行的过程</strong></p>
+</li>
+<li>
+<p>“挖矿”争夺记账权奖励</p>
+<ul>
+<li>记账有利润： <strong>比特币奖励</strong> + <strong>交易手续费</strong></li>
+<li>很多人争夺记账权</li>
+<li>通过付出计算量解决一个难题，谁先解决谁获得记账权</li>
+<li>坏人作恶的成本变高</li>
+</ul>
+</li>
+<li>
+<p>比特币 PoW 挖矿的一些规则</p>
+<ul>
+<li>每 10 分钟左右生成一个不超过 1 MB 大小的<strong>区块</strong>（记录了这 10 分钟内<strong>发生的验证过的交易内容</strong>），串联到区块链尾部，每个<strong>区块</strong>的<strong>成功提交者</strong>可以得到系统<strong>一定数量的比特币奖励</strong>（该奖励作为区块内的第一个交易，一定区块数后才能使用），以及用户附加到交易上的支付服务费用</li>
+<li>注：每个区块的奖励<strong>最初是 50 个比特币</strong>，<strong>每隔 21 万个区块自动减半</strong>，即<strong>4年</strong>时间</li>
+<li>最终在2140年，比特币总量稳定在 2100 万个（等比数列计算）</li>
+<li>因此，比特币是一种通缩的货币</li>
+</ul>
+</li>
+</ul>
+<h3 id="PoW最长链机制">PoW最长链机制</h3>
+<ul>
+<li>加人全网<strong>同时有两个合法提案</strong>会在网络中进行广播，收到的用户进行验证后，会基于用户认为的<strong>最长链</strong>基础上继续难题的计算。</li>
+<li>因此，系统中可能出现链的分叉(Fork)解决方案:比特币网络最长链机制</li>
+</ul>
+<img src="D:\Typora_picture\5_比特币的共识机制\image-20231211171437097.png" alt="image-20231211171437097" style="zoom:33%;" />
+<h3 id="51-攻击与双重支付">51%攻击与双重支付</h3>
+<ul>
+<li>
+<p>步骤</p>
+<ul>
+<li>
+<p>A 给 B 支付比特币，交易在一个块中确认</p>
+</li>
+<li>
+<p>A 重新构造一笔交易 A→C，并打包进区块公布(分叉)</p>
+</li>
+<li>
+<p><strong>包含双重支付的块率先找到下一个块</strong>，全网认可 A→C，交易 A→B 无效</p>
+</li>
+</ul>
+</li>
+<li>
+<p>双花能够成功，需要攻击者拥有<strong>超过一半以上的算力</strong></p>
+</li>
+<li>
+<p>比特币网络的安全，要求一半以上的节点(算力)是可信的</p>
+</li>
+<li>
+<p>一般个体达到1 / 3的计算力，比特币网络就存在被破坏的风险</p>
+</li>
+</ul>
+<img src="D:\Typora_picture\5_比特币的共识机制\image-20231211171548312.png" alt="image-20231211171548312" style="zoom:33%;" />
+<h3 id="比特币共识机制总结">比特币共识机制总结</h3>
+<ul>
+<li>总结1：无中心网络需要<strong>工作量证明</strong>
+<ul>
+<li>不容易完成（表明需要工作量）</li>
+<li>容易验证（其他节点可以快速确认确实付出了工作量）</li>
+<li>工作过程<strong>公平</strong>（任何节点没有完成工作的捷径）</li>
+<li>具有<strong>随机性</strong>（能力越强，只能保证率先完成概率越大）</li>
+</ul>
+</li>
+<li>总结2：<strong>共识机制</strong>是区块链的<strong>核心引擎</strong>
+<ul>
+<li>一种多方协作机制，用于协调多参与方达成共同接受的<strong>唯一结果</strong>，且保证此过程<strong>难以被欺骗</strong>，且持续<strong>稳定运行</strong></li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\5_比特币的共识机制\image-20231211171939292.png" alt="image-20231211171939292" style="zoom:33%;" />
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Blog of ZhangCW">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/12/BC_4/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-12 22:59:37" itemprop="dateCreated datePublished" datetime="2024-02-12T22:59:37+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-12-11 16:24:19" itemprop="dateModified" datetime="2023-12-11T16:24:19+08:00">2023-12-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1>比特币交易模型</h1>
+<h2 id="比特币身份确认">比特币身份确认</h2>
+<ul>
+<li>私钥、公钥、钱包地址生成</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\14df444000a04833d9d2e4ca0b21260.png" alt="14df444000a04833d9d2e4ca0b21260" style="zoom: 33%;" />
+<ul>
+<li>私钥、公钥、钱包地址间的关系：</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\046e1104bf7cd7b83d97fd011c994d3.png" alt="046e1104bf7cd7b83d97fd011c994d3" style="zoom:50%;" />
+<ul>
+<li>数学上，公钥由私钥生成，从公钥反推私钥几乎是不可能的：<strong>椭圆曲线</strong>特性</li>
+<li>只要拥有了“密钥 + 签名 + 地址”，就能随意使用该地址下的数字资产</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\be2b5b2a9264a3e6a91884b8a4390f3.png" alt="be2b5b2a9264a3e6a91884b8a4390f3" style="zoom:50%;" />
+<h2 id="交易服务与UTXO交易模型">交易服务与UTXO交易模型</h2>
+<p><strong>不可用的简单方案</strong></p>
+<ul>
+<li><strong>签名能被复制</strong>，导致无限复制</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\d3e4f09c869905da848bb30464cf27a.png" alt="d3e4f09c869905da848bb30464cf27a" style="zoom:50%;" />
+<ul>
+<li>中心化</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\3fc3151fad24fe47f7bad8001458db0.png" alt="3fc3151fad24fe47f7bad8001458db0" style="zoom: 33%;" />
+<h3 id="交易有效性">交易有效性</h3>
+<ul>
+<li>
+<p>所有权确认</p>
+<ul>
+<li>
+<p>转账要有来源</p>
+</li>
+<li>
+<p>防止双发攻击</p>
+<ul>
+<li>仅有“<strong>转账数额</strong>”和“<strong>转入钱包地址</strong>”无法证明<strong>交易的生成者</strong>对“<strong>转出钱包地址</strong>“余额有动用的权利</li>
+<li>需要用[<strong>私钥</strong>]对原始数据进行签名</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\3347b7a746045dc8a7e7108641ac66b.png" alt="3347b7a746045dc8a7e7108641ac66b" style="zoom: 33%;" />
+<img src="D:\Typora_picture\4_比特币交易模型\237b95a4976913297a2fa0adfb46345.png" alt="237b95a4976913297a2fa0adfb46345" style="zoom: 33%;" />
+<ul>
+<li>
+<p>具有可动用的资金</p>
+</li>
+<li>
+<p><strong>其他交易不会用到</strong>同一笔资金</p>
+</li>
+</ul>
+<h3 id="未花费的交易输出UTXO">未花费的交易输出UTXO</h3>
+<p><img src="D:%5CTypora_picture%5C4_%E6%AF%94%E7%89%B9%E5%B8%81%E4%BA%A4%E6%98%93%E6%A8%A1%E5%9E%8B%5C73db66c5fd00ddc36a570721b38d703.png" alt="73db66c5fd00ddc36a570721b38d703"></p>
+<ul>
+<li>
+<p>比特币使用<strong>U</strong>nspent <strong>T</strong>ran<strong>s</strong>action <strong>O</strong>utput (未花费的交易输出，UTXO)来<strong>确保同一笔资金只出现在一笔交易中</strong></p>
+</li>
+<li>
+<p>类比：每一收到的资金都<strong>存在一个储蓄罐</strong>里，每次交易都需要<strong>打碎一个或多个储蓄罐</strong></p>
+</li>
+<li>
+<p>==<strong>基本形式</strong>==</p>
+</li>
+<li>
+<p>版本号</p>
+</li>
+<li>
+<p>Input未花费交易UTXO</p>
+</li>
+<li>
+<p>Output输出地址及数量</p>
+</li>
+<li>
+<p>锁定时间</p>
+</li>
+<li>
+<p>安全性</p>
+<ul>
+<li>结合所有权确认，<strong>每个交易都包含着比特币拥有者的签名</strong>，所有交易记录<strong>可溯源</strong>，记录着每个比特币从“出身”开始的所有“主人”</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\9fd01e04798569459d38d621ef1a373.png" alt="9fd01e04798569459d38d621ef1a373" style="zoom:33%;" />
+<ul>
+<li>
+<p>Bob的签名与公钥</p>
+</li>
+<li>
+<p>OP_DUP</p>
+<ul>
+<li>弹出第一个元素，并复制这个元素。随后，它将二者同时添加回堆栈。通常，这样做是为了在不影响原始元素的情况下对副本进行操作。</li>
+</ul>
+</li>
+<li>
+<p>OP_HASH160</p>
+<ul>
+<li>这将弹出第一个元素，并进行两次哈希。第一轮将使用SHA-256算法进行哈希。随后使用RIPEMD-160算法对SHA-256输出进行哈希。结果输出被添加回堆栈。</li>
+</ul>
+</li>
+<li>
+<p>OP_EQUALVERIFY</p>
+<ul>
+<li>OP_EQUALVERIFY由另外两个运算符OP_EQUAL和OP_VERIFY组合而成。OP_EQUAL弹出两个元素，并检查其是否相同。如果相同，则将1添加到堆栈。如果不相同，则添加0。OP_VERIFY弹出顶部元素，并检查其是否为True（亦即非0）。如果不是，则交易失败。综合起来，如果顶部两个元素不匹配，OP_EQUALVERIFY会导致交易失败。</li>
+</ul>
+</li>
+</ul>
+<h2 id="区块链类型及应用">区块链类型及应用</h2>
+<h3 id="类型">类型</h3>
+<ul>
+<li>
+<p>公有链</p>
+</li>
+<li>
+<p>联盟链</p>
+</li>
+<li>
+<p>私有链</p>
+</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\0c6fc4d63099009e75175d535ac1545.png" alt="0c6fc4d63099009e75175d535ac1545" style="zoom:50%;" />
+<h3 id="应用场景">应用场景</h3>
+<img src="D:\Typora_picture\4_比特币交易模型\08891e4458179221cd15fb0ec716ee7.png" alt="08891e4458179221cd15fb0ec716ee7" style="zoom:50%;" />
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Blog of ZhangCW">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/12/BC_3/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-12 22:59:37" itemprop="dateCreated datePublished" datetime="2024-02-12T22:59:37+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-12-11 15:40:52" itemprop="dateModified" datetime="2023-12-11T15:40:52+08:00">2023-12-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1>比特币数据结构</h1>
+<h2 id="数据结构">==数据结构==</h2>
+<p><img src="D:%5CTypora_picture%5C3_%E6%AF%94%E7%89%B9%E5%B8%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%5Cd7257962ea3dec49b1fbdd631c1ec27.png" alt="d7257962ea3dec49b1fbdd631c1ec27"></p>
+<p><strong>版本号：4B</strong></p>
+<ul>
+<li>记录了比特币区块链的<strong>版本信息</strong>，用于表示区块数据的格式和规则</li>
+</ul>
+<p><strong>前一区块哈希值：32B</strong></p>
+<ul>
+<li>记录了<strong>上一个区块的哈希值</strong>，通过这个字段可以将区块链中的区块连接起来</li>
+</ul>
+<p><strong>默克尔树根：32B</strong></p>
+<ul>
+<li>是一个哈希值，记录了<strong>区块中所有交易数据的哈希树（默克尔树）根节点</strong>，用于验证区块中的交易信息完整性</li>
+</ul>
+<p><strong>时间戳：4B</strong></p>
+<ul>
+<li>记录区块<strong>生成的时间戳</strong>，用UNIX时间格式表示</li>
+</ul>
+<p><strong>难度目标：4B</strong></p>
+<ul>
+<li>表示该区块<strong>difficulty target</strong>的数值，用于调整比特币的挖矿难度</li>
+</ul>
+<p><strong>Nonce：4B</strong></p>
+<ul>
+<li>用于工作量证明算法的计算器</li>
+</ul>
+<h2 id="哈希指针">哈希指针</h2>
+<h3 id="普通指针与哈希指针的区别">普通指针与哈希指针的区别</h3>
+<ul>
+<li>
+<p>普通指针</p>
+<ul>
+<li>能够告知数据的位置</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\3_比特币数据结构\image-20231211152711011.png" alt="image-20231211152711011" style="zoom:33%;" />
+<ul>
+<li>
+<p>哈希指针</p>
+<ul>
+<li>不仅能<strong>告知数据位置</strong>，还能<strong>防止数据被篡改</strong>
+<ul>
+<li>哈希指针存储了它<strong>所指向的数据的哈希值</strong></li>
+<li>如果它所指向的数据发生了修改 它存储的哈希值与所指向数据当前的哈希值不同，则可判断这个数据发生了修改</li>
+</ul>
+</li>
+<li>hash pointer := H(header)</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\3_比特币数据结构\image-20231211152725166.png" alt="image-20231211152725166" style="zoom:33%;" />
+<img src="D:\Typora_picture\3_比特币数据结构\image-20231211153737520.png" alt="image-20231211153737520" style="zoom: 33%;" />
+<h3 id="默克尔树">默克尔树</h3>
+<ul>
+<li>默克尔树是一种以<strong>散列</strong>的形式<strong>构建大量数据</strong>的方法，并用<strong>单个散列</strong>表示这些数据</li>
+</ul>
+<img src="D:\Typora_picture\3_比特币数据结构\5ebfe9a11e2c323a20a329ce789b19a.png" alt="5ebfe9a11e2c323a20a329ce789b19a" style="zoom: 50%;" />
+<h3 id="如何证明交易存在？">如何证明交易存在？</h3>
+<ul>
+<li>
+<p>==<strong>轻节点与全节点</strong>==</p>
+</li>
+<li>
+<p><strong>全节点</strong></p>
+<ul>
+<li>
+<p>一直在线</p>
+</li>
+<li>
+<p>在<strong>本地硬盘</strong>中维护<strong>完整</strong>的区块链信息</p>
+</li>
+<li>
+<p>在内存中<strong>维护UTXO集合</strong>，以便快速验证交易的正确性</p>
+</li>
+<li>
+<p><strong>监听</strong>比特币网络上的交易信息，<strong>验证</strong>交易合法性</p>
+</li>
+<li>
+<p><strong>决定</strong>哪些交易会被打包到区块里</p>
+</li>
+<li>
+<p>监听别的矿工挖出来的区块，<strong>验证其合法性</strong></p>
+</li>
+<li>
+<p>挖矿</p>
+<ul>
+<li>
+<p>决定沿着哪条链挖下去</p>
+</li>
+<li>
+<p>当出现等长的分叉时，选择哪一个分叉</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>轻节点</strong></p>
+<ul>
+<li>
+<p>不是一直在线</p>
+</li>
+<li>
+<p>不用保存整个区块链，<strong>只保存每个区块的块头</strong></p>
+</li>
+<li>
+<p>不用保存全部交易，<strong>只保存与自己相关的交易</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>汇款人A</p>
+<ul>
+<li>向就近的全节点进行请求</li>
+</ul>
+</li>
+<li>
+<p>收款人B</p>
+<ul>
+<li>轻节点，区块头中有hash root</li>
+</ul>
+</li>
+<li>
+<p>给出<strong>一条路径</strong></p>
+</li>
+</ul>
+<h3 id="如何验证交易不存在？">如何验证交易不存在？</h3>
+<ul>
+<li>
+<p>1、把所有最底层的哈希值进行<strong>排序</strong></p>
+</li>
+<li>
+<p>2、给出<strong>两条路径</strong></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Blog of ZhangCW">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/12/BC_2/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-12 22:59:37" itemprop="dateCreated datePublished" datetime="2024-02-12T22:59:37+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-12-11 15:22:15" itemprop="dateModified" datetime="2023-12-11T15:22:15+08:00">2023-12-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1>密码学原理</h1>
+<h2 id="密码学简介">密码学简介</h2>
+<h3 id="密码学定义">密码学定义</h3>
+<ul>
+<li><strong>第三方存在下</strong>的<strong>安全通信</strong>技术的研究与实践</li>
+</ul>
+<h3 id="密码学历史">密码学历史</h3>
+<ul>
+<li>
+<p>传统密码学</p>
+</li>
+<li>
+<p>现代密码学1976/1977</p>
+<ul>
+<li>
+<p>公钥密码学的提出</p>
+</li>
+<li>
+<p>美国数据加密标准DES的颁布</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="对称加密">对称加密</h3>
+<ul>
+<li>使用相同的秘钥加密和解密大量数据</li>
+</ul>
+<img src="D:\Typora_picture\2_密码学原理\image-20231211144901032.png" alt="image-20231211144901032" style="zoom:33%;" />
+<h3 id="非对称加密">非对称加密</h3>
+<ul>
+<li>
+<p>采用<strong>不同的秘钥</strong>加密少量数据，用于<strong>交换对称密钥</strong>、用于<strong>签名验签</strong></p>
+<ul>
+<li>
+<p>公钥：公开，用于加密</p>
+</li>
+<li>
+<p>私钥：私密，用于解密</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\2_密码学原理\image-20231211144912558.png" alt="image-20231211144912558" style="zoom:33%;" />
+<h2 id="哈希函数">哈希函数</h2>
+<p><strong>哈希定义</strong></p>
+<ul>
+<li><strong>表示大量数据的唯一摘要值</strong>。原数据的少量更改会在哈希值中产生不可预知的大量更改,可以作为数据的验证凭据。可保证数据的完整性、正确性</li>
+</ul>
+<p><strong>Hash函数：H(x) = y</strong></p>
+<ul>
+<li>
+<p><strong>定义</strong></p>
+<ul>
+<li>
+<p>将<strong>任意长度</strong>的消息映射成一个<strong>较短的定长输出</strong>消息的函数</p>
+</li>
+<li>
+<p>y = H(x), x 是<strong>变长</strong>的消息, y 是<strong>定长</strong>的 Hash</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>目的</strong></p>
+<ul>
+<li>为文件、消息或其他的分组数据产生“数字指纹”</li>
+</ul>
+</li>
+<li>
+<p><strong>特点</strong></p>
+<ul>
+<li>
+<p>正向快速</p>
+<ul>
+<li>给定明文和 hash 算法，在<strong>有限时间和有限资源</strong>内能计算出 hash 值</li>
+</ul>
+</li>
+<li>
+<p>输入敏感</p>
+<ul>
+<li>原始输入信息修改一点信息，产生的 hash 值看起来应该都有<strong>很大不同</strong></li>
+</ul>
+</li>
+<li>
+<p>逆向困难</p>
+<ul>
+<li>给定特定 hash 值，在有限时间内<strong>很难</strong>（基本不可能）<strong>逆推</strong>出明文</li>
+</ul>
+</li>
+<li>
+<p>冲突避免</p>
+<ul>
+<li>很难找到两段内容不同的明文，使得它们的 hash 值一致（发生冲突）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\2_密码学原理\image-20231211145254267.png" alt="image-20231211145254267" style="zoom:50%;" />
+<ul>
+<li>
+<p><strong>特性</strong></p>
+<ul>
+<li>
+<p>输入可以为任意大小的 string</p>
+</li>
+<li>
+<p>输出为固定大小，如 256bit</p>
+</li>
+<li>
+<p>有效计算：特定的输入字符串，合理时间内输出 —— O(n) 时间复杂度</p>
+</li>
+</ul>
+</li>
+<li>
+<p>达到==<strong>密码学安全</strong>==的更高要求</p>
+<ul>
+<li>
+<p><strong>碰撞阻力</strong></p>
+<ul>
+<li>
+<p>如果无法找到两个值， x 与 y, x != y, 而 H(x) = H(y)，那么，称哈希函数 H 具有碰撞阻力</p>
+</li>
+<li>
+<p>”找不到“ 不代表 ”不存在“</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>隐秘性</strong></p>
+<ul>
+<li>
+<p>当其输入 x 选自一个符合<strong>高阶最小熵的概率分布</strong>，在给定 H(x) 时，确定 x 是不可行的</p>
+<ul>
+<li>
+<p>高阶最小熵描述了分布的分散程度。在这样的分布中，任意数值被选定的概率的<strong>小到可以忽略不计</strong>。</p>
+</li>
+<li>
+<p>x 取自一个广泛的集合</p>
+</li>
+<li>
+<p>仅通过尝试特定的 x，找不到特定的输出值</p>
+</li>
+</ul>
+</li>
+<li>
+<p>不可逆：如果仅仅知道哈希函数的输出  y，则没有可行的办法得到输入 x</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>谜题友好</strong></p>
+<ul>
+<li>
+<p>如果对于任意 n 位输出值 y， 假定x选自<strong>高阶最小熵分布</strong>，如果无法找到一个<strong>可行</strong>的方法，在比 2^n小很多的时间内找到 x，保证 H(x) = y 成立，那么我们称哈希函数H 为谜题友好。</p>
+</li>
+<li>
+<p>如果已知 y 值，想去得到 x 值，那就<strong>必须暴力枚举</strong>，通过不断的尝试才能做到，并且没有比这更好的方法。</p>
+</li>
+<li>
+<p>？（不能从 x 预知 y ）</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="签名机制">签名机制</h2>
+<ul>
+<li>引言：比特币用户有账户吗？
+<ul>
+<li><strong>比特币没有账户，但用户有“钱包”</strong>
+<ul>
+<li>用户自己（在比特币App里）开设“钱包” ，通过使用一对独特的 <strong>&lt;public key, secret key&gt;(pk, sk)</strong></li>
+<li>pk 和 sk 的作用：
+<ul>
+<li>签名： Sign (message, <strong>sk</strong>) = Signature</li>
+<li>验证： (message, Signature, <strong>pk</strong>) = Ture / False</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\2_密码学原理\image-20231211151400753.png" alt="image-20231211151400753" style="zoom: 50%;" />
+<ul>
+<li>数字签名：信息的发送者 (掌握私钥) 能产生的<strong>别人无法伪造的一段数字串</strong>，且可以通过其公布出去的<strong>公钥验证</strong>由他发送</li>
+<li>功能：所有者确权</li>
+</ul>
+<h3 id="数字签名方案">数字签名方案</h3>
+<ul>
+<li>
+<p>==<strong>三个算法</strong>==</p>
+<ul>
+<li>
+<p>(sk, pk) := <strong>generateKeys</strong> (keysize)</p>
+<ul>
+<li>
+<p>把 keysize 作为输入，来产生一对公钥和私钥</p>
+</li>
+<li>
+<p>私钥 sk 被安全保存，并用来签名一段消息；</p>
+</li>
+<li>
+<p>公钥 pk 是都可找到的，拿它来验证你的签名。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>签名过程 sig := sign(<strong>sk</strong>, msg)</p>
+<ul>
+<li>把 <strong>消息</strong> 和 <strong>私钥</strong> 作为输入，输出是签名 sig</li>
+</ul>
+</li>
+<li>
+<p>验证过程 isValid := verify(<strong>pk</strong>, <strong>message</strong>, <strong>sig</strong>)</p>
+<ul>
+<li>
+<p>通过把一段消息和签名消息与公钥作为输入</p>
+</li>
+<li>
+<p>如果返回是真，证明签名属实；否则， 证明签名的消息为假</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>要求</p>
+<ul>
+<li>
+<p>有效的签名可以通过验证</p>
+<ul>
+<li>verify(pk, message, sign(sk, message)) == true</li>
+</ul>
+</li>
+<li>
+<p>签名不可伪造</p>
+</li>
+</ul>
+</li>
+<li>
+<p>实践中</p>
+<ul>
+<li>
+<p>比特币使用的<strong>签名算法是随机的</strong>，需良好随机源</p>
+</li>
+<li>
+<p>对要签名的<strong>信息 message 大小有限</strong>，所以使用 HashFunction，因为哈希函数的输出定长</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="比特币中的签名">比特币中的签名</h3>
+<ul>
+<li>
+<p>每笔 Tx 的发起方用他的 sk 签名</p>
+</li>
+<li>
+<p>其他人通过 Tx 发起方的 pk 验证 Tx 的合法性</p>
+</li>
+</ul>
+<h3 id="“公钥即身份”">“公钥即身份”</h3>
+<ul>
+<li>
+<p>Bitcoin 用户自己开账户</p>
+</li>
+<li>
+<p>其他用户看到一个签名，并被一个 pk 验证了： pk 就可以代表一个人的身份</p>
+</li>
+<li>
+<p>比特币中用户的身份： <strong>地址 := Hash (pk || x)</strong></p>
+</li>
+<li>
+<p>比特币提供去中心化身份管理</p>
+<ul>
+<li>随时定制新的随机身份</li>
+<li>具有匿名性：一个人可以有多个 &lt;pk, sk&gt;，随便使用哪一个身份转账</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Blog of ZhangCW">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/12/BC_10/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-12 22:59:35" itemprop="dateCreated datePublished" datetime="2024-02-12T22:59:35+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-01-01 15:49:40" itemprop="dateModified" datetime="2024-01-01T15:49:40+08:00">2024-01-01</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1>区块链的安全与攻击</h1>
+<h2 id="区块链架构与安全性">区块链架构与安全性</h2>
+<h3 id="区块链层级架构视角">区块链层级架构视角</h3>
+<ul>
+<li>区块链结构复杂，无论是在任何一个环节出现的安全问题，都有可能造成整个区块链系统的损失。
+<ul>
+<li>应用层
+<ul>
+<li>EVM（以太坊虚拟机）、智能合约、DAPP</li>
+</ul>
+</li>
+<li>激励层
+<ul>
+<li>发行机制、传播机制、分配机制</li>
+</ul>
+</li>
+<li>共识层
+<ul>
+<li>POW、POS、DPOS、PBFT</li>
+</ul>
+</li>
+<li>网络层
+<ul>
+<li>P2P网络、传播机制、验证机制</li>
+</ul>
+</li>
+<li>数据层
+<ul>
+<li>区块数据、链式结构、数字签名、哈希函数、Merkle树、非对称加密</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="区块链六类安全隐患">区块链六类安全隐患</h3>
+<img src="D:\Typora_picture\14_区块链的安全与攻击\image-20231230214235872.png" alt="image-20231230214235872" style="zoom:50%;" />
+<ul>
+<li>彩虹攻击
+<ul>
+<li>彩虹表用于<strong>加密 hash func 逆运算</strong>而预先计算好的表，为破解密码的 hash 而准备</li>
+</ul>
+</li>
+<li>庞氏骗局
+<ul>
+<li>利用<strong>新投资人的钱</strong>向<strong>老投资者</strong>支付<strong>利息</strong>和<strong>短期回报</strong>，以制造赚钱的假象进而骗取更多的投资</li>
+</ul>
+</li>
+</ul>
+<h3 id="网络连通性与区块链安全性">网络连通性与区块链安全性</h3>
+<ul>
+<li>网络<strong>连通性</strong>越低
+<ul>
+<li>系统越容易出现<strong>分叉</strong></li>
+<li>矿工进行 51% 攻击<strong>所需的算力就会越低</strong></li>
+</ul>
+</li>
+<li>网络连通性的<strong>差异性</strong>越大
+<ul>
+<li>具有<strong>更好连通性</strong>的矿工发起 51%攻击所需的算力就会<strong>越低</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="区块链安全攻击">区块链安全攻击</h2>
+<ul>
+<li>攻击基础组件和设施
+<ul>
+<li>密码学安全威胁（设计的哈希函数不满足密码学要求）</li>
+<li>P2P 网络安全威胁
+<ul>
+<li>Eclipse日蚀攻击：<strong>孤立</strong>正常的节点</li>
+<li>分割攻击：攻击者让多个社区的诚实节点分别在多个不同的子树下贡献算力，从而将诚实节点的<strong>算力</strong>分割，实现分开击破</li>
+<li>延迟攻击：反馈<strong>过时</strong>区块</li>
+<li>DDos拒绝服务攻击：破坏诚实节点的<strong>通信</strong>
+<ul>
+<li>传统的 DoS 攻击：入侵，形成僵尸网络，发起 DoS 攻击</li>
+<li>分布式攻击 (DDoS)：不需建立僵尸网络，通过主动向网络节点<strong>发送大量虚假信息</strong>，使得针对这些信息的<strong>后续访问</strong>都<strong>指向受害者</strong>来达到攻击效果。</li>
+</ul>
+</li>
+<li>交易<strong>延展性</strong>攻击：破坏区块链（如修改交易的ID）</li>
+<li><strong>劫持算力</strong>进行挖矿的攻击：劫持用户挖掘设备挖掘加密货币；可通过安装安全插件，监测设备性能和CPU利用率来解决</li>
+<li><strong>木马</strong>攻击：使计算机感染木马病毒并实施操作；可通过安装安全插件解决</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>攻击系统核心设计
+<ul>
+<li>51%攻击、双花攻击、女巫攻击</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\14_区块链的安全与攻击\image-20231230215338679.png" alt="image-20231230215338679" style="zoom: 43%;" />
+<ul>
+<li>攻击应用生态
+<ul>
+<li>针对<strong>服务器</strong>软件的攻击：<br>
+Tether (USDT) 、<a target="_blank" rel="noopener" href="http://Blockchain.info">Blockchain.info</a>、CoinDash ICO、<a target="_blank" rel="noopener" href="http://Steem.it">Steem.it</a> (STEEM)</li>
+<li>针对<strong>管理人员</strong>的攻击(钓鱼) ：BitPay</li>
+<li>针对<strong>云服务器提供商</strong>的攻击：Slush Pool</li>
+</ul>
+</li>
+<li>攻击区块链
+<ul>
+<li><strong>钱包</strong>的安全管理
+<ul>
+<li>保护<strong>私钥</strong>在运行和存储的安全</li>
+<li>考虑用户密钥<strong>被盗、丢失后</strong>账户资产安全</li>
+</ul>
+</li>
+<li><strong>智能合约</strong>的安全
+<ul>
+<li>提升智能合约<strong>代码</strong>的可靠性</li>
+<li>进行智能合约<strong>协议安全性</strong>分析</li>
+</ul>
+</li>
+<li><strong>交易</strong>的隐私与安全
+<ul>
+<li>加密交易<strong>内容</strong></li>
+<li>验证交易的<strong>正确性</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="区块链安全措施">区块链安全措施</h2>
+<ul>
+<li>
+<p>人为主观的强化</p>
+<ul>
+<li>区块链资产的<strong>持有者</strong>
+<ul>
+<li>牢记：私钥即权利</li>
+<li>不要重复使用密码，使用自动生成的密码</li>
+<li>从收藏夹访问交易所、检查SSL标志。</li>
+<li>学会识别并避免百度、谷歌等的推广链接</li>
+<li>仔细阅读产品或网站上的安全提示相关内容</li>
+<li>大额资产离线存储，或使用知名厂商的硬件钱包</li>
+<li>慎用云盘、云笔记软件等备份私钥数据</li>
+<li>保管好您的邮箱账号</li>
+</ul>
+</li>
+<li>区块链项目的<strong>开发者</strong>
+<ul>
+<li>打破习惯的 “去中心化” 思维，您面对的是拜占庭节点</li>
+<li>不要尝试使用自己发明的加密算法</li>
+<li>谨慎对待随机数，不要轻信时间戳</li>
+<li>重视安全测试用例的编写，在开发时即充分开展安全测试</li>
+<li>检视您引用的每一个Library</li>
+<li>如果您的工作基于其他项目（如BTC/ETH），应关注并同步更新其漏洞补丁部分的代码</li>
+<li>告诫自己写好智能合约很难，对合约安全检查应谨小慎微</li>
+<li>补齐加密学和安全基础知识，并学会看论文</li>
+</ul>
+</li>
+<li>区块链相关产品的<strong>创业者</strong>
+<ul>
+<li>如您的项目尚未开始：问一问自己，一定要用区块链吗？</li>
+<li>如您的项目已经开始：重新从安全的角度审视它的各个方面</li>
+<li>只有当安全事故出现的时候，才能知道代价有多么大</li>
+<li>防范针对自己以及关键团队成员（人）的安全攻击</li>
+<li>修复服务器上非区块链系统（网站系统、操作系统等）的漏洞</li>
+<li>划拨资金设立 Bug Bounty；聘用安全顾问，请第三方审计代码</li>
+<li>如果产品为公链，建议用两组人员、两种不同语言独立开发</li>
+<li>开源的，才是安全的（但不要等到上线前一天才开源）</li>
+<li>做好思想准备：系统一定有漏洞、一定会被攻破的。因此团队要配备安全专员、应急小组、安全预案</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>区块链系统漏洞优化</p>
+<ul>
+<li>核心代码缺陷</li>
+</ul>
+</li>
+<li>
+<p>结合其他技术提升区块链安全性</p>
+</li>
+</ul>
+<h2 id="区块链攻击案例">区块链攻击案例</h2>
+<ul>
+<li>
+<p>区块截留攻击</p>
+<ul>
+<li>矿池如何计算矿工的贡献比例：部分工作量证明机制PPoW
+<ul>
+<li>(1) PoW：   系统挖矿难度为𝑫 , 要求区块的 hash 值前 n 位为 0</li>
+<li>(2) PPoW：矿池挖矿难度为𝑫’ , 要求区块的 hash 值前 m 位为 0
+<ul>
+<li>其中𝑫’ &lt; 𝑫 ，m &lt; n</li>
+</ul>
+</li>
+<li>矿工提交符合 (2) 的 PPoW 以核算其贡献比例</li>
+<li>攻击者<strong>只发送 PPoW 给矿池管理员</strong>， 当发现<strong>完整PoW</strong>时就将其<strong>抛弃</strong></li>
+<li>其他人找到完整答案时，攻击者会收到一定份额的奖励，但他并未对该矿池提供任何实质贡献</li>
+</ul>
+</li>
+<li>示例：<img src="D:\Typora_picture\14_区块链的安全与攻击\image-20240101154129470.png" alt="image-20240101154129470" style="zoom: 45%;" />
+<ul>
+<li>矿池 A 分配 10% 的算力加入矿池 B 卧底，该算力进入矿池 B 实行区块截留攻击</li>
+<li>矿池 A 收益情况：
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mn>20</mn><mi mathvariant="normal">%</mi></mrow><mrow><mn>90</mn><mi mathvariant="normal">%</mi></mrow></mfrac><mo>+</mo><mfrac><mn>10</mn><mn>40</mn></mfrac><mo>×</mo><mfrac><mrow><mn>30</mn><mi mathvariant="normal">%</mi></mrow><mrow><mn>90</mn><mi mathvariant="normal">%</mi></mrow></mfrac><mo>=</mo><mn>0.30555</mn><mo>&gt;</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">\frac{20\%}{90\%}+\frac{10}{40}×\frac{30\%}{90\%} = 0.30555 &gt; 0.3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.3029em;vertical-align:-0.3839em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.919em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">90%</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">20%</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3839em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">40</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">10</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.3029em;vertical-align:-0.3839em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.919em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">90%</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">30%</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3839em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">0.30555</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.3</span></span></span></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>以太坊空账户 DoS 攻击</p>
+</li>
+<li>
+<p>比特币矿池中的 DDoS 攻击</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -241,836 +3328,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/08/CF_7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Blog of ZhangCW">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/12/08/CF_7/" class="post-title-link" itemprop="url">编译原理7：目标代码生成</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-12-08 17:03:07" itemprop="dateCreated datePublished" datetime="2023-12-08T17:03:07+08:00">2023-12-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-12 22:31:25" itemprop="dateModified" datetime="2024-02-12T22:31:25+08:00">2024-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CF/" itemprop="url" rel="index"><span itemprop="name">CF</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>目标代码生成是编译的最后一个阶段。目标代码生成器把语法分析后或优化后的中间代码变换成目标代码。目标代码（object code）指计算机科学中编译器或汇编器处理源代码后所生成的代码，它一般由机器代码或接近于机器语言的代码组成。...</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/12/08/CF_7/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/05/DIP_4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Blog of ZhangCW">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/12/05/DIP_4/" class="post-title-link" itemprop="url">文献研读:《RIS-GAN：利用生成对抗网络探索残影和光照的去影技术》</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-12-05 17:03:07" itemprop="dateCreated datePublished" datetime="2023-12-05T17:03:07+08:00">2023-12-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-12 13:59:32" itemprop="dateModified" datetime="2024-02-12T13:59:32+08:00">2024-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/DIP/" itemprop="url" rel="index"><span itemprop="name">DIP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在图像增强领域中,残影图像和光照估计已被证明非常有帮助。本文提出了一个通用而新颖的框架RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像...</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/12/05/DIP_4/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/10/CF_6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Blog of ZhangCW">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/11/10/CF_6/" class="post-title-link" itemprop="url">编译原理6：运行时刻环境</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-11-10 17:03:07" itemprop="dateCreated datePublished" datetime="2023-11-10T17:03:07+08:00">2023-11-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-12 22:31:19" itemprop="dateModified" datetime="2024-02-12T22:31:19+08:00">2024-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CF/" itemprop="url" rel="index"><span itemprop="name">CF</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>运行时刻环境是编译程序执行过程中的基础设施,为编译程序提供了内存管理、错误处理、I/O操作、硬件支持和并发支持等功能。它在编译程序执行过程中起到了至关重要的作用...</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/11/10/CF_6/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/05/DIP_3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Blog of ZhangCW">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/11/05/DIP_3/" class="post-title-link" itemprop="url">运动模糊处理</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-11-05 17:03:07" itemprop="dateCreated datePublished" datetime="2023-11-05T17:03:07+08:00">2023-11-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-12 13:59:01" itemprop="dateModified" datetime="2024-02-12T13:59:01+08:00">2024-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/DIP/" itemprop="url" rel="index"><span itemprop="name">DIP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在图像中，运动模糊是一种很常见的现象。它出现的原因主要是：相机曝光的这段时间里，相机运动较大距离，导致原先采集到的像素点发生了变化，就出现了这种重影的现象。科研人员提出了很多恢复模糊图片的方法...</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/11/05/DIP_3/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/31/CF_5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Blog of ZhangCW">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/10/31/CF_5/" class="post-title-link" itemprop="url">编译原理5：中间代码生成</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-10-31 17:03:07" itemprop="dateCreated datePublished" datetime="2023-10-31T17:03:07+08:00">2023-10-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-12 22:39:09" itemprop="dateModified" datetime="2024-02-12T22:39:09+08:00">2024-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CF/" itemprop="url" rel="index"><span itemprop="name">CF</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>中间代码生成是指在编程语言的编译过程中，将高级语言（如C++、Java等）的源代码转换成一种中间形式的代码。这个中间形式通常是低级语言或者称为中间语言，它是一种介于人类可读的高级语言和计算机能直接执行的机器码之间的中间产物。中间代码的主要目的是为了便于进一步的编译优化和代码生成...</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/10/31/CF_5/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/20/CF_4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Blog of ZhangCW">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/10/20/CF_4/" class="post-title-link" itemprop="url">编译原理4：语法制导</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-10-20 17:03:07" itemprop="dateCreated datePublished" datetime="2023-10-20T17:03:07+08:00">2023-10-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-12 22:28:06" itemprop="dateModified" datetime="2024-02-12T22:28:06+08:00">2024-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CF/" itemprop="url" rel="index"><span itemprop="name">CF</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>语法制导（Grammar-Driven）是一种编程语言的设计方法，它通过语法规则来指导程序的编写，以确保程序的正确性和可靠性。这种方法不仅限于描述语言的语法结构，而且还包括了语义信息，有助于指导程序的正确性检查和错误处理。...</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/10/20/CF_4/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/05/DIP_2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Blog of ZhangCW">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/10/05/DIP_2/" class="post-title-link" itemprop="url">直方图均衡化</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-10-05 17:03:07" itemprop="dateCreated datePublished" datetime="2023-10-05T17:03:07+08:00">2023-10-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-12 13:58:45" itemprop="dateModified" datetime="2024-02-12T13:58:45+08:00">2024-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/DIP/" itemprop="url" rel="index"><span itemprop="name">DIP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>直方图均衡化是图像处理领域中利用图像直方图对对比度进行调整的方法。通过这种方法，亮度可以更好地在直方图上分布。这样就可以用于增强局部的对比度而不影响整体的对比度，直方图均衡化通过有效地扩展常用的亮度来实现这种功能...</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/10/05/DIP_2/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/25/CF_3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Blog of ZhangCW">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/09/25/CF_3/" class="post-title-link" itemprop="url">编译原理3：语法分析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-09-25 17:03:07" itemprop="dateCreated datePublished" datetime="2023-09-25T17:03:07+08:00">2023-09-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-12 22:45:44" itemprop="dateModified" datetime="2024-02-12T22:45:44+08:00">2024-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CF/" itemprop="url" rel="index"><span itemprop="name">CF</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>语法分析是编译过程的一个逻辑阶段。语法分析的任务是在词法分析的基础上将单词序列组合成各类语法短语，如“程序”，“语句”，“表达式”等等，语法分析程序判断源程序在结构上是否正确，源程序的结构由上下文无关文法描述....</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/09/25/CF_3/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/15/CF_2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Blog of ZhangCW">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/09/15/CF_2/" class="post-title-link" itemprop="url">编译原理2：词法分析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-09-15 17:03:07" itemprop="dateCreated datePublished" datetime="2023-09-15T17:03:07+08:00">2023-09-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-12 22:40:24" itemprop="dateModified" datetime="2024-02-12T22:40:24+08:00">2024-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CF/" itemprop="url" rel="index"><span itemprop="name">CF</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>词法分析是计算机科学中将字符序列转换为单词（Token）序列的过程。进行词法分析的程序或者函数叫作词法分析器，也称扫描器。词法分析器一般以函数的形式存在，供语法分析器调用。 ...</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/09/15/CF_2/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

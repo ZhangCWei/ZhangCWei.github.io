@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="密码学原理 密码学简介 密码学定义  第三方存在下的安全通信技术的研究与实践  密码学历史   传统密码学   现代密码学1976&#x2F;1977   公钥密码学的提出   美国数据加密标准DES的颁布     对称加密  使用相同的秘钥加密和解密大量数据   非对称加密   采用不同的秘钥加密少量数据，用于交换对称密钥、用于签名验签   公钥：公开，用于加密   私钥：私密，用于解密      哈希函">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Blog of ZhangCW">
+<meta property="og:url" content="http://example.com/2024/02/12/BC_2/index.html">
+<meta property="og:site_name" content="Blog of ZhangCW">
+<meta property="og:description" content="密码学原理 密码学简介 密码学定义  第三方存在下的安全通信技术的研究与实践  密码学历史   传统密码学   现代密码学1976&#x2F;1977   公钥密码学的提出   美国数据加密标准DES的颁布     对称加密  使用相同的秘钥加密和解密大量数据   非对称加密   采用不同的秘钥加密少量数据，用于交换对称密钥、用于签名验签   公钥：公开，用于加密   私钥：私密，用于解密      哈希函">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="d:\Typora_picture\2_%E5%AF%86%E7%A0%81%E5%AD%A6%E5%8E%9F%E7%90%86\image-20231211144901032.png">
+<meta property="og:image" content="d:\Typora_picture\2_%E5%AF%86%E7%A0%81%E5%AD%A6%E5%8E%9F%E7%90%86\image-20231211144912558.png">
+<meta property="og:image" content="d:\Typora_picture\2_%E5%AF%86%E7%A0%81%E5%AD%A6%E5%8E%9F%E7%90%86\image-20231211145254267.png">
+<meta property="og:image" content="d:\Typora_picture\2_%E5%AF%86%E7%A0%81%E5%AD%A6%E5%8E%9F%E7%90%86\image-20231211151400753.png">
+<meta property="article:published_time" content="2024-02-12T14:59:37.421Z">
+<meta property="article:modified_time" content="2023-12-11T07:22:15.417Z">
+<meta property="article:author" content="ZhangChengWei">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:\Typora_picture\2_%E5%AF%86%E7%A0%81%E5%AD%A6%E5%8E%9F%E7%90%86\image-20231211144901032.png">
+
+
+<link rel="canonical" href="http://example.com/2024/02/12/BC_2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/02/12/BC_2/","path":"2024/02/12/BC_2/","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | Blog of ZhangCW</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Blog of ZhangCW</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">By ZhangCW</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">密码学原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%86%E7%A0%81%E5%AD%A6%E7%AE%80%E4%BB%8B"><span class="nav-text">密码学简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%86%E7%A0%81%E5%AD%A6%E5%AE%9A%E4%B9%89"><span class="nav-text">密码学定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%86%E7%A0%81%E5%AD%A6%E5%8E%86%E5%8F%B2"><span class="nav-text">密码学历史</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86"><span class="nav-text">对称加密</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86"><span class="nav-text">非对称加密</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="nav-text">哈希函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6"><span class="nav-text">签名机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E6%96%B9%E6%A1%88"><span class="nav-text">数字签名方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%AD%E7%9A%84%E7%AD%BE%E5%90%8D"><span class="nav-text">比特币中的签名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%80%9C%E5%85%AC%E9%92%A5%E5%8D%B3%E8%BA%AB%E4%BB%BD%E2%80%9D"><span class="nav-text">“公钥即身份”</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ZhangChengWei</p>
+  <div class="site-description" itemprop="description">paper analysis</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Blog of ZhangCW">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-12 22:59:37" itemprop="dateCreated datePublished" datetime="2024-02-12T22:59:37+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-12-11 15:22:15" itemprop="dateModified" datetime="2023-12-11T15:22:15+08:00">2023-12-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1>密码学原理</h1>
+<h2 id="密码学简介">密码学简介</h2>
+<h3 id="密码学定义">密码学定义</h3>
+<ul>
+<li><strong>第三方存在下</strong>的<strong>安全通信</strong>技术的研究与实践</li>
+</ul>
+<h3 id="密码学历史">密码学历史</h3>
+<ul>
+<li>
+<p>传统密码学</p>
+</li>
+<li>
+<p>现代密码学1976/1977</p>
+<ul>
+<li>
+<p>公钥密码学的提出</p>
+</li>
+<li>
+<p>美国数据加密标准DES的颁布</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="对称加密">对称加密</h3>
+<ul>
+<li>使用相同的秘钥加密和解密大量数据</li>
+</ul>
+<img src="D:\Typora_picture\2_密码学原理\image-20231211144901032.png" alt="image-20231211144901032" style="zoom:33%;" />
+<h3 id="非对称加密">非对称加密</h3>
+<ul>
+<li>
+<p>采用<strong>不同的秘钥</strong>加密少量数据，用于<strong>交换对称密钥</strong>、用于<strong>签名验签</strong></p>
+<ul>
+<li>
+<p>公钥：公开，用于加密</p>
+</li>
+<li>
+<p>私钥：私密，用于解密</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\2_密码学原理\image-20231211144912558.png" alt="image-20231211144912558" style="zoom:33%;" />
+<h2 id="哈希函数">哈希函数</h2>
+<p><strong>哈希定义</strong></p>
+<ul>
+<li><strong>表示大量数据的唯一摘要值</strong>。原数据的少量更改会在哈希值中产生不可预知的大量更改,可以作为数据的验证凭据。可保证数据的完整性、正确性</li>
+</ul>
+<p><strong>Hash函数：H(x) = y</strong></p>
+<ul>
+<li>
+<p><strong>定义</strong></p>
+<ul>
+<li>
+<p>将<strong>任意长度</strong>的消息映射成一个<strong>较短的定长输出</strong>消息的函数</p>
+</li>
+<li>
+<p>y = H(x), x 是<strong>变长</strong>的消息, y 是<strong>定长</strong>的 Hash</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>目的</strong></p>
+<ul>
+<li>为文件、消息或其他的分组数据产生“数字指纹”</li>
+</ul>
+</li>
+<li>
+<p><strong>特点</strong></p>
+<ul>
+<li>
+<p>正向快速</p>
+<ul>
+<li>给定明文和 hash 算法，在<strong>有限时间和有限资源</strong>内能计算出 hash 值</li>
+</ul>
+</li>
+<li>
+<p>输入敏感</p>
+<ul>
+<li>原始输入信息修改一点信息，产生的 hash 值看起来应该都有<strong>很大不同</strong></li>
+</ul>
+</li>
+<li>
+<p>逆向困难</p>
+<ul>
+<li>给定特定 hash 值，在有限时间内<strong>很难</strong>（基本不可能）<strong>逆推</strong>出明文</li>
+</ul>
+</li>
+<li>
+<p>冲突避免</p>
+<ul>
+<li>很难找到两段内容不同的明文，使得它们的 hash 值一致（发生冲突）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\2_密码学原理\image-20231211145254267.png" alt="image-20231211145254267" style="zoom:50%;" />
+<ul>
+<li>
+<p><strong>特性</strong></p>
+<ul>
+<li>
+<p>输入可以为任意大小的 string</p>
+</li>
+<li>
+<p>输出为固定大小，如 256bit</p>
+</li>
+<li>
+<p>有效计算：特定的输入字符串，合理时间内输出 —— O(n) 时间复杂度</p>
+</li>
+</ul>
+</li>
+<li>
+<p>达到==<strong>密码学安全</strong>==的更高要求</p>
+<ul>
+<li>
+<p><strong>碰撞阻力</strong></p>
+<ul>
+<li>
+<p>如果无法找到两个值， x 与 y, x != y, 而 H(x) = H(y)，那么，称哈希函数 H 具有碰撞阻力</p>
+</li>
+<li>
+<p>”找不到“ 不代表 ”不存在“</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>隐秘性</strong></p>
+<ul>
+<li>
+<p>当其输入 x 选自一个符合<strong>高阶最小熵的概率分布</strong>，在给定 H(x) 时，确定 x 是不可行的</p>
+<ul>
+<li>
+<p>高阶最小熵描述了分布的分散程度。在这样的分布中，任意数值被选定的概率的<strong>小到可以忽略不计</strong>。</p>
+</li>
+<li>
+<p>x 取自一个广泛的集合</p>
+</li>
+<li>
+<p>仅通过尝试特定的 x，找不到特定的输出值</p>
+</li>
+</ul>
+</li>
+<li>
+<p>不可逆：如果仅仅知道哈希函数的输出  y，则没有可行的办法得到输入 x</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>谜题友好</strong></p>
+<ul>
+<li>
+<p>如果对于任意 n 位输出值 y， 假定x选自<strong>高阶最小熵分布</strong>，如果无法找到一个<strong>可行</strong>的方法，在比 2^n小很多的时间内找到 x，保证 H(x) = y 成立，那么我们称哈希函数H 为谜题友好。</p>
+</li>
+<li>
+<p>如果已知 y 值，想去得到 x 值，那就<strong>必须暴力枚举</strong>，通过不断的尝试才能做到，并且没有比这更好的方法。</p>
+</li>
+<li>
+<p>？（不能从 x 预知 y ）</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="签名机制">签名机制</h2>
+<ul>
+<li>引言：比特币用户有账户吗？
+<ul>
+<li><strong>比特币没有账户，但用户有“钱包”</strong>
+<ul>
+<li>用户自己（在比特币App里）开设“钱包” ，通过使用一对独特的 <strong>&lt;public key, secret key&gt;(pk, sk)</strong></li>
+<li>pk 和 sk 的作用：
+<ul>
+<li>签名： Sign (message, <strong>sk</strong>) = Signature</li>
+<li>验证： (message, Signature, <strong>pk</strong>) = Ture / False</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\2_密码学原理\image-20231211151400753.png" alt="image-20231211151400753" style="zoom: 50%;" />
+<ul>
+<li>数字签名：信息的发送者 (掌握私钥) 能产生的<strong>别人无法伪造的一段数字串</strong>，且可以通过其公布出去的<strong>公钥验证</strong>由他发送</li>
+<li>功能：所有者确权</li>
+</ul>
+<h3 id="数字签名方案">数字签名方案</h3>
+<ul>
+<li>
+<p>==<strong>三个算法</strong>==</p>
+<ul>
+<li>
+<p>(sk, pk) := <strong>generateKeys</strong> (keysize)</p>
+<ul>
+<li>
+<p>把 keysize 作为输入，来产生一对公钥和私钥</p>
+</li>
+<li>
+<p>私钥 sk 被安全保存，并用来签名一段消息；</p>
+</li>
+<li>
+<p>公钥 pk 是都可找到的，拿它来验证你的签名。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>签名过程 sig := sign(<strong>sk</strong>, msg)</p>
+<ul>
+<li>把 <strong>消息</strong> 和 <strong>私钥</strong> 作为输入，输出是签名 sig</li>
+</ul>
+</li>
+<li>
+<p>验证过程 isValid := verify(<strong>pk</strong>, <strong>message</strong>, <strong>sig</strong>)</p>
+<ul>
+<li>
+<p>通过把一段消息和签名消息与公钥作为输入</p>
+</li>
+<li>
+<p>如果返回是真，证明签名属实；否则， 证明签名的消息为假</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>要求</p>
+<ul>
+<li>
+<p>有效的签名可以通过验证</p>
+<ul>
+<li>verify(pk, message, sign(sk, message)) == true</li>
+</ul>
+</li>
+<li>
+<p>签名不可伪造</p>
+</li>
+</ul>
+</li>
+<li>
+<p>实践中</p>
+<ul>
+<li>
+<p>比特币使用的<strong>签名算法是随机的</strong>，需良好随机源</p>
+</li>
+<li>
+<p>对要签名的<strong>信息 message 大小有限</strong>，所以使用 HashFunction，因为哈希函数的输出定长</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="比特币中的签名">比特币中的签名</h3>
+<ul>
+<li>
+<p>每笔 Tx 的发起方用他的 sk 签名</p>
+</li>
+<li>
+<p>其他人通过 Tx 发起方的 pk 验证 Tx 的合法性</p>
+</li>
+</ul>
+<h3 id="“公钥即身份”">“公钥即身份”</h3>
+<ul>
+<li>
+<p>Bitcoin 用户自己开账户</p>
+</li>
+<li>
+<p>其他用户看到一个签名，并被一个 pk 验证了： pk 就可以代表一个人的身份</p>
+</li>
+<li>
+<p>比特币中用户的身份： <strong>地址 := Hash (pk || x)</strong></p>
+</li>
+<li>
+<p>比特币提供去中心化身份管理</p>
+<ul>
+<li>随时定制新的随机身份</li>
+<li>具有匿名性：一个人可以有多个 &lt;pk, sk&gt;，随便使用哪一个身份转账</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/02/12/BC_10/" rel="prev" title="">
+                  <i class="fa fa-angle-left"></i> 
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/02/12/BC_3/" rel="next" title="">
+                   <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ZhangChengWei</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>
