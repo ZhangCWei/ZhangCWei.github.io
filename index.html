@@ -157,820 +157,6 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/CF_2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Methods for DIP">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Methods for DIP">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/02/12/CF_2/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2024-02-12 17:28:06 / 修改时间：22:10:40" itemprop="dateCreated datePublished" datetime="2024-02-12T17:28:06+08:00">2024-02-12</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">title: 编译原理2：词法分析</span><br><span class="line">tags: []</span><br><span class="line">categories: [CF]</span><br><span class="line">description: &quot;词法分析是计算机科学中将字符序列转换为单词（Token）序列的过程。进行词法分析的程序或者函数叫作词法分析器，也称扫描器。词法分析器一般以函数的形式存在，供语法分析器调用。 ...&quot;</span><br><span class="line">date: 2023-09-15 17:03:07</span><br></pre></td></tr></table></figure>
-<h1>词法分析</h1>
-<h2 id="词法分析的主要任务">词法分析的主要任务</h2>
-<p>  从左向右逐行扫描源程序的字符，识别出各个单词，确定单词的类型。将识别出的单词转换成统一的机内表示——词法单元(token)形式</p>
-<img src="/images/image-20231225111442342.png" alt="image-20231225111442342" style="zoom: 67%;" />
-<h2 id="词法分析器的作用">词法分析器的作用</h2>
-<h3 id="词法分析器的作用-2">词法分析器的作用</h3>
-<ul>
-<li>
-<p>读入字符流，组成词素，输出<strong>词法单元序列</strong></p>
-</li>
-<li>
-<p>过滤空白、换行、制表符、注释等</p>
-</li>
-<li>
-<p>将词素添加到<strong>符号表</strong>中</p>
-</li>
-</ul>
-<img src="/images/image-20231225111524461.png" alt="image-20231225111524461" style="zoom:50%;" />
-<h3 id="独立的词法分析器">独立的词法分析器</h3>
-<ul>
-<li>
-<p>简化编译器的设计</p>
-<ul>
-<li>词法分析器可以首先完成一些简单的处理工作</li>
-</ul>
-</li>
-<li>
-<p>模块化设计，增强编译器的可移植性</p>
-</li>
-</ul>
-<h3 id="重点名词解释">重点名词解释</h3>
-<ul>
-<li>
-<p>词法单元 token</p>
-<ul>
-<li>
-<p>&lt;词法单元名(类型)、属性值(可选)&gt;</p>
-</li>
-<li>
-<p>单元名是表示词法单位<strong>种类</strong>的抽象符号，<br>
-语法分析器通过单元名即可<strong>确定词法单元序列的结构</strong></p>
-</li>
-<li>
-<p>属性值通常用于语义分析之后的阶段</p>
-<ul>
-<li>
-<p>一个模式匹配多个词素时，必须通过<strong>属性</strong>来传递附加的信息</p>
-<ul>
-<li>属性值将被用于语义分析、代码生成等阶段</li>
-</ul>
-</li>
-<li>
-<p>不同的目的需要不同的属性</p>
-<ul>
-<li>属性值通常是一个<strong>结构化数据</strong>（包含多种信息）</li>
-</ul>
-</li>
-<li>
-<p>如词法单元id的属性</p>
-<ul>
-<li>id内容、类型、第一次出现的位置、 …</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>模式 pattern</p>
-<ul>
-<li>描述了一类词法单元的词素可能具有的形式</li>
-</ul>
-</li>
-<li>
-<p>词素 lexeme</p>
-<ul>
-<li>
-<p><strong>源程序中的字符序列</strong></p>
-</li>
-<li>
-<p>和某个词法单元的模式匹配，被词法分析器识别为该词法单元的实例</p>
-</li>
-</ul>
-</li>
-<li>
-<p>例：</p>
-</li>
-</ul>
-<img src="/images/image-20231225111627134.png" alt="image-20231225111627134" style="zoom: 70%;" />
-<h2 id="词法单元的规约-正则表达式">词法单元的规约(正则表达式)</h2>
-<h3 id="串和语言">串和语言</h3>
-<ul>
-<li>
-<p><strong>字母表</strong></p>
-<ul>
-<li>
-<p>一个有穷的符号集合，如字母、数字、标点等</p>
-</li>
-<li>
-<p>如{0,1}，ASCII，Unicode</p>
-</li>
-<li>
-<p>任意的<strong>有限</strong>集合都可看作字母表</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>串</strong></p>
-<ul>
-<li>
-<p>字母表中符号的<strong>有穷序列</strong></p>
-</li>
-<li>
-<p>|s|：串s的长度，指s中符号出现的次数(即长度)</p>
-<ul>
-<li>空串：长度为0的串， ε</li>
-</ul>
-</li>
-<li>
-<p>其他术语</p>
-<ul>
-<li>
-<p>前缀</p>
-<ul>
-<li>从串的尾部删除<strong>0个或多个</strong>符号后得到的串</li>
-</ul>
-</li>
-<li>
-<p>后缀</p>
-<ul>
-<li>从串的开始处删除<strong>0个或多个</strong>符号后得到的串</li>
-</ul>
-</li>
-<li>
-<p><strong>子串</strong></p>
-</li>
-<li>
-<p>删除串的<strong>某个前缀</strong>和<strong>某个后缀</strong>得到的串</p>
-</li>
-</ul>
-</li>
-<li>
-<p>真前缀、真后缀、真子串</p>
-<ul>
-<li>不等于<strong>原串</strong>，也<strong>不等于空串</strong>的前缀、后缀、子串</li>
-</ul>
-</li>
-<li>
-<p><strong>子序列</strong></p>
-<ul>
-<li>从原串中删除0个或者多个符号后得到的串</li>
-</ul>
-</li>
-<li>
-<p>串的运算</p>
-<ul>
-<li>
-<p>连接：x和y连接即将y附加到x后面，记作xy</p>
-</li>
-<li>
-<p>幂运算：x^0 = ε，s^1 = s, x^i = s^(i-1) * s</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>语言</strong></p>
-<ul>
-<li>
-<p>某个给定字母表上的<strong>串的可数集合</strong></p>
-</li>
-<li>
-<p>语言的运算</p>
-</li>
-</ul>
-</li>
-</ul>
-<img src="/images/image-20231225111940054.png" alt="image-20231225111940054" style="zoom:50%;" />
-<h3 id="语言上的运算">语言上的运算</h3>
-<h3 id="正则表达式和正则定义">正则表达式和正则定义</h3>
-<ul>
-<li>
-<p>正则表达式</p>
-</li>
-<li>
-<p>高效简洁地描述处理词法单元时用到的<strong>模式类型</strong><br>
-(给出字母、数位集合的名字，再用并、链接、闭包等运算来描述标识符)</p>
-</li>
-<li>
-<p>字母表Σ上的正则表达式</p>
-<ul>
-<li>
-<p>L® 表示<strong>正则表达式 r</strong> 所表达的语言</p>
-</li>
-<li>
-<p>基本部分</p>
-<ul>
-<li>
-<p>ε是一个正则表达式， L(ε) = {ε}</p>
-</li>
-<li>
-<p>如果a是Σ上的一个 符号，那么a是正则表达式， L(a) = {a}</p>
-</li>
-</ul>
-</li>
-<li>
-<p>归纳步骤</p>
-<ul>
-<li>
-<p>选择： ®|(s)  &lt;=&gt;  L(®|(s)) = L® ∪ L(s)</p>
-</li>
-<li>
-<p>连接： ®(s)  &lt;=&gt;  L(®(s)) = L®L(s)</p>
-</li>
-<li>
-<p>闭包： ®*  &lt;=&gt;  L(  ®* ) = ( L® )*</p>
-</li>
-<li>
-<p>括号： ®  &lt;=&gt;  L(®) = L®</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>优先级</strong></p>
-</li>
-<li>
-<p>第一级：*<br>
-第二级：连接<br>
-第三级：|</p>
-</li>
-<li>
-<p>正则语言：可以用一个正则表达式定义的语言</p>
-</li>
-</ul>
-</li>
-<li>
-<p>正则定义</p>
-<ul>
-<li>
-<p>正则定义是<strong>对正则表达式的命名</strong>，是如下形式的定义序列：</p>
-</li>
-<li>
-<img src="/images/image-20231225112220767.png" alt="image-20231225112220767" style="zoom:50%;float:left" />
-</li>
-<li>
-<p>d~i~不在Σ中，且各不相同</p>
-</li>
-<li>
-<p>每个r~i~是字母表Σ ∪ {d~1~, d~2~, …, d~i-1~}上的正则表达式，保证了不会出现递归定义</p>
-</li>
-<li>
-<p>C语言标识符的正则定义</p>
-<ul>
-<li>
-<p>letter_ → A | B | … | Z | a | b | … | z |</p>
-</li>
-<li>
-<p>digit → 0 | 1 | … | 9</p>
-</li>
-<li>
-<p>id → letter_ ( letter_ | digit )*</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="正则表达式的扩展">正则表达式的扩展</h3>
-<ul>
-<li>
-<p>使正则表达式更简洁，但不会使其描述能力增强</p>
-</li>
-<li>
-<p>扩展的运算符</p>
-<ul>
-<li>
-<p>一个或多个实例：单目后缀 +</p>
-</li>
-<li>
-<p>零个或一个实例：？</p>
-</li>
-<li>
-<p>字符类</p>
-<ul>
-<li>
-<p>[a~1~a~2~…a~n~]等价于a~1~ | a~2~ | … | a~n~</p>
-</li>
-<li>
-<p>符号，如：[a-e]等价于a | b | c | d | e</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="词法单元识别">词法单元识别</h3>
-<ul>
-<li>
-<p>词法分析器要求能够<strong>检查输入字符串</strong>，在其<strong>前缀</strong>中找出和某个模式匹配的词素</p>
-</li>
-<li>
-<p>通过正则定义来描述各种词法单元的模式</p>
-</li>
-<li>
-<p>定义ws → (blank | tab | newline)+ 来消除空白</p>
-<ul>
-<li>当词法分析器<strong>识别出</strong>这个模式时，<strong>不返回词法单元</strong>， 继续识别其它模式</li>
-</ul>
-</li>
-</ul>
-<h2 id="词法单元的识别-状态转换图">词法单元的识别(状态转换图)</h2>
-<p><strong>状态转换图是词法分析器的重要组件之一</strong></p>
-<ul>
-<li>
-<p>点[状态]：表示在识别词素时可能出现的情况</p>
-<ul>
-<li>
-<p>状态看作是<strong>已处理部分</strong>的总结[lexemeBegin指针和forward指针之间的串]</p>
-</li>
-<li>
-<p>开始状态 (初始状态)：用Start边表示</p>
-</li>
-<li>
-<p>某些状态为接受状态/最终状态，表明已找到词素</p>
-</li>
-<li>
-<p>加上*的接受状态表示最后读入的符号不在词素中</p>
-</li>
-</ul>
-</li>
-<li>
-<p>边[转换]：从一个状态指向另一个状态</p>
-<ul>
-<li>
-<p>边的标号是一个或多个符号</p>
-</li>
-<li>
-<p>当前状态为s，下一个输入符号为a，就沿着从s离开，标号为a的边到达下一个状态</p>
-</li>
-</ul>
-</li>
-<li>
-<p>例：注意，*号表示将最后读入的other字符“吐出”</p>
-</li>
-</ul>
-<img src="/images/image-20231225112708998.png" alt="image-20231225112708998" style="zoom:50%;" />
-<h3 id="保留字和标识符的识别">保留字和标识符的识别</h3>
-<ul>
-<li>
-<p>识别标识符的状态转换图也会<strong>识别保留字</strong></p>
-</li>
-<li>
-<p>解决方法</p>
-<ol>
-<li>在<strong>符号表中先填保留字</strong> ，指明不是普通标识符</li>
-<li>为保留字建立独立的、 <strong>高优先级的状态转换图</strong></li>
-</ol>
-</li>
-</ul>
-<img src="/images/image-20231225112845280.png" alt="image-20231225112845280" style="zoom:50%;" />
-<h2 id="词法分析器的体系结构">词法分析器的体系结构</h2>
-<ul>
-<li>
-<p>从转换图构造词法分析器的方法</p>
-<ul>
-<li>
-<p>变量state记录当前状态</p>
-</li>
-<li>
-<p>一个switch根据state的值转到相应的代码</p>
-</li>
-<li>
-<p>每个状态对应于一段代码</p>
-<ul>
-<li>这段代码根据读入的符号，确定下一个状态</li>
-<li>如果找不到相应的边，则调用fail进行错误恢复</li>
-<li>进入某个接受状态时，返回相应的词法单元</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>注意状态有*标记时，需要回退forward指针</p>
-</li>
-</ul>
-<img src="/images/image-20231225113039850.png" alt="image-20231225113039850" style="zoom: 45%;" />
-<h2 id="词法分析器生成工具及设计">词法分析器生成工具及设计</h2>
-<h3 id="Lex-Flex">Lex/Flex</h3>
-<ul>
-<li>核心：将<strong>输入的模式</strong>生成为<strong>状态转换图</strong>，并生成代码</li>
-</ul>
-<h3 id="Lex源程序的结构">Lex源程序的结构</h3>
-<ul>
-<li>
-<p>声明部分</p>
-<ul>
-<li>
-<p>常量：表示常数的标识符</p>
-</li>
-<li>
-<p>正则定义</p>
-</li>
-</ul>
-</li>
-<li>
-<p>转换规则</p>
-<ul>
-<li>
-<p>模式 { 动作 }</p>
-<ul>
-<li>
-<p>模式是正则表达式</p>
-</li>
-<li>
-<p>动作表示识别到相应模式时应采取的处理方式</p>
-</li>
-<li>
-<p>处理方式通常用是C语言代码表示</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>辅助函数</p>
-<ul>
-<li>各个动作中使用的函数</li>
-</ul>
-</li>
-</ul>
-<p>语法分析器调用getNextToken()函数，在其内会调用词法分析器这里的代码</p>
-<h3 id="Lex中的冲突解决方式">Lex中的冲突解决方式</h3>
-<ul>
-<li>
-<p>冲突：多个输入前缀与某个模式相匹配，或者一个前缀与多个模式匹配</p>
-</li>
-<li>
-<p>多个前缀可能匹配时，选择最长的前缀</p>
-<ul>
-<li>比如，词法分析器把&lt;=当作一个词法单元识别</li>
-</ul>
-</li>
-<li>
-<p>某前缀和多个模式匹配时，选择列在前面的模式</p>
-<ul>
-<li>如果保留字的规则在标识符的规则之前，词法分析器将识别出保留字</li>
-</ul>
-</li>
-</ul>
-<h2 id="有穷自动机：从正则表达式到NFA">有穷自动机：从正则表达式到NFA</h2>
-<ul>
-<li>
-<p>不确定的有穷自动机 <strong>NFA</strong></p>
-<ul>
-<li>边上的标号没有限制，<strong>一个符号可出现在离开同一个状态的多条边上</strong>，<strong>ε可以做标号</strong></li>
-</ul>
-</li>
-<li>
-<p>三个组成部分</p>
-<ul>
-<li>
-<p>一个<strong>有穷的状态集合</strong>S</p>
-<ul>
-<li>
-<p>S中的某个**状态s~0~**被指定为开始状态/初始状态(有些定义中可以有多个开始状态)</p>
-</li>
-<li>
-<p>S的一个<strong>子集F</strong>被指定为接受状态集合</p>
-</li>
-</ul>
-</li>
-<li>
-<p>一个<strong>输入符号字母表</strong>Σ</p>
-</li>
-<li>
-<p>相应的<strong>转换函数</strong></p>
-</li>
-<li>
-<p>对于每个状态和Σ ∪ {ε}中的符号，给出<strong>相应的后继状态集合</strong></p>
-</li>
-</ul>
-</li>
-<li>
-<p>用二维表表示NFA转换函数</p>
-<ul>
-<li>
-<p>每行对应于一个状态</p>
-</li>
-<li>
-<p>每列对应于一个输入符号或者ε</p>
-</li>
-<li>
-<p>每个条目表示对应的后继状态集合</p>
-<ul>
-<li>例：当处于状态0时，输入为a，则后继状态为0或1</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<img src="/images/image-20231225113914502.png" alt="image-20231225113914502" style="zoom:50%;" />
-<ul>
-<li>
-<p>NFA接收的语言：从开始状态到达接受状态的<strong>所有可能路径的标号串</strong>的集合</p>
-<ul>
-<li>
-<p>NFA接受的语言即为其接收的所有符号串的集合</p>
-</li>
-<li>
-<p>注意’或’的表达方法，也可以0-2直接连接</p>
-</li>
-</ul>
-</li>
-<li>
-<p>对于每个可以用正则表达式描述的语言，均可用某个NFA或DFA来识别；反之亦然</p>
-</li>
-</ul>
-<h2 id="有穷自动机：从NFA到DFA">有穷自动机：从NFA到DFA</h2>
-<ul>
-<li>
-<p>确定的有穷自动机DFA</p>
-<ul>
-<li>
-<p>对于<strong>每个状态</strong>以及<strong>每个符号</strong>，<strong>有且只有一条边</strong>(或最多只有一条边)</p>
-</li>
-<li>
-<p>NFA：易于从正则表达式转换（ε跳转）</p>
-</li>
-<li>
-<p>DFA：可由NFA转换，便于机器高效模拟执行</p>
-</li>
-</ul>
-</li>
-<li>
-<p>一个NFA被称为DFA，如果</p>
-</li>
-<li>
-<p><strong>没有标号为ε</strong>的转换</p>
-</li>
-<li>
-<p>对于每个状态s和每个输入符号a，<strong>有且仅有一条标号为a的离开s的边</strong></p>
-</li>
-<li>
-<p>转换算法</p>
-</li>
-<li>
-<p>基本规则部分（略）</p>
-</li>
-<li>
-<p>归纳部分：</p>
-</li>
-</ul>
-<img src="/images/image-20231225114710057.png" alt="image-20231225114710057" style="zoom:50%;" />
-<ul>
-<li>
-<p>子集构造法</p>
-</li>
-<li>
-<p>基本思想</p>
-<ul>
-<li>
-<p>构造所得DFA的每个<strong>状态</strong>和NFA的<strong>状态子集</strong>对应</p>
-</li>
-<li>
-<p>DFA读入a~1~, a~2~, …, a~n~后到达的状态对应于<br>
-从NFA开始状态出发沿着a~1~, a~2~, …, a~n~可能到达的状态集合</p>
-</li>
-<li>
-<p>在算法中“并行地模拟”NFA在遇到一个给定输入串时可能执行的所有动作</p>
-</li>
-<li>
-<p>理论上，最坏情况下DFA的状态个数会是NFA状态个数的指数多个（幂集，2^n），但对于大部分应用，NFA和相应的DFA的状态数量大致相同</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>基本操作</strong></p>
-<ul>
-<li>
-<p><strong>ε-closure(s)</strong></p>
-<ul>
-<li>从NFA状态s开始，<strong>只通过ε转换</strong>能到达的NFA状态集合</li>
-</ul>
-</li>
-<li>
-<p>ε-closure(T)</p>
-<ul>
-<li>枚举T中所有状态，从某个状态s开始，<strong>只通过ε转换</strong>能到达的NFA状态集合</li>
-</ul>
-</li>
-<li>
-<p>mova(T,a)</p>
-<ul>
-<li>枚举T中所有状态，从某个状态s出发， <strong>只通过一个标号为a的转换</strong>能到达的NFA状态集合</li>
-</ul>
-</li>
-<li>
-<p>Dstates</p>
-<ul>
-<li>DFA状态，每个元素对应一个NFA状态集合</li>
-</ul>
-</li>
-<li>
-<p><strong>Dtran</strong></p>
-</li>
-<li>
-<p>DFA状态转换表：<strong>先move，再ε-closure</strong></p>
-</li>
-<li>
-<p>Dtran[A,a]=ε-closure(move(A,a))</p>
-</li>
-</ul>
-</li>
-</ul>
-<img src="/images/image-20231225123224432.png" alt="image-20231225123224432" style="zoom:50%;" />
-<ul>
-<li>
-<p><strong>DFA状态数量的最小化</strong></p>
-</li>
-<li>
-<p>DFA状态越少，空间效率越高</p>
-</li>
-<li>
-<p>一个正则语言可对应于多个识别此语言的DFA</p>
-</li>
-<li>
-<p>通过DFA的最小化可得到<strong>状态数量最少</strong>的DFA</p>
-</li>
-<li>
-<p>状态的区分</p>
-<ul>
-<li>
-<p>状态的<strong>可区分</strong></p>
-<ul>
-<li>
-<p>如果存在串x，使得从状态s1和s2，一个<strong>到达接受状态</strong>而另一个到达非接受状态，那么x就区分了s1和s2</p>
-</li>
-<li>
-<p>如果存在某个串区分了s和t，则s和t是可区分的，否则它们是不可区分的</p>
-</li>
-</ul>
-</li>
-<li>
-<p>不可区分的两个状态就是<strong>等价</strong>的，可以<strong>合并</strong></p>
-</li>
-<li>
-<p>必要不充分条件</p>
-</li>
-</ul>
-</li>
-<li>
-<p>DFA最小化算法</p>
-</li>
-<li>
-<p>基本思想</p>
-<ul>
-<li>把所有可区分的状态分开</li>
-</ul>
-</li>
-<li>
-<p>划分部分</p>
-<ul>
-<li>
-<p>设置初始划分</p>
-<ul>
-<li>π = { S - F , F }</li>
-</ul>
-</li>
-<li>
-<p>迭代，枚举字母表，不断划分等价类</p>
-</li>
-<li>
-<p>如果 π(new) == π，令 π(final) = π，算法完成；否则π = π(new)，转步骤2</p>
-<ul>
-<li>注意S-F=F时</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>构造部分</p>
-<ul>
-<li>
-<p>在 π(final)的每个组中选择一个状态作代表，作为最小化DFA中的状态</p>
-<ul>
-<li>
-<p>开始状态就是包含原开始状态的组的代表</p>
-</li>
-<li>
-<p>接受状态就是包含原接受状态的组的代表(这个组一定只包含接受状态)</p>
-</li>
-<li>
-<p>转换关系构造</p>
-<ul>
-<li>如果s是G的代表，而原DFA中s在a上的转换到达t，且t所在组的代表为r，那么最小化DFA中有从s到r的在a上的转换</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<img src="/images/image-20231225123504491.png" alt="image-20231225123504491" style="zoom:50%;" />
-<h2 id="自动机到词法分析器">自动机到词法分析器</h2>
-<ul>
-<li>
-<p>正则表达式：识别单个模式</p>
-</li>
-<li>
-<p>词法分析器：识别<strong>多种模式</strong></p>
-<ul>
-<li>关键字、运算符、标识符、数字…</li>
-</ul>
-</li>
-<li>
-<p>NFA合并方法</p>
-<ul>
-<li>引入新的开始状态，并引入<strong>从该开始状态到各个原开始状态的ε转换</strong></li>
-<li>得到的NFA所接受的语言是原来各个NFA语言的<strong>并集</strong></li>
-<li>不同的接受状态代表不同的模式</li>
-</ul>
-</li>
-</ul>
-<img src="/images/image-20231225123622053.png" alt="image-20231225123622053" style="zoom:50%;" />
-<img src="/images/image-20231225123739380.png" alt="image-20231225123739380" style="zoom:52%;" />
-<h3 id="词法分析器状态的最小化">词法分析器状态的最小化</h3>
-<ul>
-<li>基本思想和DFA最小化算法相同</li>
-<li>差别
-<ul>
-<li>词法分析器中的<strong>接受状态</strong>对应于<strong>不同的模式</strong></li>
-<li>对应不同模式的接受状态<strong>一定是不等价的</strong></li>
-<li>初始划分为
-<ul>
-<li>所有非接受状态集合 + 对应各模式的接受状态集合</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>其余划分和构造的方法均相同</li>
-<li>接受状态对应的模式就是原来的模式</li>
-</ul>
-<img src="/images/image-20231225123939500.png" alt="image-20231225123939500" style="zoom:50%;" />
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/12/25/CF_8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1467,7 +653,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-12 22:28:36" itemprop="dateModified" datetime="2024-02-12T22:28:36+08:00">2024-02-12</time>
+      <time title="修改时间：2024-02-12 22:39:09" itemprop="dateModified" datetime="2024-02-12T22:39:09+08:00">2024-02-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1489,7 +675,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>中间代码生成是指在编程语言的编译过程中，将高级语言（如C++、Java等）的源代码转换成一种中间形式的代码。这个中间形式通常是低级语言或者称为中间语言，它是一种介于人类可读的高级语言和计算机能直接执行的机器码之间的中间产物。中间代码的主要目的是为了便于进一步的编译优化和代码生成...</p>
+          <p>中间代码生成是指在编程语言的编译过程中，将高级语言（如C++、Java等）的源代码转换成一种中间形式的代码。这个中间形式通常是低级语言或者称为中间语言，它是一种介于人类可读的高级语言和计算机能直接执行的机器码之间的中间产物。中间代码的主要目的是为了便于进一步的编译优化和代码生成...</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/10/31/CF_5/">
@@ -1743,7 +929,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-12 22:27:24" itemprop="dateModified" datetime="2024-02-12T22:27:24+08:00">2024-02-12</time>
+      <time title="修改时间：2024-02-12 22:37:58" itemprop="dateModified" datetime="2024-02-12T22:37:58+08:00">2024-02-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1769,6 +955,98 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/09/25/CF_3/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/15/CF_2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Methods for DIP">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Methods for DIP">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/09/15/CF_2/" class="post-title-link" itemprop="url">编译原理2：词法分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-09-15 17:03:07" itemprop="dateCreated datePublished" datetime="2023-09-15T17:03:07+08:00">2023-09-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-12 22:40:24" itemprop="dateModified" datetime="2024-02-12T22:40:24+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CF/" itemprop="url" rel="index"><span itemprop="name">CF</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>词法分析是计算机科学中将字符序列转换为单词（Token）序列的过程。进行词法分析的程序或者函数叫作词法分析器，也称扫描器。词法分析器一般以函数的形式存在，供语法分析器调用。 ...</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/09/15/CF_2/">
                 阅读全文 &raquo;
               </a>
             </div>
