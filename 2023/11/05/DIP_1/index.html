@@ -19,25 +19,52 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="paper analysis">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Methods for DIP">
-<meta property="og:url" content="http://example.com/index.html">
+    <meta name="description" content="1. 最 邻 近 插 值   最邻近插值是一种简单的插值方式，通过将原始图片中的像素映射至变换后图片的相应位置上，以此来实现图片的缩放。具体公式如下： x&#x3D;inx &#x3D; \frac{i}{n} x&#x3D;ni​ y&#x3D;jny &#x3D; \frac{j}{n} y&#x3D;nj​   其中，$$x$$、$$y$$表示原始图像中的像素坐标，$$i$$、$$j$$表示变换后图片中的像素坐标，$$n$$表示放缩的倍数。故代码如下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像插值算法实现">
+<meta property="og:url" content="http://example.com/2023/11/05/DIP_1/index.html">
 <meta property="og:site_name" content="Methods for DIP">
-<meta property="og:description" content="paper analysis">
+<meta property="og:description" content="1. 最 邻 近 插 值   最邻近插值是一种简单的插值方式，通过将原始图片中的像素映射至变换后图片的相应位置上，以此来实现图片的缩放。具体公式如下： x&#x3D;inx &#x3D; \frac{i}{n} x&#x3D;ni​ y&#x3D;jny &#x3D; \frac{j}{n} y&#x3D;nj​   其中，$$x$$、$$y$$表示原始图像中的像素坐标，$$i$$、$$j$$表示变换后图片中的像素坐标，$$n$$表示放缩的倍数。故代码如下">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132315230.png">
+<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132320399.png">
+<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132323856.png">
+<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132329676.png">
+<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132333006.png">
+<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132338069.png">
+<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132344349.png">
+<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132348150.png">
+<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132351488.png">
+<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132503109.png">
+<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132507851.png">
+<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132510605.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133038121.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133041177.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133044183.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133048977.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133051598.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133055515.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133100275.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133103051.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133105638.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133111092.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133113935.png">
+<meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133116596.png">
+<meta property="article:published_time" content="2023-11-05T09:03:07.000Z">
+<meta property="article:modified_time" content="2024-02-12T05:40:06.456Z">
 <meta property="article:author" content="ZhangChengWei">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132315230.png">
 
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2023/11/05/DIP_1/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/11/05/DIP_1/","path":"2023/11/05/DIP_1/","title":"图像插值算法实现"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Methods for DIP</title>
+<title>图像插值算法实现 | Methods for DIP</title>
   
 
 
@@ -70,7 +97,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Methods for DIP</h1>
+      <p class="site-title">Methods for DIP</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">By ZhangCW & WeiGP & JiangT</p>
@@ -97,7 +124,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -110,6 +137,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">1. 最 邻 近 插 值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">2. 双 线 性 插 值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">3. 双 三 次 插 值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text">4. 输 出 图 片 对 比 分 析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%80%8D%E6%95%B0%E4%B8%BA0-5%E7%9A%84%E7%BC%A9%E5%B0%8F%E5%9B%BE%E5%83%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90"><span class="nav-text">倍数为0.5的缩小图像对比分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%80%8D%E6%95%B0%E4%B8%BA3-0%E7%9A%84%E6%94%BE%E5%A4%A7%E5%9B%BE%E5%83%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90"><span class="nav-text">倍数为3.0的放大图像对比分析</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -147,108 +175,17 @@
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/05/DIP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Methods for DIP">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Methods for DIP">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/11/05/DIP/" class="post-title-link" itemprop="url">文献研读:《RIS-GAN：利用生成对抗网络探索残影和光照的去影技术》</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-11-05 17:03:07" itemprop="dateCreated datePublished" datetime="2023-11-05T17:03:07+08:00">2023-11-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-12-27 10:49:24" itemprop="dateModified" datetime="2023-12-27T10:49:24+08:00">2023-12-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/DIP/" itemprop="url" rel="index"><span itemprop="name">DIP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在图像增强领域中,残影图像和光照估计已被证明非常有帮助。本文提出了一个通用而新颖的框架RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像...</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/11/05/DIP/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/05/DIP_1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -262,13 +199,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Methods for DIP">
+      <meta itemprop="name" content="图像插值算法实现 | Methods for DIP">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/11/05/DIP_1/" class="post-title-link" itemprop="url">图像插值算法实现</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          图像插值算法实现
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -306,8 +243,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-          <h2 align = "center">1. 最 邻 近 插 值</h2>
+    <div class="post-body" itemprop="articleBody"><h2 align = "center">1. 最 邻 近 插 值</h2>
 <p>  最邻近插值是一种简单的插值方式，通过将原始图片中的像素映射至变换后图片的相应位置上，以此来实现图片的缩放。具体公式如下：</p>
 <p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>x</mi><mo>=</mo><mfrac><mi>i</mi><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">x = \frac{i}{n}
 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0225em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3365em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">n</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
@@ -420,7 +356,6 @@ y\,\,=\,\,\frac{i+0.5}{n} \,\,-\,\,0.5
 <li>使用最邻近插值算法所得图片<strong>平滑程度</strong>较差，以cameraman(第二张)这张图片为例，在人物脸与头发交界处有明显的像素“<strong>锯齿</strong>”，而另外两种算法的图片平滑程度则较为良好。</li>
 </ul>
 
-      
     </div>
 
     
@@ -428,187 +363,25 @@ y\,\,=\,\,\frac{i+0.5}{n} \,\,-\,\,0.5
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
 
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/05/DIP_3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Methods for DIP">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Methods for DIP">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/11/05/DIP_3/" class="post-title-link" itemprop="url">文献研读:《RIS-GAN：利用生成对抗网络探索残影和光照的去影技术》</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-11-05 17:03:07" itemprop="dateCreated datePublished" datetime="2023-11-05T17:03:07+08:00">2023-11-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-08 13:30:17" itemprop="dateModified" datetime="2024-02-08T13:30:17+08:00">2024-02-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/DIP/" itemprop="url" rel="index"><span itemprop="name">DIP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在图像增强领域中,残影图像和光照估计已被证明非常有帮助。本文提出了一个通用而新颖的框架RIS-GAN，利用生成对抗网络探索残影和光照的去影技术。结合粗糙的去影图像，估计得到的负残影图像和反向光照图可以用来生成间接去影图像，以粗糙到精细的方式改善粗糙的去影结果，得到无阴影的精细图像...</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/11/05/DIP_3/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/05/DIP_3/" rel="prev" title="文献研读:《RIS-GAN：利用生成对抗网络探索残影和光照的去影技术》">
+                  <i class="fa fa-angle-left"></i> 文献研读:《RIS-GAN：利用生成对抗网络探索残影和光照的去影技术》
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/11/05/DIP/" rel="next" title="文献研读:《RIS-GAN：利用生成对抗网络探索残影和光照的去影技术》">
+                  文献研读:《RIS-GAN：利用生成对抗网络探索残影和光照的去影技术》 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
     </footer>
   </article>
 </div>
 
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/05/DIP_2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Methods for DIP">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Methods for DIP">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/11/05/DIP_2/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-11-05 17:03:07" itemprop="dateCreated datePublished" datetime="2023-11-05T17:03:07+08:00">2023-11-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-08 16:35:07" itemprop="dateModified" datetime="2024-02-08T16:35:07+08:00">2024-02-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/DIP/" itemprop="url" rel="index"><span itemprop="name">DIP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
 
 
 
