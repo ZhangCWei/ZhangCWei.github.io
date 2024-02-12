@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="1. 最 邻 近 插 值   最邻近插值是一种简单的插值方式，通过将原始图片中的像素映射至变换后图片的相应位置上，以此来实现图片的缩放。具体公式如下： x&#x3D;inx &#x3D; \frac{i}{n} x&#x3D;ni​ y&#x3D;jny &#x3D; \frac{j}{n} y&#x3D;nj​   其中，$$x$$、$$y$$表示原始图像中的像素坐标，$$i$$、$$j$$表示变换后图片中的像素坐标，$$n$$表示放缩的倍数。故代码如下">
+    <meta name="description" content="插值，分为图像内插值和图像间插值，其主要应用是对图像进行放大以及旋转等操作，是根据一幅较低分辨率图像再生出另一幅均具有较高分辨率的图像，是图像内插值。图像间的插值，也叫图像的超分辨率重建，是指在一图像序列之间再生出若干幅新的图像...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="图像插值算法实现">
 <meta property="og:url" content="http://example.com/2023/11/05/DIP_1/index.html">
 <meta property="og:site_name" content="Methods for DIP">
-<meta property="og:description" content="1. 最 邻 近 插 值   最邻近插值是一种简单的插值方式，通过将原始图片中的像素映射至变换后图片的相应位置上，以此来实现图片的缩放。具体公式如下： x&#x3D;inx &#x3D; \frac{i}{n} x&#x3D;ni​ y&#x3D;jny &#x3D; \frac{j}{n} y&#x3D;nj​   其中，$$x$$、$$y$$表示原始图像中的像素坐标，$$i$$、$$j$$表示变换后图片中的像素坐标，$$n$$表示放缩的倍数。故代码如下">
+<meta property="og:description" content="插值，分为图像内插值和图像间插值，其主要应用是对图像进行放大以及旋转等操作，是根据一幅较低分辨率图像再生出另一幅均具有较高分辨率的图像，是图像内插值。图像间的插值，也叫图像的超分辨率重建，是指在一图像序列之间再生出若干幅新的图像...">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132315230.png">
-<meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132320399.png">
+<meta property="og:image" content="http://example.com/images/image-20240212132315230.png">
+<meta property="og:image" content="http://example.com/images/image-20240212132320399.png">
 <meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132323856.png">
 <meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132329676.png">
 <meta property="og:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132333006.png">
@@ -51,10 +51,11 @@
 <meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133113935.png">
 <meta property="og:image" content="d:%5CTypora_picture%5CDIP_1%5Cimage-20240212133116596.png">
 <meta property="article:published_time" content="2023-11-05T09:03:07.000Z">
-<meta property="article:modified_time" content="2024-02-12T05:40:06.456Z">
+<meta property="article:modified_time" content="2024-02-12T05:48:30.377Z">
 <meta property="article:author" content="ZhangChengWei">
+<meta property="article:tag" content="Interpolation">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2023/11/05/DIP_1/%5Cimages%5Cimage-20240212132315230.png">
+<meta name="twitter:image" content="http://example.com/images/image-20240212132315230.png">
 
 
 <link rel="canonical" href="http://example.com/2023/11/05/DIP_1/">
@@ -159,7 +160,7 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -200,7 +201,7 @@
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="图像插值算法实现 | Methods for DIP">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="插值，分为图像内插值和图像间插值，其主要应用是对图像进行放大以及旋转等操作，是根据一幅较低分辨率图像再生出另一幅均具有较高分辨率的图像，是图像内插值。图像间的插值，也叫图像的超分辨率重建，是指在一图像序列之间再生出若干幅新的图像...">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -222,7 +223,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-12 13:40:06" itemprop="dateModified" datetime="2024-02-12T13:40:06+08:00">2024-02-12</time>
+      <time title="修改时间：2024-02-12 13:48:30" itemprop="dateModified" datetime="2024-02-12T13:48:30+08:00">2024-02-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -237,6 +238,7 @@
   
 </div>
 
+            <div class="post-description">插值，分为图像内插值和图像间插值，其主要应用是对图像进行放大以及旋转等操作，是根据一幅较低分辨率图像再生出另一幅均具有较高分辨率的图像，是图像内插值。图像间的插值，也叫图像的超分辨率重建，是指在一图像序列之间再生出若干幅新的图像...</div>
         </div>
       </header>
 
@@ -245,10 +247,9 @@
     
     <div class="post-body" itemprop="articleBody"><h2 align = "center">1. 最 邻 近 插 值</h2>
 <p>  最邻近插值是一种简单的插值方式，通过将原始图片中的像素映射至变换后图片的相应位置上，以此来实现图片的缩放。具体公式如下：</p>
-<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>x</mi><mo>=</mo><mfrac><mi>i</mi><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">x = \frac{i}{n}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0225em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3365em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">n</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
-<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>y</mi><mo>=</mo><mfrac><mi>j</mi><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">y = \frac{j}{n}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0225em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3365em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">n</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p class="katex-block "><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>x</mi><mo>=</mo><mfrac><mi>i</mi><mi>n</mi></mfrac><mspace linebreak="newline"></mspace><mi>y</mi><mo>=</mo><mfrac><mi>j</mi><mi>n</mi></mfrac></mrow><annotation encoding="application/x-tex">x = \frac{i}{n} \\
+y = \frac{j}{n}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0225em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3365em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">n</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0225em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3365em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">n</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
 <p>  其中，$$x$$、$$y$$表示原始图像中的像素坐标，$$i$$、$$j$$表示变换后图片中的像素坐标，$$n$$表示放缩的倍数。故代码如下（其中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mfrac><msub><mi>h</mi><mn>1</mn></msub><msub><mi>h</mi><mn>2</mn></msub></mfrac><mo>=</mo><mfrac><msub><mi>w</mi><mn>1</mn></msub><msub><mi>w</mi><mn>2</mn></msub></mfrac></mrow><annotation encoding="application/x-tex">n = \frac{h_1}{h_2} = \frac{w_1}{w_2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.3413em;vertical-align:-0.4451em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8962em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4101em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4451em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1566em;vertical-align:-0.4451em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7115em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.0269em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4101em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.0269em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4451em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>）</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 最近邻插值代码实现</span></span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> <span class="built_in">range</span>(chs):</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(h_2):</span><br><span class="line">		<span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(w_2):</span><br><span class="line">			<span class="comment"># 计算原图中的坐标</span></span><br><span class="line">			x = np.<span class="built_in">int</span>(i * (h_1 / h_2))</span><br><span class="line">			y = np.<span class="built_in">int</span>(j * (w_1 / w_2))</span><br><span class="line">			<span class="comment"># 使用原图坐标填充新的图片</span></span><br><span class="line">			img_2[i, j, c] = img_1[x, y, c]</span><br></pre></td></tr></table></figure>
 <h2 align = "center">2. 双 线 性 插 值</h2>
@@ -292,8 +293,8 @@ y\,\,=\,\,\frac{i+0.5}{n} \,\,-\,\,0.5
 <table>
 <thead>
 <tr>
-<th style="text-align:center"><img src="%5Cimages%5Cimage-20240212132315230.png" alt="image-20240212132315230"></th>
-<th style="text-align:center"><img src="%5Cimages%5Cimage-20240212132320399.png" alt="image-20240212132320399"></th>
+<th style="text-align:center"><img src="/images/image-20240212132315230.png" alt=""></th>
+<th style="text-align:center"><img src="/images/image-20240212132320399.png" alt="image-20240212132320399"></th>
 <th style="text-align:center"><img src="%5Cimages%5Cimage-20240212132323856.png" alt="image-20240212132323856"></th>
 </tr>
 </thead>
@@ -363,14 +364,14 @@ y\,\,=\,\,\frac{i+0.5}{n} \,\,-\,\,0.5
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Interpolation/" rel="tag"># Interpolation</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/11/05/DIP_3/" rel="prev" title="文献研读:《RIS-GAN：利用生成对抗网络探索残影和光照的去影技术》">
-                  <i class="fa fa-angle-left"></i> 文献研读:《RIS-GAN：利用生成对抗网络探索残影和光照的去影技术》
-                </a>
             </div>
             <div class="post-nav-item">
                 <a href="/2023/11/05/DIP/" rel="next" title="文献研读:《RIS-GAN：利用生成对抗网络探索残影和光照的去影技术》">
