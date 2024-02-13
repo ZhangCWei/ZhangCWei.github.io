@@ -2187,205 +2187,6 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Blog of ZhangCW">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/02/12/BC_4/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-02-12 22:59:37" itemprop="dateCreated datePublished" datetime="2024-02-12T22:59:37+08:00">2024-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-12-11 16:24:19" itemprop="dateModified" datetime="2023-12-11T16:24:19+08:00">2023-12-11</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1>比特币交易模型</h1>
-<h2 id="比特币身份确认">比特币身份确认</h2>
-<ul>
-<li>私钥、公钥、钱包地址生成</li>
-</ul>
-<img src="D:\Typora_picture\4_比特币交易模型\14df444000a04833d9d2e4ca0b21260.png" alt="14df444000a04833d9d2e4ca0b21260" style="zoom: 33%;" />
-<ul>
-<li>私钥、公钥、钱包地址间的关系：</li>
-</ul>
-<img src="D:\Typora_picture\4_比特币交易模型\046e1104bf7cd7b83d97fd011c994d3.png" alt="046e1104bf7cd7b83d97fd011c994d3" style="zoom:50%;" />
-<ul>
-<li>数学上，公钥由私钥生成，从公钥反推私钥几乎是不可能的：<strong>椭圆曲线</strong>特性</li>
-<li>只要拥有了“密钥 + 签名 + 地址”，就能随意使用该地址下的数字资产</li>
-</ul>
-<img src="D:\Typora_picture\4_比特币交易模型\be2b5b2a9264a3e6a91884b8a4390f3.png" alt="be2b5b2a9264a3e6a91884b8a4390f3" style="zoom:50%;" />
-<h2 id="交易服务与UTXO交易模型">交易服务与UTXO交易模型</h2>
-<p><strong>不可用的简单方案</strong></p>
-<ul>
-<li><strong>签名能被复制</strong>，导致无限复制</li>
-</ul>
-<img src="D:\Typora_picture\4_比特币交易模型\d3e4f09c869905da848bb30464cf27a.png" alt="d3e4f09c869905da848bb30464cf27a" style="zoom:50%;" />
-<ul>
-<li>中心化</li>
-</ul>
-<img src="D:\Typora_picture\4_比特币交易模型\3fc3151fad24fe47f7bad8001458db0.png" alt="3fc3151fad24fe47f7bad8001458db0" style="zoom: 33%;" />
-<h3 id="交易有效性">交易有效性</h3>
-<ul>
-<li>
-<p>所有权确认</p>
-<ul>
-<li>
-<p>转账要有来源</p>
-</li>
-<li>
-<p>防止双发攻击</p>
-<ul>
-<li>仅有“<strong>转账数额</strong>”和“<strong>转入钱包地址</strong>”无法证明<strong>交易的生成者</strong>对“<strong>转出钱包地址</strong>“余额有动用的权利</li>
-<li>需要用[<strong>私钥</strong>]对原始数据进行签名</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<img src="D:\Typora_picture\4_比特币交易模型\3347b7a746045dc8a7e7108641ac66b.png" alt="3347b7a746045dc8a7e7108641ac66b" style="zoom: 33%;" />
-<img src="D:\Typora_picture\4_比特币交易模型\237b95a4976913297a2fa0adfb46345.png" alt="237b95a4976913297a2fa0adfb46345" style="zoom: 33%;" />
-<ul>
-<li>
-<p>具有可动用的资金</p>
-</li>
-<li>
-<p><strong>其他交易不会用到</strong>同一笔资金</p>
-</li>
-</ul>
-<h3 id="未花费的交易输出UTXO">未花费的交易输出UTXO</h3>
-<p><img src="D:%5CTypora_picture%5C4_%E6%AF%94%E7%89%B9%E5%B8%81%E4%BA%A4%E6%98%93%E6%A8%A1%E5%9E%8B%5C73db66c5fd00ddc36a570721b38d703.png" alt="73db66c5fd00ddc36a570721b38d703"></p>
-<ul>
-<li>
-<p>比特币使用<strong>U</strong>nspent <strong>T</strong>ran<strong>s</strong>action <strong>O</strong>utput (未花费的交易输出，UTXO)来<strong>确保同一笔资金只出现在一笔交易中</strong></p>
-</li>
-<li>
-<p>类比：每一收到的资金都<strong>存在一个储蓄罐</strong>里，每次交易都需要<strong>打碎一个或多个储蓄罐</strong></p>
-</li>
-<li>
-<p>==<strong>基本形式</strong>==</p>
-</li>
-<li>
-<p>版本号</p>
-</li>
-<li>
-<p>Input未花费交易UTXO</p>
-</li>
-<li>
-<p>Output输出地址及数量</p>
-</li>
-<li>
-<p>锁定时间</p>
-</li>
-<li>
-<p>安全性</p>
-<ul>
-<li>结合所有权确认，<strong>每个交易都包含着比特币拥有者的签名</strong>，所有交易记录<strong>可溯源</strong>，记录着每个比特币从“出身”开始的所有“主人”</li>
-</ul>
-</li>
-</ul>
-<img src="D:\Typora_picture\4_比特币交易模型\9fd01e04798569459d38d621ef1a373.png" alt="9fd01e04798569459d38d621ef1a373" style="zoom:33%;" />
-<ul>
-<li>
-<p>Bob的签名与公钥</p>
-</li>
-<li>
-<p>OP_DUP</p>
-<ul>
-<li>弹出第一个元素，并复制这个元素。随后，它将二者同时添加回堆栈。通常，这样做是为了在不影响原始元素的情况下对副本进行操作。</li>
-</ul>
-</li>
-<li>
-<p>OP_HASH160</p>
-<ul>
-<li>这将弹出第一个元素，并进行两次哈希。第一轮将使用SHA-256算法进行哈希。随后使用RIPEMD-160算法对SHA-256输出进行哈希。结果输出被添加回堆栈。</li>
-</ul>
-</li>
-<li>
-<p>OP_EQUALVERIFY</p>
-<ul>
-<li>OP_EQUALVERIFY由另外两个运算符OP_EQUAL和OP_VERIFY组合而成。OP_EQUAL弹出两个元素，并检查其是否相同。如果相同，则将1添加到堆栈。如果不相同，则添加0。OP_VERIFY弹出顶部元素，并检查其是否为True（亦即非0）。如果不是，则交易失败。综合起来，如果顶部两个元素不匹配，OP_EQUALVERIFY会导致交易失败。</li>
-</ul>
-</li>
-</ul>
-<h2 id="区块链类型及应用">区块链类型及应用</h2>
-<h3 id="类型">类型</h3>
-<ul>
-<li>
-<p>公有链</p>
-</li>
-<li>
-<p>联盟链</p>
-</li>
-<li>
-<p>私有链</p>
-</li>
-</ul>
-<img src="D:\Typora_picture\4_比特币交易模型\0c6fc4d63099009e75175d535ac1545.png" alt="0c6fc4d63099009e75175d535ac1545" style="zoom:50%;" />
-<h3 id="应用场景">应用场景</h3>
-<img src="D:\Typora_picture\4_比特币交易模型\08891e4458179221cd15fb0ec716ee7.png" alt="08891e4458179221cd15fb0ec716ee7" style="zoom:50%;" />
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2572,6 +2373,205 @@
 <p>2、给出<strong>两条路径</strong></p>
 </li>
 </ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Blog of ZhangCW">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/12/BC_4/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-12 22:59:37" itemprop="dateCreated datePublished" datetime="2024-02-12T22:59:37+08:00">2024-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-12-11 16:24:19" itemprop="dateModified" datetime="2023-12-11T16:24:19+08:00">2023-12-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1>比特币交易模型</h1>
+<h2 id="比特币身份确认">比特币身份确认</h2>
+<ul>
+<li>私钥、公钥、钱包地址生成</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\14df444000a04833d9d2e4ca0b21260.png" alt="14df444000a04833d9d2e4ca0b21260" style="zoom: 33%;" />
+<ul>
+<li>私钥、公钥、钱包地址间的关系：</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\046e1104bf7cd7b83d97fd011c994d3.png" alt="046e1104bf7cd7b83d97fd011c994d3" style="zoom:50%;" />
+<ul>
+<li>数学上，公钥由私钥生成，从公钥反推私钥几乎是不可能的：<strong>椭圆曲线</strong>特性</li>
+<li>只要拥有了“密钥 + 签名 + 地址”，就能随意使用该地址下的数字资产</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\be2b5b2a9264a3e6a91884b8a4390f3.png" alt="be2b5b2a9264a3e6a91884b8a4390f3" style="zoom:50%;" />
+<h2 id="交易服务与UTXO交易模型">交易服务与UTXO交易模型</h2>
+<p><strong>不可用的简单方案</strong></p>
+<ul>
+<li><strong>签名能被复制</strong>，导致无限复制</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\d3e4f09c869905da848bb30464cf27a.png" alt="d3e4f09c869905da848bb30464cf27a" style="zoom:50%;" />
+<ul>
+<li>中心化</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\3fc3151fad24fe47f7bad8001458db0.png" alt="3fc3151fad24fe47f7bad8001458db0" style="zoom: 33%;" />
+<h3 id="交易有效性">交易有效性</h3>
+<ul>
+<li>
+<p>所有权确认</p>
+<ul>
+<li>
+<p>转账要有来源</p>
+</li>
+<li>
+<p>防止双发攻击</p>
+<ul>
+<li>仅有“<strong>转账数额</strong>”和“<strong>转入钱包地址</strong>”无法证明<strong>交易的生成者</strong>对“<strong>转出钱包地址</strong>“余额有动用的权利</li>
+<li>需要用[<strong>私钥</strong>]对原始数据进行签名</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\3347b7a746045dc8a7e7108641ac66b.png" alt="3347b7a746045dc8a7e7108641ac66b" style="zoom: 33%;" />
+<img src="D:\Typora_picture\4_比特币交易模型\237b95a4976913297a2fa0adfb46345.png" alt="237b95a4976913297a2fa0adfb46345" style="zoom: 33%;" />
+<ul>
+<li>
+<p>具有可动用的资金</p>
+</li>
+<li>
+<p><strong>其他交易不会用到</strong>同一笔资金</p>
+</li>
+</ul>
+<h3 id="未花费的交易输出UTXO">未花费的交易输出UTXO</h3>
+<p><img src="D:%5CTypora_picture%5C4_%E6%AF%94%E7%89%B9%E5%B8%81%E4%BA%A4%E6%98%93%E6%A8%A1%E5%9E%8B%5C73db66c5fd00ddc36a570721b38d703.png" alt="73db66c5fd00ddc36a570721b38d703"></p>
+<ul>
+<li>
+<p>比特币使用<strong>U</strong>nspent <strong>T</strong>ran<strong>s</strong>action <strong>O</strong>utput (未花费的交易输出，UTXO)来<strong>确保同一笔资金只出现在一笔交易中</strong></p>
+</li>
+<li>
+<p>类比：每一收到的资金都<strong>存在一个储蓄罐</strong>里，每次交易都需要<strong>打碎一个或多个储蓄罐</strong></p>
+</li>
+<li>
+<p>==<strong>基本形式</strong>==</p>
+</li>
+<li>
+<p>版本号</p>
+</li>
+<li>
+<p>Input未花费交易UTXO</p>
+</li>
+<li>
+<p>Output输出地址及数量</p>
+</li>
+<li>
+<p>锁定时间</p>
+</li>
+<li>
+<p>安全性</p>
+<ul>
+<li>结合所有权确认，<strong>每个交易都包含着比特币拥有者的签名</strong>，所有交易记录<strong>可溯源</strong>，记录着每个比特币从“出身”开始的所有“主人”</li>
+</ul>
+</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\9fd01e04798569459d38d621ef1a373.png" alt="9fd01e04798569459d38d621ef1a373" style="zoom:33%;" />
+<ul>
+<li>
+<p>Bob的签名与公钥</p>
+</li>
+<li>
+<p>OP_DUP</p>
+<ul>
+<li>弹出第一个元素，并复制这个元素。随后，它将二者同时添加回堆栈。通常，这样做是为了在不影响原始元素的情况下对副本进行操作。</li>
+</ul>
+</li>
+<li>
+<p>OP_HASH160</p>
+<ul>
+<li>这将弹出第一个元素，并进行两次哈希。第一轮将使用SHA-256算法进行哈希。随后使用RIPEMD-160算法对SHA-256输出进行哈希。结果输出被添加回堆栈。</li>
+</ul>
+</li>
+<li>
+<p>OP_EQUALVERIFY</p>
+<ul>
+<li>OP_EQUALVERIFY由另外两个运算符OP_EQUAL和OP_VERIFY组合而成。OP_EQUAL弹出两个元素，并检查其是否相同。如果相同，则将1添加到堆栈。如果不相同，则添加0。OP_VERIFY弹出顶部元素，并检查其是否为True（亦即非0）。如果不是，则交易失败。综合起来，如果顶部两个元素不匹配，OP_EQUALVERIFY会导致交易失败。</li>
+</ul>
+</li>
+</ul>
+<h2 id="区块链类型及应用">区块链类型及应用</h2>
+<h3 id="类型">类型</h3>
+<ul>
+<li>
+<p>公有链</p>
+</li>
+<li>
+<p>联盟链</p>
+</li>
+<li>
+<p>私有链</p>
+</li>
+</ul>
+<img src="D:\Typora_picture\4_比特币交易模型\0c6fc4d63099009e75175d535ac1545.png" alt="0c6fc4d63099009e75175d535ac1545" style="zoom:50%;" />
+<h3 id="应用场景">应用场景</h3>
+<img src="D:\Typora_picture\4_比特币交易模型\08891e4458179221cd15fb0ec716ee7.png" alt="08891e4458179221cd15fb0ec716ee7" style="zoom:50%;" />
 
       
     </div>
@@ -3280,7 +3280,7 @@ Tether (USDT) 、<a target="_blank" rel="noopener" href="http://Blockchain.info"
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-12 22:31:23" itemprop="dateModified" datetime="2024-02-12T22:31:23+08:00">2024-02-12</time>
+      <time title="修改时间：2024-02-13 14:32:14" itemprop="dateModified" datetime="2024-02-13T14:32:14+08:00">2024-02-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
