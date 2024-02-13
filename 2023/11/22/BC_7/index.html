@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://example.com/images/8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86/image-20231030151641653.png">
 <meta property="og:image" content="http://example.com/images/8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86/image-20231030151242167.png">
 <meta property="article:published_time" content="2023-11-22T09:03:07.000Z">
-<meta property="article:modified_time" content="2024-02-13T08:16:52.301Z">
+<meta property="article:modified_time" content="2024-02-13T08:34:24.405Z">
 <meta property="article:author" content="ZhangChengWei">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/images/8_%E5%88%86%E5%8F%89%E8%83%8C%E5%90%8E%E5%8E%9F%E7%90%86/image-20231030144315159.png">
@@ -207,7 +207,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-13 16:16:52" itemprop="dateModified" datetime="2024-02-13T16:16:52+08:00">2024-02-13</time>
+      <time title="修改时间：2024-02-13 16:34:24" itemprop="dateModified" datetime="2024-02-13T16:34:24+08:00">2024-02-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -365,9 +365,6 @@
 <li>答：无法取消已经发布的交易。如果转入不存在地址，则该部分比特币便成为了死钱。比特币系统中UTXO会永久保存该交易，记录该并不存在的地址。因此，对全节点来说，这是不友好的。</li>
 </ul>
 </li>
-<li>
-<h2 id="OP-RETURN指令为普通用户提供了一个向比特币网络中写入想要一直保存的内容。但OP-RETURN执行结果是无条件返回错误，-而交易返回错误，-区块又怎么会包含它？-区块链又如何会接收这个区块？"><strong>OP_RETURN指令</strong>为普通用户提供了一个向比特币网络中写入想要一直保存的内容。但OP_RETURN执行结果是无条件返回错误， 而交易返回错误， 区块又怎么会包含它？ 区块链又如何会接收这个区块？</h2>
-</li>
 <li><strong>BTC系统挖矿，会不会有矿工“偷”答案？例如：某个矿工发现其他矿工发布了nonce，收到后验证该区块合法，将该nonce作为自己找到的nonce发布出去</strong>
 <ul>
 <li>实际上这是<strong>不可能</strong>的。发布的区块中包含<strong>铸币交易</strong>，其收款人地址为挖到矿的矿工地址，如果要偷答案，需要修改该收款地址，而<strong>地址改变，铸币交易内容也发生改变，从而引发Merkle Tree根哈希值改变</strong>。从而导致<strong>原本的nonce作废</strong>。也就是说，不可能会“偷”答案。</li>
@@ -377,6 +374,9 @@
 <ul>
 <li>事先无需知道谁会挖到矿，<strong>交易中总输入和总输出差额</strong>就是交易费。哪个矿工挖到矿，在打包交易时，可以将这些<strong>交易费收集</strong>起来作为自己获得的交易费。</li>
 </ul>
+</li>
+<li>
+<h2 id="OP-RETURN指令为普通用户提供了一个向比特币网络中写入想要一直保存的内容。但OP-RETURN执行结果是无条件返回错误，-而交易返回错误，-区块又怎么会包含它？-区块链又如何会接收这个区块？"><strong>OP_RETURN指令</strong>为普通用户提供了一个向比特币网络中写入想要一直保存的内容。但OP_RETURN执行结果是无条件返回错误， 而交易返回错误， 区块又怎么会包含它？ 区块链又如何会接收这个区块？</h2>
 </li>
 </ol>
 
