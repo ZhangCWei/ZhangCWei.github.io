@@ -19,12 +19,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="挖矿&amp;脚本 挖矿 挖矿难度的定义  挖矿需满足区块头的哈希值小于等于target阈值，公式为    挖矿难度与target成反比，target越小，挖矿难度约高 (分子：挖矿难度为1时的阈值，非常小)     挖矿难度不能太低   通过降低难度，缩短出块时间会出现的问题  因为网络传输也需要一定时间，造成不同节点收到的区块会不一样，那么会导致分叉成为常态，无法达成共识      造成分叉攻">
+    <meta name="description" content="比特币规定客户端可运行五种标准交易脚本,分别为 P2PKH、P2PK、P2SH、MS 和 OP_Return,不同的脚本对应着不同的特性和用途...">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Blog of ZhangCW">
-<meta property="og:url" content="http://example.com/2024/02/12/BC_6/index.html">
+<meta property="og:title" content="区块链原理6：挖矿&amp;脚本">
+<meta property="og:url" content="http://example.com/2023/11/12/BC_6/index.html">
 <meta property="og:site_name" content="Blog of ZhangCW">
-<meta property="og:description" content="挖矿&amp;脚本 挖矿 挖矿难度的定义  挖矿需满足区块头的哈希值小于等于target阈值，公式为    挖矿难度与target成反比，target越小，挖矿难度约高 (分子：挖矿难度为1时的阈值，非常小)     挖矿难度不能太低   通过降低难度，缩短出块时间会出现的问题  因为网络传输也需要一定时间，造成不同节点收到的区块会不一样，那么会导致分叉成为常态，无法达成共识      造成分叉攻">
+<meta property="og:description" content="比特币规定客户端可运行五种标准交易脚本,分别为 P2PKH、P2PK、P2SH、MS 和 OP_Return,不同的脚本对应着不同的特性和用途...">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="d:\Typora_picture\7_%E6%8C%96%E7%9F%BF&%E8%84%9A%E6%9C%AC\image-20231211191411295.png">
 <meta property="og:image" content="d:\Typora_picture\7_%E6%8C%96%E7%9F%BF&%E8%84%9A%E6%9C%AC\dfda65430dc3cb9d32985dd13d77715.png">
@@ -42,21 +42,21 @@
 <meta property="og:image" content="d:\Typora_picture\7_%E6%8C%96%E7%9F%BF&%E8%84%9A%E6%9C%AC\444540a864c0e69d049dd8fd1c58a39.png">
 <meta property="og:image" content="d:\Typora_picture\7_%E6%8C%96%E7%9F%BF&%E8%84%9A%E6%9C%AC\image-20231211230444890.png">
 <meta property="og:image" content="d:\Typora_picture\7_%E6%8C%96%E7%9F%BF&%E8%84%9A%E6%9C%AC\image-20231211230503369.png">
-<meta property="article:published_time" content="2024-02-12T14:59:37.454Z">
-<meta property="article:modified_time" content="2023-12-11T15:05:12.187Z">
+<meta property="article:published_time" content="2023-11-12T09:03:07.000Z">
+<meta property="article:modified_time" content="2024-02-13T08:14:26.350Z">
 <meta property="article:author" content="ZhangChengWei">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="d:\Typora_picture\7_%E6%8C%96%E7%9F%BF&%E8%84%9A%E6%9C%AC\image-20231211191411295.png">
 
 
-<link rel="canonical" href="http://example.com/2024/02/12/BC_6/">
+<link rel="canonical" href="http://example.com/2023/11/12/BC_6/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/02/12/BC_6/","path":"2024/02/12/BC_6/","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/11/12/BC_6/","path":"2023/11/12/BC_6/","title":"区块链原理6：挖矿&脚本"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title> | Blog of ZhangCW</title>
+<title>区块链原理6：挖矿&脚本 | Blog of ZhangCW</title>
   
 
 
@@ -178,7 +178,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/12/BC_6/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/12/BC_6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -191,12 +191,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Blog of ZhangCW">
-      <meta itemprop="description" content="">
+      <meta itemprop="name" content="区块链原理6：挖矿&脚本 | Blog of ZhangCW">
+      <meta itemprop="description" content="比特币规定客户端可运行五种标准交易脚本,分别为 P2PKH、P2PK、P2SH、MS 和 OP_Return,不同的脚本对应着不同的特性和用途...">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          区块链原理6：挖矿&脚本
         </h1>
 
         <div class="post-meta-container">
@@ -207,19 +207,29 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-02-12 22:59:37" itemprop="dateCreated datePublished" datetime="2024-02-12T22:59:37+08:00">2024-02-12</time>
+      <time title="创建时间：2023-11-12 17:03:07" itemprop="dateCreated datePublished" datetime="2023-11-12T17:03:07+08:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-12-11 23:05:12" itemprop="dateModified" datetime="2023-12-11T23:05:12+08:00">2023-12-11</time>
+      <time title="修改时间：2024-02-13 16:14:26" itemprop="dateModified" datetime="2024-02-13T16:14:26+08:00">2024-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/BC/" itemprop="url" rel="index"><span itemprop="name">BC</span></a>
+        </span>
     </span>
 
   
 </div>
 
+            <div class="post-description">比特币规定客户端可运行五种标准交易脚本,分别为 P2PKH、P2PK、P2SH、MS 和 OP_Return,不同的脚本对应着不同的特性和用途...</div>
         </div>
       </header>
 
@@ -389,13 +399,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2024/02/12/BC_5/" rel="prev" title="">
-                  <i class="fa fa-angle-left"></i> 
+                <a href="/2023/11/10/CF_6/" rel="prev" title="编译原理6：运行时刻环境">
+                  <i class="fa fa-angle-left"></i> 编译原理6：运行时刻环境
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2024/02/12/BC_9/" rel="next" title="">
-                   <i class="fa fa-angle-right"></i>
+                <a href="/2023/11/22/BC_7/" rel="next" title="区块链原理7：分叉背后原理">
+                  区块链原理7：分叉背后原理 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
