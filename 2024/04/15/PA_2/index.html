@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="...">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Program Analysis 2：Intermediate Representation">
+<meta property="og:url" content="http://example.com/2024/04/15/PA_2/index.html">
+<meta property="og:site_name" content="Blog of ZhangCW">
+<meta property="og:description" content="...">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229151918753.png">
+<meta property="og:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229152843482.png">
+<meta property="og:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229153630819.png">
+<meta property="og:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229154234938.png">
+<meta property="og:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229163202543.png">
+<meta property="og:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229163241585.png">
+<meta property="og:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229164816105.png">
+<meta property="og:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229165222943.png">
+<meta property="og:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229165912646.png">
+<meta property="og:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229170021233.png">
+<meta property="og:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229170853393.png">
+<meta property="og:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229171018374.png">
+<meta property="og:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229171305629.png">
+<meta property="article:published_time" content="2024-04-15T06:35:37.000Z">
+<meta property="article:modified_time" content="2024-04-15T08:29:57.278Z">
+<meta property="article:author" content="ZhangChengWei">
+<meta property="article:tag" content="PA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/2_%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA/image-20240229151918753.png">
+
+
+<link rel="canonical" href="http://example.com/2024/04/15/PA_2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/04/15/PA_2/","path":"2024/04/15/PA_2/","title":"Program Analysis 2：Intermediate Representation"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Program Analysis 2：Intermediate Representation | Blog of ZhangCW</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Blog of ZhangCW</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">By ZhangCW</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Intermediate Representation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Compilers-and-Static-Analyzers"><span class="nav-text">Compilers and Static Analyzers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AST-vs-IR"><span class="nav-text">AST vs. IR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IR-Three-Address-Code-3AC"><span class="nav-text">IR: Three-Address Code (3AC)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Address-Code"><span class="nav-text">3-Address Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Some-Common-3AC-Forms"><span class="nav-text">Some Common 3AC Forms:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3AC-in-Real-Static-Analyzer-Tai-e"><span class="nav-text">3AC in Real Static Analyzer: Tai-e</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Static-Single-Assignment-SSA"><span class="nav-text">Static Single Assignment (SSA)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Control-Flow-Analysis"><span class="nav-text">Control Flow Analysis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Basic-Blocks-BB"><span class="nav-text">Basic Blocks (BB)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Focal-Point"><span class="nav-text">Focal Point</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ZhangChengWei</p>
+  <div class="site-description" itemprop="description">paper analysis</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/15/PA_2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZhangChengWei">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="paper analysis">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Program Analysis 2：Intermediate Representation | Blog of ZhangCW">
+      <meta itemprop="description" content="...">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Program Analysis 2：Intermediate Representation
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-04-15 14:35:37 / 修改时间：16:29:57" itemprop="dateCreated datePublished" datetime="2024-04-15T14:35:37+08:00">2024-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PA/" itemprop="url" rel="index"><span itemprop="name">PA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">...</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1>Intermediate Representation</h1>
+<h2 id="Compilers-and-Static-Analyzers">Compilers and Static Analyzers</h2>
+<ul>
+<li>词法分析 (正则表达式) – 语法分析 (上下文无关文法) – 语义分析</li>
+<li><strong>IR</strong> 是中间表示形式，一般都指<strong>三地址码</strong></li>
+</ul>
+<img src="\images\2_中间表示\image-20240229151918753.png" alt="image-20240229151918753" style="zoom: 33%;" />
+<h2 id="AST-vs-IR">AST vs. IR</h2>
+<ul>
+<li><strong>AST</strong>
+<ul>
+<li><strong>high-level</strong> and <strong>closed to grammar</strong> structure</li>
+<li>usually language <strong>dependent</strong></li>
+<li>suitable for <strong>fast type checking</strong></li>
+<li><strong>lack of control flow information</strong></li>
+</ul>
+</li>
+<li><strong>IR</strong>
+<ul>
+<li><strong>low-level</strong> and <strong>closed to machine code</strong></li>
+<li>usually language <strong>independent</strong></li>
+<li>compact(简洁的) and uniform(统一)</li>
+<li><strong>contains control flow information</strong></li>
+<li>usually considered as <strong>the basis for static analysis</strong></li>
+</ul>
+</li>
+</ul>
+<img src="\images\2_中间表示\image-20240229152843482.png" alt="image-20240229152843482" style="zoom:50%;" />
+<h2 id="IR-Three-Address-Code-3AC">IR: Three-Address Code (3AC)</h2>
+<h3 id="3-Address-Code">3-Address Code</h3>
+<p>  There is at <strong>most one operator</strong> on the <strong>right</strong> side of an instruction.</p>
+<img src="\images\2_中间表示\image-20240229153630819.png" alt="image-20240229153630819" style="zoom:50%;" />
+<p>  Each 3AC contains most at 3 addresses, <strong>address</strong> can be one of the following:</p>
+<ul>
+<li><strong>Name</strong>: a, b, c</li>
+<li><strong>Constant</strong>: 3</li>
+<li><strong>Compiler-generated temporary</strong>: t1</li>
+</ul>
+<h3 id="Some-Common-3AC-Forms">Some Common 3AC Forms:</h3>
+<img src="\images\2_中间表示\image-20240229154234938.png" alt="image-20240229154234938" style="zoom: 33%;" />
+<ul>
+<li><em><strong>bop</strong></em>: binary arithmetic or logical operation (二元算术或逻辑运算)</li>
+<li><em><strong>uop</strong></em>: unary operation (minus, negation, casting) (一元运算:负、取反、强制转换)</li>
+<li><strong>L</strong>: a label to represent a program location</li>
+<li><em><strong>rop</strong></em>: relational operator (&gt;, &lt;, ==, &gt;=, &lt;=, etc.)</li>
+<li><strong>goto L</strong>: unconditional jump</li>
+<li><strong>if … goto L</strong>: conditional jump</li>
+</ul>
+<h2 id="3AC-in-Real-Static-Analyzer-Tai-e">3AC in Real Static Analyzer: Tai-e</h2>
+<h2 id="Static-Single-Assignment-SSA">Static Single Assignment (SSA)</h2>
+<ul>
+<li>
+<p><strong>SSA</strong>: All assignments in SSA are to variables with <strong>distinct names</strong>.</p>
+<ul>
+<li>
+<p>Give each definition a <strong>fresh name</strong></p>
+</li>
+<li>
+<p>Propagate(传播) fresh name to subsequent(随后的) uses</p>
+</li>
+<li>
+<p>Every variable has <strong>exactly</strong> one definition</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="\images\2_中间表示\image-20240229163202543.png" alt="image-20240229163202543" style="zoom:50%;" />
+<ul>
+<li>
+<p><strong>What if a variable use is at control flow merges?</strong></p>
+<ul>
+<li>
+<p>A special merge operator, <strong>∅</strong>(called phi-function), is introduced to select the values at merge nodes</p>
+</li>
+<li>
+<p>∅(x0,x1) has the value x0 if the control flow passes through the true part of the conditional and the value x1 otherwise</p>
+</li>
+</ul>
+</li>
+</ul>
+<img src="\images\2_中间表示\image-20240229163241585.png" alt="image-20240229163241585" style="zoom: 33%;" />
+<ul>
+<li>
+<p><strong>Why SSA ?</strong></p>
+<ul>
+<li>
+<p>Flow information is indirectly incorporated into the <strong>unique variable</strong> names</p>
+<ul>
+<li>有助于提供一些更简单的分析</li>
+</ul>
+</li>
+<li>
+<p>Define-and-Use pairs are explicit(显式的)</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Why not SSA ?</strong></p>
+<ul>
+<li>
+<p>SSA may introduce <strong>too many</strong> variables and phi-functions</p>
+</li>
+<li>
+<p>May introduce <strong>inefficiency problem</strong> when translating to machine code (due to copy operations)</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Control-Flow-Analysis">Control Flow Analysis</h2>
+<ul>
+<li>Usually refer to building <strong>Control Flow Graph (CFG)</strong></li>
+<li>CFG serves as the <strong>basic structure</strong> for static analysis</li>
+<li>The node in CFG can be an individual 3-address instruction, or (usually) a <strong>Basic Block</strong> (BB)</li>
+</ul>
+<img src="\images\2_中间表示\image-20240229164816105.png" alt="image-20240229164816105" style="zoom: 40%;" />
+<h2 id="Basic-Blocks-BB">Basic Blocks (BB)</h2>
+<ul>
+<li>Basic blocks (BB) are <strong>maximal sequences</strong> of consecutive three-address instructions with the properties that :
+<ul>
+<li>It can <strong>be entered only at the beginning</strong>, i.e., the first instruction in the block</li>
+<li>It can <strong>be exited only at the end</strong>, i.e., the last instruction in the block</li>
+</ul>
+</li>
+</ul>
+<img src="\images\2_中间表示\image-20240229165222943.png" alt="image-20240229165222943" style="zoom:50%;" />
+<ul>
+<li>How to build Basic Blocks ?
+<ul>
+<li><strong>INPUT</strong>: A sequence of three-address instructions of <em>P</em></li>
+<li><strong>OUTPUT</strong>: A list of basic blocks of <em>P</em></li>
+<li><strong>METHOD</strong>:
+<ol>
+<li>Determine the leaders in <em>P</em>
+<ul>
+<li>The <strong>first instruction</strong> in <em>P</em> is a leader (程序的<strong>第一条指令</strong>)</li>
+<li>Any <strong>target instruction</strong> of a conditional or unconditional jump is a leader (跳转指令的<strong>目标指令</strong>)</li>
+<li>Any instruction that immediately follows a conditional or unconditional jump is a leader (<strong>紧跟</strong>在跳转指令<strong>后</strong>的<strong>第一条指令</strong>)</li>
+</ul>
+</li>
+<li>Build BBs for <em>P</em>
+<ul>
+<li>A BB consists of a leader and all its subsequent instructions <strong>until the next leader</strong> (下一个leader之前)</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<center class="half">
+    <img src="\images\2_中间表示\image-20240229165912646.png" alt="image-20240229165912646" style="zoom: 30%;"/>
+    <img src="\images\2_中间表示\image-20240229170021233.png" alt="image-20240229170021233" style="zoom: 30%;"/>
+</center>
+## Control Flow Graphs (CFG)
+<ul>
+<li>The <strong>nodes</strong> of CFG are <strong>basic blocks</strong></li>
+<li>There is an <strong>edge</strong> from block A to block B <strong>if and only if</strong>
+<ul>
+<li>There is a conditional or unconditional <strong>jump</strong> from the end of A to the beginning of B</li>
+<li>B <strong>immediately follows</strong> A in the <strong>original order</strong> of instructions and A does not end in an unconditional <strong>jump</strong></li>
+</ul>
+</li>
+</ul>
+<img src="\images\2_中间表示\image-20240229170853393.png" alt="image-20240229170853393" style="zoom: 40%;" />
+<ul>
+<li>It is normal to replace the jumps to instruction labels by <strong>jumps to basic blocks</strong></li>
+</ul>
+<img src="\images\2_中间表示\image-20240229171018374.png" alt="image-20240229171018374" style="zoom:40%;" />
+<ul>
+<li>Add edges in CFG
+<ul>
+<li>We say that A is a <strong>predecessor</strong>(先驱) of B, and B is a <strong>successor</strong>(后继) of A</li>
+</ul>
+</li>
+</ul>
+<img src="\images\2_中间表示\image-20240229171305629.png" alt="image-20240229171305629" style="zoom:40%;" />
+<h2 id="Focal-Point">Focal Point</h2>
+<ul>
+<li>The relation between <strong>compilers</strong> and <strong>static analyzers</strong></li>
+<li>Understand <strong>3AC</strong> and its <strong>common forms</strong></li>
+<li>How to <strong>build basic blocks</strong> on top of IR</li>
+<li>How to <strong>construct control flow graphs</strong> on top of BBs</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PA/" rel="tag"># PA</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/14/PA_1/" rel="prev" title="Program Analysis 1：Introduction">
+                  <i class="fa fa-angle-left"></i> Program Analysis 1：Introduction
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/04/15/PA_3&4/" rel="next" title="Program Analysis 3&4：Data Flow Analysis">
+                  Program Analysis 3&4：Data Flow Analysis <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ZhangChengWei</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>
