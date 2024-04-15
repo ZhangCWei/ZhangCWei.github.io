@@ -1152,7 +1152,7 @@ pre code {
 .menu {
   margin: 0;
   padding: 1em 0;
-  text-align: center;
+  text-align: right;
 }
 .menu-item {
   display: inline-block;
