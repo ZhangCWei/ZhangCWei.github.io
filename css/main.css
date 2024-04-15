@@ -1152,7 +1152,7 @@ pre code {
 .menu {
   margin: 0;
   padding: 1em 0;
-  text-align: right;
+  text-align: center;
 }
 .menu-item {
   display: inline-block;
@@ -2364,7 +2364,7 @@ header.header {
 }
 @media (max-width: 767px) {
   .menu .menu-item a {
-    text-align: right;
+    text-align: left;
   }
 }
 .menu .menu-item .badge {
@@ -2524,7 +2524,7 @@ header.header {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #ffebe5;
+  background: #a300fc;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
