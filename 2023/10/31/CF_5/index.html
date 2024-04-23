@@ -17,78 +17,78 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zhangcwei.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="中间代码生成是指在编程语言的编译过程中，将高级语言（如C++、Java等）的源代码转换成一种中间形式的代码。这个中间形式通常是低级语言或者称为中间语言，它是一种介于人类可读的高级语言和计算机能直接执行的机器码之间的中间产物。中间代码的主要目的是为了便于进一步的编译优化和代码生成...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="编译原理5：中间代码生成">
-<meta property="og:url" content="http://example.com/2023/10/31/CF_5/index.html">
+<meta property="og:url" content="https://zhangcwei.github.io/2023/10/31/CF_5/index.html">
 <meta property="og:site_name" content="Blog of ZhangCW">
 <meta property="og:description" content="中间代码生成是指在编程语言的编译过程中，将高级语言（如C++、Java等）的源代码转换成一种中间形式的代码。这个中间形式通常是低级语言或者称为中间语言，它是一种介于人类可读的高级语言和计算机能直接执行的机器码之间的中间产物。中间代码的主要目的是为了便于进一步的编译优化和代码生成...">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/img1698118448890.jpg">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231024114412407.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231024114450617.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/img1698119294168.jpg">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026133803037.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026133902137.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026103352438.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026103431973.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026103638666.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026103723533.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117163223936.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026114442257.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/52316425686ba4a36d2b7c49af211f4.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117163138758.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-91a9846cd13d3fccfbb43d66fe1f0cb2_1440w.webp">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117164127274.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102101322488.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102101613447.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-f8e2ff6744ba2902bf14b08980ef7838_1440w.webp">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102102107043.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102102246895.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102102515450.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/img4666271f88c9c45d1299558fb30b8fd.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102102739288.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102102920661.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-1d3c0f312dcb9ab26f49cb43b8f58a1f_1440w.webp">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102103659246.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102104630823.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102104803633.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102105351656.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102112038642.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102110554380.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102113023312.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117125517097.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102114031311.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102114529801.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102114553474.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102114648139.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231109103806288.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231109103821048.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-e99f7b17132b0d8210f3eea62ea0933d_1440w.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117144832194.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-11759adc1cf77db5300c1f6d8463935e_1440w.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-1e4c4818cfe96e94d24e08ba195ab9cd_1440w.webp">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-f0dbd8de88509d7a308f68dfcf269883_1440w.webp">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231109111233285.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231109112709810.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231116095817703.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117154138574.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117155028410.png">
-<meta property="og:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231116100537125.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/img1698118448890.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231024114412407.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231024114450617.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/img1698119294168.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026133803037.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026133902137.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026103352438.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026103431973.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026103638666.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026103723533.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117163223936.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231026114442257.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/52316425686ba4a36d2b7c49af211f4.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117163138758.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-91a9846cd13d3fccfbb43d66fe1f0cb2_1440w.webp">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117164127274.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102101322488.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102101613447.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-f8e2ff6744ba2902bf14b08980ef7838_1440w.webp">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102102107043.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102102246895.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102102515450.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/img4666271f88c9c45d1299558fb30b8fd.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102102739288.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102102920661.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-1d3c0f312dcb9ab26f49cb43b8f58a1f_1440w.webp">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102103659246.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102104630823.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102104803633.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102105351656.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102112038642.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102110554380.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102113023312.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117125517097.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102114031311.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102114529801.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102114553474.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/imgimage-20231102114648139.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231109103806288.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231109103821048.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-e99f7b17132b0d8210f3eea62ea0933d_1440w.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117144832194.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-11759adc1cf77db5300c1f6d8463935e_1440w.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-1e4c4818cfe96e94d24e08ba195ab9cd_1440w.webp">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/v2-f0dbd8de88509d7a308f68dfcf269883_1440w.webp">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231109111233285.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231109112709810.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231116095817703.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117154138574.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117155028410.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231116100537125.png">
 <meta property="article:published_time" content="2023-10-31T09:03:07.000Z">
 <meta property="article:modified_time" content="2024-04-15T07:34:14.497Z">
-<meta property="article:author" content="ZhangChengWei">
+<meta property="article:author" content="Chengwei Zhang">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/img1698118448890.jpg">
+<meta name="twitter:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/img1698118448890.jpg">
 
 
-<link rel="canonical" href="http://example.com/2023/10/31/CF_5/">
+<link rel="canonical" href="https://zhangcwei.github.io/2023/10/31/CF_5/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/10/31/CF_5/","path":"2023/10/31/CF_5/","title":"编译原理5：中间代码生成"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zhangcwei.github.io/2023/10/31/CF_5/","path":"2023/10/31/CF_5/","title":"编译原理5：中间代码生成"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>编译原理5：中间代码生成 | Blog of ZhangCW</title>
@@ -127,7 +127,6 @@
       <p class="site-title">Blog of ZhangCW</p>
       <i class="logo-line"></i>
     </a>
-      <p class="site-subtitle" itemprop="description">By ZhangCW</p>
   </div>
 
   <div class="site-nav-right">
@@ -170,8 +169,10 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">ZhangChengWei</p>
-  <div class="site-description" itemprop="description">paper analysis</div>
+    <img class="site-author-image" itemprop="image" alt="Chengwei Zhang"
+      src="/images/Chengwei-Zhang.jpg">
+  <p class="site-author-name" itemprop="name">Chengwei Zhang</p>
+  <div class="site-description" itemprop="description">An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
@@ -186,11 +187,19 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZhangCWei" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZhangCWei" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhangchw9@mail2.sysu.edu.cn" title="E-Mail → mailto:zhangchw9@mail2.sysu.edu.cn" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
 
         </div>
       </div>
@@ -213,16 +222,16 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/31/CF_5/">
+    <link itemprop="mainEntityOfPage" href="https://zhangcwei.github.io/2023/10/31/CF_5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
+      <meta itemprop="image" content="/images/Chengwei-Zhang.jpg">
+      <meta itemprop="name" content="Chengwei Zhang">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
+      <meta itemprop="description" content="An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
@@ -1469,7 +1478,7 @@ base + i~1~ * w~1~ + i~2~ * w~2~ + … + i~k~ * w~k~</p>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
-    <span class="author" itemprop="copyrightHolder">ZhangChengWei</span>
+    <span class="author" itemprop="copyrightHolder">Chengwei Zhang</span>
   </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
   </div>

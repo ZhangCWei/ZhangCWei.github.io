@@ -17,35 +17,35 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zhangcwei.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="降维是无监督学习中的一种特殊方法,它的目标是将高维数据映射到低维空间,以保留数据的主要特征和结构...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习7：降维">
-<meta property="og:url" content="http://example.com/2024/03/16/ML_7/index.html">
+<meta property="og:url" content="https://zhangcwei.github.io/2024/03/16/ML_7/index.html">
 <meta property="og:site_name" content="Blog of ZhangCW">
 <meta property="og:description" content="降维是无监督学习中的一种特殊方法,它的目标是将高维数据映射到低维空间,以保留数据的主要特征和结构...">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/images/7_%E9%99%8D%E7%BB%B4/image-20231106203909987.png">
-<meta property="og:image" content="http://example.com/images/7_%E9%99%8D%E7%BB%B4/image-20231106203934862.png">
-<meta property="og:image" content="http://example.com/images/7_%E9%99%8D%E7%BB%B4/image-20231106204002141.png">
-<meta property="og:image" content="http://example.com/images/7_%E9%99%8D%E7%BB%B4/image-20231106200556878.png">
-<meta property="og:image" content="http://example.com/images/7_%E9%99%8D%E7%BB%B4/image-20231106201339077.png">
-<meta property="og:image" content="http://example.com/images/7_%E9%99%8D%E7%BB%B4/image-20231106202335189-1699273426296-59.png">
-<meta property="og:image" content="http://example.com/images/7_%E9%99%8D%E7%BB%B4/image-20231106202837581.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/7_%E9%99%8D%E7%BB%B4/image-20231106203909987.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/7_%E9%99%8D%E7%BB%B4/image-20231106203934862.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/7_%E9%99%8D%E7%BB%B4/image-20231106204002141.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/7_%E9%99%8D%E7%BB%B4/image-20231106200556878.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/7_%E9%99%8D%E7%BB%B4/image-20231106201339077.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/7_%E9%99%8D%E7%BB%B4/image-20231106202335189-1699273426296-59.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/7_%E9%99%8D%E7%BB%B4/image-20231106202837581.png">
 <meta property="article:published_time" content="2024-03-16T04:46:29.000Z">
 <meta property="article:modified_time" content="2024-04-15T03:24:11.510Z">
-<meta property="article:author" content="ZhangChengWei">
+<meta property="article:author" content="Chengwei Zhang">
 <meta property="article:tag" content="ML">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/images/7_%E9%99%8D%E7%BB%B4/image-20231106203909987.png">
+<meta name="twitter:image" content="https://zhangcwei.github.io/images/7_%E9%99%8D%E7%BB%B4/image-20231106203909987.png">
 
 
-<link rel="canonical" href="http://example.com/2024/03/16/ML_7/">
+<link rel="canonical" href="https://zhangcwei.github.io/2024/03/16/ML_7/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/03/16/ML_7/","path":"2024/03/16/ML_7/","title":"机器学习7：降维"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zhangcwei.github.io/2024/03/16/ML_7/","path":"2024/03/16/ML_7/","title":"机器学习7：降维"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>机器学习7：降维 | Blog of ZhangCW</title>
@@ -84,7 +84,6 @@
       <p class="site-title">Blog of ZhangCW</p>
       <i class="logo-line"></i>
     </a>
-      <p class="site-subtitle" itemprop="description">By ZhangCW</p>
   </div>
 
   <div class="site-nav-right">
@@ -127,8 +126,10 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">ZhangChengWei</p>
-  <div class="site-description" itemprop="description">paper analysis</div>
+    <img class="site-author-image" itemprop="image" alt="Chengwei Zhang"
+      src="/images/Chengwei-Zhang.jpg">
+  <p class="site-author-name" itemprop="name">Chengwei Zhang</p>
+  <div class="site-description" itemprop="description">An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
@@ -143,11 +144,19 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZhangCWei" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZhangCWei" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhangchw9@mail2.sysu.edu.cn" title="E-Mail → mailto:zhangchw9@mail2.sysu.edu.cn" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
 
         </div>
       </div>
@@ -170,16 +179,16 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/16/ML_7/">
+    <link itemprop="mainEntityOfPage" href="https://zhangcwei.github.io/2024/03/16/ML_7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
+      <meta itemprop="image" content="/images/Chengwei-Zhang.jpg">
+      <meta itemprop="name" content="Chengwei Zhang">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
+      <meta itemprop="description" content="An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
@@ -622,7 +631,7 @@ s.t.\ 𝑊^𝑇𝑊 = I
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
-    <span class="author" itemprop="copyrightHolder">ZhangChengWei</span>
+    <span class="author" itemprop="copyrightHolder">Chengwei Zhang</span>
   </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
   </div>

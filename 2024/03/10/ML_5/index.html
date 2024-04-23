@@ -17,39 +17,39 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zhangcwei.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="集成学习通过构建并结合多个学习器来完成学习任务。一般结构是：先产生一组“个体学习器”，再用某种策略将它们结合起来。常见的集成学习算法有：随机森林、adaBoost等...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习5：集成学习">
-<meta property="og:url" content="http://example.com/2024/03/10/ML_5/index.html">
+<meta property="og:url" content="https://zhangcwei.github.io/2024/03/10/ML_5/index.html">
 <meta property="og:site_name" content="Blog of ZhangCW">
 <meta property="og:description" content="集成学习通过构建并结合多个学习器来完成学习任务。一般结构是：先产生一组“个体学习器”，再用某种策略将它们结合起来。常见的集成学习算法有：随机森林、adaBoost等...">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018142706503.png">
-<meta property="og:image" content="http://example.com/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018142903144.png">
-<meta property="og:image" content="http://example.com/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018144514850.png">
-<meta property="og:image" content="http://example.com/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018144902775.png">
-<meta property="og:image" content="http://example.com/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018150452543.png">
-<meta property="og:image" content="http://example.com/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018152313026.png">
-<meta property="og:image" content="http://example.com/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/887b0a3ecc804240a3bc584c1a495b1c.png">
-<meta property="og:image" content="http://example.com/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018152342546.png">
-<meta property="og:image" content="http://example.com/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/36eba20490c84e9d9d64f56cb46f13d1.png">
-<meta property="og:image" content="http://example.com/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018155658841.png">
-<meta property="og:image" content="http://example.com/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231027103612120.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018142706503.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018142903144.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018144514850.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018144902775.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018150452543.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018152313026.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/887b0a3ecc804240a3bc584c1a495b1c.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018152342546.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/36eba20490c84e9d9d64f56cb46f13d1.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018155658841.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231027103612120.png">
 <meta property="article:published_time" content="2024-03-10T06:39:27.000Z">
 <meta property="article:modified_time" content="2024-04-15T03:26:26.507Z">
-<meta property="article:author" content="ZhangChengWei">
+<meta property="article:author" content="Chengwei Zhang">
 <meta property="article:tag" content="ML">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018142706503.png">
+<meta name="twitter:image" content="https://zhangcwei.github.io/images/5_%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/image-20231018142706503.png">
 
 
-<link rel="canonical" href="http://example.com/2024/03/10/ML_5/">
+<link rel="canonical" href="https://zhangcwei.github.io/2024/03/10/ML_5/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/03/10/ML_5/","path":"2024/03/10/ML_5/","title":"机器学习5：集成学习"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zhangcwei.github.io/2024/03/10/ML_5/","path":"2024/03/10/ML_5/","title":"机器学习5：集成学习"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>机器学习5：集成学习 | Blog of ZhangCW</title>
@@ -88,7 +88,6 @@
       <p class="site-title">Blog of ZhangCW</p>
       <i class="logo-line"></i>
     </a>
-      <p class="site-subtitle" itemprop="description">By ZhangCW</p>
   </div>
 
   <div class="site-nav-right">
@@ -131,8 +130,10 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">ZhangChengWei</p>
-  <div class="site-description" itemprop="description">paper analysis</div>
+    <img class="site-author-image" itemprop="image" alt="Chengwei Zhang"
+      src="/images/Chengwei-Zhang.jpg">
+  <p class="site-author-name" itemprop="name">Chengwei Zhang</p>
+  <div class="site-description" itemprop="description">An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
@@ -147,11 +148,19 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZhangCWei" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZhangCWei" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhangchw9@mail2.sysu.edu.cn" title="E-Mail → mailto:zhangchw9@mail2.sysu.edu.cn" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
 
         </div>
       </div>
@@ -174,16 +183,16 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/10/ML_5/">
+    <link itemprop="mainEntityOfPage" href="https://zhangcwei.github.io/2024/03/10/ML_5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
+      <meta itemprop="image" content="/images/Chengwei-Zhang.jpg">
+      <meta itemprop="name" content="Chengwei Zhang">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
+      <meta itemprop="description" content="An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
@@ -662,7 +671,7 @@ c_j,&amp;if\ \   \sum_{t=1}^Th_t^j(\boldsymbol{x}) &gt; \frac12\sum_{k=1}^N\sum^
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
-    <span class="author" itemprop="copyrightHolder">ZhangChengWei</span>
+    <span class="author" itemprop="copyrightHolder">Chengwei Zhang</span>
   </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
   </div>

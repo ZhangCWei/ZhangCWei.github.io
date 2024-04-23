@@ -17,64 +17,64 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zhangcwei.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="语法分析是编译过程的一个逻辑阶段。语法分析的任务是在词法分析的基础上将单词序列组合成各类语法短语，如“程序”，“语句”，“表达式”等等，语法分析程序判断源程序在结构上是否正确，源程序的结构由上下文无关文法描述....">
 <meta property="og:type" content="article">
 <meta property="og:title" content="编译原理3：语法分析">
-<meta property="og:url" content="http://example.com/2023/09/25/CF_3/index.html">
+<meta property="og:url" content="https://zhangcwei.github.io/2023/09/25/CF_3/index.html">
 <meta property="og:site_name" content="Blog of ZhangCW">
 <meta property="og:description" content="语法分析是编译过程的一个逻辑阶段。语法分析的任务是在词法分析的基础上将单词序列组合成各类语法短语，如“程序”，“语句”，“表达式”等等，语法分析程序判断源程序在结构上是否正确，源程序的结构由上下文无关文法描述....">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/48c2199598949353ab1ee6d3760d5bd.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094343848.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/907ae7231e12edc569aa6583539c3de.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094505776.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225170330842.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225171040236.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225170916942.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094629495.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094713205.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225171226509.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094729000.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225171544811.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094805833.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094828282.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225172204357.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094935922.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697095003731.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697095088924.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225190325117.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231221214835203.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697095153948.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225192226470.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697096167034.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231012153644474.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225201123239.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697096505800.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697096541641.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225201836213.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225203823822.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225203859468.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225204124135.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225204311159.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225205608369.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697097423695.jpg">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225210050155.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225210528072.png">
-<meta property="og:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225210657269.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/48c2199598949353ab1ee6d3760d5bd.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094343848.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/907ae7231e12edc569aa6583539c3de.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094505776.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225170330842.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225171040236.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225170916942.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094629495.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094713205.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225171226509.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094729000.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225171544811.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094805833.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094828282.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225172204357.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697094935922.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697095003731.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697095088924.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225190325117.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231221214835203.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697095153948.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225192226470.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697096167034.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231012153644474.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225201123239.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697096505800.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697096541641.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225201836213.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225203823822.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225203859468.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225204124135.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225204311159.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225205608369.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/1697097423695.jpg">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225210050155.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225210528072.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/image-20231225210657269.png">
 <meta property="article:published_time" content="2023-09-25T09:03:07.000Z">
 <meta property="article:modified_time" content="2024-04-15T03:21:21.662Z">
-<meta property="article:author" content="ZhangChengWei">
+<meta property="article:author" content="Chengwei Zhang">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/48c2199598949353ab1ee6d3760d5bd.png">
+<meta name="twitter:image" content="https://zhangcwei.github.io/images/3_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/48c2199598949353ab1ee6d3760d5bd.png">
 
 
-<link rel="canonical" href="http://example.com/2023/09/25/CF_3/">
+<link rel="canonical" href="https://zhangcwei.github.io/2023/09/25/CF_3/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/09/25/CF_3/","path":"2023/09/25/CF_3/","title":"编译原理3：语法分析"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zhangcwei.github.io/2023/09/25/CF_3/","path":"2023/09/25/CF_3/","title":"编译原理3：语法分析"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>编译原理3：语法分析 | Blog of ZhangCW</title>
@@ -113,7 +113,6 @@
       <p class="site-title">Blog of ZhangCW</p>
       <i class="logo-line"></i>
     </a>
-      <p class="site-subtitle" itemprop="description">By ZhangCW</p>
   </div>
 
   <div class="site-nav-right">
@@ -156,8 +155,10 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">ZhangChengWei</p>
-  <div class="site-description" itemprop="description">paper analysis</div>
+    <img class="site-author-image" itemprop="image" alt="Chengwei Zhang"
+      src="/images/Chengwei-Zhang.jpg">
+  <p class="site-author-name" itemprop="name">Chengwei Zhang</p>
+  <div class="site-description" itemprop="description">An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
@@ -172,11 +173,19 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZhangCWei" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZhangCWei" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhangchw9@mail2.sysu.edu.cn" title="E-Mail → mailto:zhangchw9@mail2.sysu.edu.cn" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
 
         </div>
       </div>
@@ -199,16 +208,16 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/25/CF_3/">
+    <link itemprop="mainEntityOfPage" href="https://zhangcwei.github.io/2023/09/25/CF_3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ZhangChengWei">
+      <meta itemprop="image" content="/images/Chengwei-Zhang.jpg">
+      <meta itemprop="name" content="Chengwei Zhang">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="Blog of ZhangCW">
-      <meta itemprop="description" content="paper analysis">
+      <meta itemprop="description" content="An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
@@ -1616,7 +1625,7 @@ x可以在某个句型中跟在A之后</li>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
-    <span class="author" itemprop="copyrightHolder">ZhangChengWei</span>
+    <span class="author" itemprop="copyrightHolder">Chengwei Zhang</span>
   </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
   </div>
