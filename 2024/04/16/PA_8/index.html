@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zhangcwei.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Now we introduce Pointer Analysis, a very very important method in Program Analysis.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Program Analysis 8：Pointer Analysis">
+<meta property="og:url" content="https://zhangcwei.github.io/2024/04/16/PA_8/index.html">
+<meta property="og:site_name" content="Blog of ZhangCW">
+<meta property="og:description" content="Now we introduce Pointer Analysis, a very very important method in Program Analysis.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240411111734654.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240411112927951.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240411113839121.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240416105531209.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240415232041085.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240415232210452.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240415232404496.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240415233157724.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240415233259324.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240415233942398.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240416105115407.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240416105135013.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240416111600131.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240416112131310.png">
+<meta property="article:published_time" content="2024-04-16T14:35:37.000Z">
+<meta property="article:modified_time" content="2024-10-26T14:08:45.467Z">
+<meta property="article:author" content="Chengwei Zhang">
+<meta property="article:tag" content="PA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangcwei.github.io/images/8_%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240411111734654.png">
+
+
+<link rel="canonical" href="https://zhangcwei.github.io/2024/04/16/PA_8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zhangcwei.github.io/2024/04/16/PA_8/","path":"2024/04/16/PA_8/","title":"Program Analysis 8：Pointer Analysis"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Program Analysis 8：Pointer Analysis | Blog of ZhangCW</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Blog of ZhangCW</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Pointer Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Motivation"><span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction-to-Pointer-Analysis"><span class="nav-text">Introduction to Pointer Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Character-of-Point-Analysis"><span class="nav-text">Character of Point Analysis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pointer-Analysis-and-Alias-Analysis"><span class="nav-text">Pointer Analysis and Alias Analysis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Applications-of-Pointer-Analysis"><span class="nav-text">Applications of Pointer Analysis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Key-Factors-of-Pointer-Analysis"><span class="nav-text">Key Factors of Pointer Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Heap-abstraction"><span class="nav-text">Heap abstraction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Context-Sensitivity"><span class="nav-text">Context Sensitivity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Flow-sensitivity"><span class="nav-text">Flow sensitivity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Analysis-Scope"><span class="nav-text">Analysis Scope</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Simple-Summary"><span class="nav-text">Simple Summary</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Concerned-Statements"><span class="nav-text">Concerned Statements</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Pointer-Affecting-Statements"><span class="nav-text">Pointer-Affecting Statements</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Focus-Points"><span class="nav-text">Focus Points</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Chengwei Zhang"
+      src="/images/Chengwei-Zhang.png">
+  <p class="site-author-name" itemprop="name">Chengwei Zhang</p>
+  <div class="site-description" itemprop="description">An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZhangCWei" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZhangCWei" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhangcwei.github.io/2024/04/16/PA_8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Chengwei-Zhang.png">
+      <meta itemprop="name" content="Chengwei Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Program Analysis 8：Pointer Analysis | Blog of ZhangCW">
+      <meta itemprop="description" content="Now we introduce Pointer Analysis, a very very important method in Program Analysis.">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Program Analysis 8：Pointer Analysis
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-16 22:35:37" itemprop="dateCreated datePublished" datetime="2024-04-16T22:35:37+08:00">2024-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-26 22:08:45" itemprop="dateModified" datetime="2024-10-26T22:08:45+08:00">2024-10-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PA/" itemprop="url" rel="index"><span itemprop="name">PA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">Now we introduce Pointer Analysis, a very very important method in Program Analysis.</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1>Pointer Analysis</h1>
+<h2 id="Motivation">Motivation</h2>
+<ul>
+<li>如下图所示的程序，如果用 CHA 对 int x = n.get() 进行分析，则会根据 n 的声明类型Number 进行 resolve。Number 有三个子类，所以就会有<strong>三个目标方法</strong>，如果在这个基础上进行常量传播分析，就会出现<strong>三个不同的返回值</strong>返回给 x，导致合并时将结果定为 x = NAC，实际上这样是<strong>不准确</strong>的，CHA分析出来的3条路径中有2条都是假的，从而<strong>丢失了精度</strong>。</li>
+<li>如果我们用<strong>指针分析</strong>的方式对该程序进行分析，会根据 n <strong>指向的对象 <strong>new One() 来建调用图，然后对 new One 做 dispatch，只得到 One 的 get 方法。如下图所示，这样分析的结果是</strong>准确</strong>的，没有 false positive。</li>
+<li>指针分析可以很好的解决 CHA 引入<strong>假的调用边</strong>的问题。</li>
+</ul>
+<img src="\images\8_指针分析\image-20240411111734654.png" alt="image-20240411111734654" style="zoom:50%;" />
+<h2 id="Introduction-to-Pointer-Analysis">Introduction to Pointer Analysis</h2>
+<h3 id="Character-of-Point-Analysis">Character of Point Analysis</h3>
+<ul>
+<li>
+<p>A fundamental static analysis</p>
+<ul>
+<li>Computes which memory locations a pointer can point to</li>
+<li>计算程序中的每个指针<strong>可以</strong>指向<strong>哪些内存的地址</strong></li>
+</ul>
+</li>
+<li>
+<p>For object-oriented programs (focus on Java)</p>
+<ul>
+<li>Computes which objects a pointer (variable or field) can point to</li>
+<li>计算一个指针<strong>可以</strong>指向程序中的<strong>哪些对象</strong></li>
+</ul>
+</li>
+<li>
+<p>Regarded as a <strong>may-analysis</strong></p>
+<ul>
+<li>Computes an <strong>over-approximation</strong> of the set of objects that a pointer can point to, i.e., we ask “a pointer <strong>may</strong> point to which objects?</li>
+<li>计算每个变量指向哪些对象的时候是 over-approximation 的，会比实际指向的对象更多一点，可以看作是这样一个问题：“指针可能会指向哪些对象?”</li>
+</ul>
+</li>
+<li>
+<p><strong>Example</strong></p>
+<ul>
+<li>第1和第2个：就是变量 a 和 x 所指向的 new A 和 new B</li>
+<li>第3个：this 是变量 a 调用函数时产生的，所以指向 new A</li>
+<li>第4个：变量 a 调用函数时对其赋值，b 声明为 B 类型，所以指向 new B</li>
+<li>第5个：变量 a 调用 getB 之后的返回值是 B 类型的，所以指向 new B</li>
+<li>下方的 new A.b 是 class A 中 this.b，指向<strong>传入参数</strong> x 的 new B</li>
+</ul>
+</li>
+</ul>
+<img src="\images\8_指针分析\image-20240411112927951.png" alt="image-20240411112927951" style="zoom:50%;" />
+<h3 id="Pointer-Analysis-and-Alias-Analysis">Pointer Analysis and Alias Analysis</h3>
+<ul>
+<li>
+<p>假设两个指针 p 和 q，指向<strong>相同的对象</strong>，则称 p 和 q 互为别名 (aliases)</p>
+</li>
+<li>
+<p>别名信息可以通过指针分析的结果 (points-to relations)推导</p>
+</li>
+<li>
+<p>Two closely related but different concepts</p>
+<ul>
+<li>Pointer analysis (指针分析): which objects a pointer can point to?
+<ul>
+<li>指针可以指向哪些对象?</li>
+</ul>
+</li>
+<li>Alias analysis (别名分析): can two pointers point to the same object?
+<ul>
+<li>程序中的两个指针是否会指向相同的对象?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Example</strong>:</p>
+<ul>
+<li>p 和 q 互为别名，但 x 和 y 不是。</li>
+</ul>
+</li>
+</ul>
+<img src="\images\8_指针分析\image-20240411113839121.png" alt="image-20240411113839121" style="zoom:50%;" />
+<h3 id="Applications-of-Pointer-Analysis">Applications of Pointer Analysis</h3>
+<ul>
+<li>Fundamental information
+<ul>
+<li>Call graph, aliases, …</li>
+</ul>
+</li>
+<li>Compiler optimization
+<ul>
+<li>Virtual call inlining, …</li>
+</ul>
+</li>
+<li>Bug detection
+<ul>
+<li>Null pointer detection, …</li>
+</ul>
+</li>
+<li>Security analysis
+<ul>
+<li>Information flow analysis, …</li>
+</ul>
+</li>
+<li>And many more …</li>
+</ul>
+<h2 id="Key-Factors-of-Pointer-Analysis">Key Factors of Pointer Analysis</h2>
+<ul>
+<li>Pointer analysis is a complex system</li>
+<li>Multiple factors affect the <strong>precision</strong> and <strong>efficiency</strong> of the system
+<ul>
+<li>针对不同的需求，指针分析需要做不同的取舍，为了取得比较好的平衡，就需要关注这些不同的因素，这里选择了4个对指针分析<strong>最关键</strong>的要素：
+<ul>
+<li>Heap abstraction 堆抽象</li>
+<li>Context Sensitivity 上下文敏感</li>
+<li>Flow sensitivity 流敏感</li>
+<li>Analysis Scope 分析范围</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="\images\8_指针分析\image-20240416105531209.png" alt="image-20240416105531209" style="zoom:50%;" />
+<h3 id="Heap-abstraction">Heap abstraction</h3>
+<ul>
+<li>解决的问题：How to model heap memory ? 如何对内存进行建模
+<ul>
+<li>In dynamic execution, the number of heap objects can be unbounded due to loops and recursion 堆中<strong>对象的数量</strong>理论上是无穷无尽的，因为存在循环与递归</li>
+<li>To ensure termination, heap abstraction models dynamically allocated, unbounded concrete objects as <strong>finite abstract objects</strong> for static analysis 将无穷的、概念性的对象转变为<strong>有穷的、抽象的对象</strong>，保证指针分析<strong>一定能够终止</strong></li>
+</ul>
+</li>
+</ul>
+<img src="\images\8_指针分析\image-20240415232041085.png" alt="image-20240415232041085" style="zoom: 50%;" />
+<ul>
+<li>两大流派：Store based model 和 Storeless mode，以及它们的混合</li>
+</ul>
+<img src="\images\8_指针分析\image-20240415232210452.png" alt="image-20240415232210452" style="zoom:67%;" />
+<ul>
+<li>
+<p><strong>Allocation-Site Abstraction</strong> (调用点抽象)</p>
+<ul>
+<li>
+<p>The <strong>most commonly-used</strong> heap abstraction</p>
+</li>
+<li>
+<p>Model concrete objects by their <strong>allocation sites</strong></p>
+<ul>
+<li>根据<strong>创建点</strong>来抽象对象，将动态对象建模的方式抽象成创建点</li>
+</ul>
+</li>
+<li>
+<p><strong>One abstract object per allocation site</strong> to represent all its allocated concrete objects</p>
+<ul>
+<li>每个<strong>创建点</strong>创建<strong>一个抽象对象</strong>，来表示其分配的动态的时候创建的<strong>所有具体对象</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Example</strong>：</p>
+<ul>
+<li>如下图程序，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>o</mi></mrow><annotation encoding="application/x-tex">o</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">o</span></span></span></span> 表示对象的创建点，下标2为程序的位置</li>
+<li>该程序共循环3次，就会产生<strong>3个具体的对象</strong></li>
+<li>如果使用 Allocation-Site Abstraction 方法，就会只生成<strong>1个抽象的对象</strong></li>
+</ul>
+</li>
+</ul>
+<img src="\images\8_指针分析\image-20240415232404496.png" alt="image-20240415232404496" style="zoom:50%;" />
+<h3 id="Context-Sensitivity">Context Sensitivity</h3>
+<ul>
+<li>解决的问题：How to model calling contexts ? 如何对上下文调用进行建模</li>
+<li>Context-sensitivity
+<ul>
+<li><strong>Distinguish</strong> different calling contexts of a method</li>
+<li>Analyze each method <strong>multiple times</strong>, once for each context</li>
+<li>Very useful technique, Significantly <strong>improve precision</strong></li>
+<li>在静态分析时，会模拟动态分析情况，对<strong>一个方法</strong>的<strong>不同上下文</strong>分开分析</li>
+<li>如下所示：对于不同的foo调用，如果采用上下文敏感的方法，就会分开上下文1和上下文2 ，这样 a.foo(x) 的实参就只会传入上下文1中的 p，而不是上下文2中。</li>
+</ul>
+</li>
+</ul>
+<img src="\images\8_指针分析\image-20240415233157724.png" alt="image-20240415233157724" style="zoom:50%;" />
+<ul>
+<li>Context-insensitive
+<ul>
+<li><strong>Merge</strong> all calling contexts of a method</li>
+<li>Analyze each method <strong>once</strong></li>
+<li>在静态分析时，对<strong>一个方法</strong>的<strong>不同上下文</strong>汇合在一起分析 (可能<strong>丢失精度</strong>)</li>
+<li>如下所示：对于上下文不敏感的情况，不会将不同上下文区分开，会将不同上下文中的数据流全都混在一起</li>
+</ul>
+</li>
+</ul>
+<img src="\images\8_指针分析\image-20240415233259324.png" alt="image-20240415233259324" style="zoom:50%;" />
+<h3 id="Flow-sensitivity">Flow sensitivity</h3>
+<ul>
+<li>解决的问题：How to model control flow ? 如何对控制流进行建模</li>
+<li>Flow-sensitive
+<ul>
+<li>Respect the execution <strong>order</strong> of the statements</li>
+<li>Maintain a <strong>map</strong> of points-to relations at <strong>each program location</strong></li>
+<li>So far, all data-flow analyses we have learnt are <strong>flow-sensitive</strong></li>
+<li>尊重程序中<strong>语句的顺序</strong>，在<strong>每个程序点</strong>都维护一对<strong>指向关系</strong>的映射，对语句顺序敏感 (下图左侧)</li>
+</ul>
+</li>
+</ul>
+<img src="\images\8_指针分析\image-20240415233942398.png" alt="image-20240415233942398" style="zoom:50%;" />
+<ul>
+<li>Flow-insensitive
+<ul>
+<li><strong>Ignore the control-flow order</strong>, treat the program as a set of <strong>unordered</strong> statements</li>
+<li>Maintain <strong>one map</strong> of points-to relations for <strong>the whole program</strong></li>
+<li>忽略程序语句的顺序，<strong>整个程序</strong>只维护一个指向关系 (上图右侧) (C++中导致<strong>损失精度</strong>，但 Java 中并没有直接证据证明)</li>
+</ul>
+</li>
+</ul>
+<h3 id="Analysis-Scope">Analysis Scope</h3>
+<ul>
+<li>解决的问题：Which parts of program should be analyzed ? 应分析程序中的哪些部分</li>
+<li>Whole-program (整体分析)
+<ul>
+<li>Compute points-to information for <strong>all pointers in the program</strong></li>
+<li>Provide information for <strong>all possible clients</strong></li>
+<li>分析程序中<strong>所有指针的指向关系</strong>，满足所有可能的应用</li>
+</ul>
+</li>
+</ul>
+<img src="\images\8_指针分析\image-20240416105115407.png" alt="image-20240416105115407" style="zoom:50%;" />
+<ul>
+<li>Demand-driven (需求驱动分析)
+<ul>
+<li>Only compute points-to information for the pointers that <strong>may affect specific sites of interest</strong> (on demand)</li>
+<li>Provide information for <strong>specific clients</strong></li>
+<li>由需求驱动，只满足特定应用</li>
+<li>如果有多个应用，那么就会导致重复与资源浪费；同时，做法更为复杂</li>
+</ul>
+</li>
+</ul>
+<img src="\images\8_指针分析\image-20240416105135013.png" alt="image-20240416105135013" style="zoom:50%;" />
+<h3 id="Simple-Summary">Simple Summary</h3>
+<ul>
+<li>堆抽象：针对对象，采用allocation-site抽象的方法，为每个调用点创建一个抽象对象；</li>
+<li>上下文敏感：针对上下文，先学习上下文不敏感，后续会再学习上下文敏感的方法；</li>
+<li>流敏感分析：针对控制流，为了减小开销，采用不敏感的；</li>
+<li>分析范围：针对分析范围，选择全程序分析。</li>
+</ul>
+<h2 id="Concerned-Statements">Concerned Statements</h2>
+<ul>
+<li>Modern languages typically have many kinds of statements, What Do We Analyze ?
+<ul>
+<li>if-else、switch-case、for/while/do-while、break/continue</li>
+<li>Do not directly affect pointers, Ignored in pointer analysis</li>
+<li>这些语句都不会直接影响指针分析，因此被忽略</li>
+</ul>
+</li>
+<li>We only focus on <strong>pointer-affecting statements</strong>
+<ul>
+<li><strong>Local variable: x</strong>
+<ul>
+<li>本地变量，在程序中无处不在，肯定需要分析</li>
+</ul>
+</li>
+<li><strong>Static field: C.f</strong>
+<ul>
+<li>Sometimes referred as <strong>global variable</strong></li>
+<li>静态字段，有时候会看作global variable，处理方式与本地变量类似</li>
+</ul>
+</li>
+<li><strong>Instance field: x.f</strong>
+<ul>
+<li>Modeled as <strong>an object</strong> (pointed by x) <strong>with a field f</strong></li>
+<li>实例 (对象) 字段，建模成一个由 x 所指向的 object，并加上 field f</li>
+</ul>
+</li>
+<li><strong>Array element: array[i]</strong>
+<ul>
+<li><strong>Ignore indexes</strong>. Modeled as an object (pointed by array) with a <strong>single field</strong>, say arr, which may point to <strong>any value</strong> stored in array  忽略索引</li>
+<li>数组。如下图所示，<strong>忽略了数组长度</strong>，在赋值和取值过程中都<strong>忽略了索引</strong>，因为这在静态分析中难以处理</li>
+<li>不同位置的数据统一指向一个单独的 field</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="\images\8_指针分析\image-20240416111600131.png" alt="image-20240416111600131" style="zoom:50%;" />
+<h3 id="Pointer-Affecting-Statements">Pointer-Affecting Statements</h3>
+<ul>
+<li>可以将上述操作浓缩为以下5种语句：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">操作类型</th>
+<th style="text-align:center">代码</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">New</td>
+<td style="text-align:center"><code>x = new T()</code></td>
+<td style="text-align:center">创建对象</td>
+</tr>
+<tr>
+<td style="text-align:center">Assign</td>
+<td style="text-align:center"><code>x = y</code></td>
+<td style="text-align:center">赋值语句</td>
+</tr>
+<tr>
+<td style="text-align:center">Store</td>
+<td style="text-align:center"><code>x.f = y</code></td>
+<td style="text-align:center">往instance field中存值</td>
+</tr>
+<tr>
+<td style="text-align:center">Load</td>
+<td style="text-align:center"><code>y = x.f</code></td>
+<td style="text-align:center">从instance field中取值</td>
+</tr>
+<tr>
+<td style="text-align:center">Call</td>
+<td style="text-align:center"><code>r = x.k(a, …)</code></td>
+<td style="text-align:center">方法调用</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Complex memory-accesses will be converted to <strong>three-address code</strong> by introducing temporary variables
+<ul>
+<li>在程序中，x.f 的操作也可能是<strong>很复杂的访问内存的指针表达式</strong>，例如 x.f.g.h = y。 我们在做指针分析的时候，对于所有这种memory-accesses的方式，都是一样的，我们会引入<strong>临时变量</strong>，将其分解成<strong>3地址码</strong>的形式，进行简化</li>
+</ul>
+</li>
+</ul>
+<img src="\images\8_指针分析\image-20240416112131310.png" alt="image-20240416112131310" style="zoom:50%;" />
+<ul>
+<li>Call
+<ul>
+<li>We will focus on Virtual Call</li>
+<li>对于方法调用，上节中提到了三种不同的调用方式，这里我们重点关注最复杂的 virtual call 的情况</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Call类型</th>
+<th style="text-align:center">代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Static call</td>
+<td style="text-align:center"><code>C.foo()</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Special call</td>
+<td style="text-align:center"><code>super.foo()</code>/<code>x.&lt;init&gt;()</code>/<code>this.privateFoo()</code></td>
+</tr>
+<tr>
+<td style="text-align:center">Virtual call</td>
+<td style="text-align:center"><code>x.foo()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="Focus-Points">Focus Points</h2>
+<ul>
+<li>What is **pointer analysis **?</li>
+<li>Understand the <strong>key factors of pointer analysis</strong></li>
+<li>Understand <strong>what we analyze in pointer analysis</strong></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PA/" rel="tag"># PA</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/15/PA_7/" rel="prev" title="Program Analysis 7：Interproducedural Analysis">
+                  <i class="fa fa-angle-left"></i> Program Analysis 7：Interproducedural Analysis
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/04/17/PA_9/" rel="next" title="Program Analysis 9：Pointer Analysis Foundations">
+                  Program Analysis 9：Pointer Analysis Foundations <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Chengwei Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>

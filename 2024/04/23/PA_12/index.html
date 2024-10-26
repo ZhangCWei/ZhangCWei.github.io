@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zhangcwei.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Datalog, a declarative language for Program Analysis.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Program Analysis 12：Datalog-Based Program Analysis">
+<meta property="og:url" content="https://zhangcwei.github.io/2024/04/23/PA_12/index.html">
+<meta property="og:site_name" content="Blog of ZhangCW">
+<meta property="og:description" content="Datalog, a declarative language for Program Analysis.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521090009346.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521090019324.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521090236867.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521090329606.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521090554350.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521090853443.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521093005995.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521091350732.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521091822929.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521092159465.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521092540091.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521093836120.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521094200683.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521094213414.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521094305622.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521092816397.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521092908360.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521102459720.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521102901604.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521103248029.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240523102719297.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240523102906956.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240523103348653.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240523104045689.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240523104323658.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240523104257632.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240523104621020.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240523105040495.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240523105048836.png">
+<meta property="article:published_time" content="2024-04-23T14:35:37.000Z">
+<meta property="article:modified_time" content="2024-10-26T14:10:10.727Z">
+<meta property="article:author" content="Chengwei Zhang">
+<meta property="article:tag" content="PA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangcwei.github.io/images/12_%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%88%86%E6%9E%90/image-20240521090009346.png">
+
+
+<link rel="canonical" href="https://zhangcwei.github.io/2024/04/23/PA_12/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zhangcwei.github.io/2024/04/23/PA_12/","path":"2024/04/23/PA_12/","title":"Program Analysis 12：Datalog-Based Program Analysis"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Program Analysis 12：Datalog-Based Program Analysis | Blog of ZhangCW</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Blog of ZhangCW</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Datalog-Based Program Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Motivation"><span class="nav-text">Motivation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Imperative-vs-Declarative"><span class="nav-text">Imperative vs Declarative</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-Implement-Program-Analyses"><span class="nav-text">How to Implement Program Analyses</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction-to-Datalog"><span class="nav-text">Introduction to Datalog</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Predicates"><span class="nav-text">Predicates</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fact"><span class="nav-text">Fact</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Atoms"><span class="nav-text">Atoms</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Datalog-Rules-Logic"><span class="nav-text">Datalog Rules (Logic)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interpretation-of-Datalog-Rules"><span class="nav-text">Interpretation of Datalog Rules</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rule-Safety"><span class="nav-text">Rule Safety</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Execution-of-Datalog-Programs"><span class="nav-text">Execution of Datalog Programs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pointer-Analysis-via-Datalog"><span class="nav-text">Pointer Analysis via Datalog</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Datalog-Model-for-Pointer-Analysis"><span class="nav-text">Datalog Model for Pointer Analysis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Datalog-Rules-for-Pointer-Analysis"><span class="nav-text">Datalog Rules for Pointer Analysis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Handle-Method-Calls"><span class="nav-text">Handle Method Calls</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Whole-Program-Pointer-Analysis"><span class="nav-text">Whole-Program Pointer Analysis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Taint-Analysis-via-Datalog"><span class="nav-text">Taint Analysis via Datalog</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Datalog-Model-for-Taint-Analysis"><span class="nav-text">Datalog Model for Taint Analysis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Taint-Analysis-via-Datalog-2"><span class="nav-text">Taint Analysis via Datalog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Datalog-Based-Program-Analysis"><span class="nav-text">Datalog-Based Program Analysis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Focus-Key"><span class="nav-text">Focus Key</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Chengwei Zhang"
+      src="/images/Chengwei-Zhang.png">
+  <p class="site-author-name" itemprop="name">Chengwei Zhang</p>
+  <div class="site-description" itemprop="description">An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZhangCWei" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZhangCWei" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhangcwei.github.io/2024/04/23/PA_12/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Chengwei-Zhang.png">
+      <meta itemprop="name" content="Chengwei Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Program Analysis 12：Datalog-Based Program Analysis | Blog of ZhangCW">
+      <meta itemprop="description" content="Datalog, a declarative language for Program Analysis.">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Program Analysis 12：Datalog-Based Program Analysis
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-23 22:35:37" itemprop="dateCreated datePublished" datetime="2024-04-23T22:35:37+08:00">2024-04-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-26 22:10:10" itemprop="dateModified" datetime="2024-10-26T22:10:10+08:00">2024-10-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PA/" itemprop="url" rel="index"><span itemprop="name">PA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">Datalog, a declarative language for Program Analysis.</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1>Datalog-Based Program Analysis</h1>
+<h2 id="Motivation">Motivation</h2>
+<h3 id="Imperative-vs-Declarative">Imperative vs Declarative</h3>
+<ul>
+<li>Datalog 是一种<strong>声明式</strong> (Declarative) 的编程语言，与之相对的另一种语言是<strong>命令式</strong>(Imperative) 编程语言</li>
+<li>Imperative: how to do，如 C 和 Java 等</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521090009346.png" alt="image-20240521090009346" style="zoom:50%;" />
+<ul>
+<li>Declarative: what to do，如 SQL 等</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521090019324.png" alt="image-20240521090019324" style="zoom:50%;" />
+<ul>
+<li>声明式语言中最广为人知的莫过于 SQL，而如果使用 Java 这类语言实现 SQL 的筛选功能，代码冗长重复，而 SQL 可以将那些冗长的重复的部分消除，让编写的人员不用再写这些代码</li>
+</ul>
+<h3 id="How-to-Implement-Program-Analyses">How to Implement Program Analyses</h3>
+<img src="\images\12_声明式编程分析\image-20240521090236867.png" alt="image-20240521090236867" style="zoom:50%;" />
+<ul>
+<li>Pointer Analysis, Imperative Implementation
+<ul>
+<li>worklist数据结构是数组list还是链表，是先进先出还是先进后出？</li>
+<li>如何表示指针集合，hash集还是bit向量？</li>
+<li>如何关联PFG节点和指针？</li>
+<li>如何联系相关语句和其中的变量？</li>
+<li><strong>需要考虑很多的实现细节</strong></li>
+</ul>
+</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521090329606.png" alt="image-20240521090329606" style="zoom:50%;" />
+<ul>
+<li>Pointer Analysis, Declarative Implementation
+<ul>
+<li>声明式实现 PTA 具有以下优势：<strong>简洁、可读性好、易于实现</strong></li>
+</ul>
+</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521090554350.png" alt="image-20240521090554350" style="zoom:50%;" />
+<h2 id="Introduction-to-Datalog">Introduction to Datalog</h2>
+<ul>
+<li>Datalog：是声明式编程语言，是Prolog的子集，最初用于数据库，现在广泛应用于程序分析、网络定义、大数据、云计算等</li>
+<li>Datalog = Data + Logic
+<ul>
+<li>没有副作用</li>
+<li>没有控制流</li>
+<li>没有函数</li>
+<li>非图灵完备</li>
+</ul>
+</li>
+</ul>
+<h3 id="Predicates">Predicates</h3>
+<ul>
+<li><strong>谓词</strong> (Predicates) 是 datalog 中的一个<strong>主要组成部分</strong>，可以看作是<strong>数据所组成的一个表</strong> (table of data)，谓词中的<strong>每一行</strong>都代表一个<strong>事实</strong> (fact)
+<ul>
+<li>例如，(“Xiaoming”, 18) 是一个 fact</li>
+<li>age 是谓词，person 也可以是谓词，对应到SQL里就是某个数据集中的<strong>一列</strong></li>
+</ul>
+</li>
+<li>谓词 Predicate 可以看作一系列陈述的集合，陈述某事情的<strong>事实 (真假)</strong></li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521090853443.png" alt="image-20240521090853443" style="zoom:50%;" />
+<ul>
+<li>总体上，谓词可以分为两类：
+<ul>
+<li><strong>EDB (extensional database)</strong>：在<strong>程序运行前</strong>，这些数据已经<strong>给定</strong></li>
+<li><strong>IDB (intensional database)</strong>：这一类数据仅<strong>由规则推导</strong>得来</li>
+</ul>
+</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521093005995.png" alt="image-20240521093005995" style="zoom:50%;" />
+<h3 id="Fact">Fact</h3>
+<ul>
+<li>事实 (Fact) <strong>表示一个组合是否属于一种关系</strong>，如 (“Xiaoming”, 18) 可表示“Xiaoming的年龄是18岁”，但注意这个陈述不一定值为True</li>
+</ul>
+<h3 id="Atoms">Atoms</h3>
+<ul>
+<li>原子 (Atoms) 是 <strong>Datalog 中的基本元素</strong>，原子的基本格式是：<code>P(X1, X2, ... , Xn)</code>
+<ul>
+<li>P 表示谓词名</li>
+<li>Xi 表示参数</li>
+</ul>
+</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521091350732.png" alt="image-20240521091350732" style="zoom:50%;" />
+<ul>
+<li>Atoms 可以分成两类：
+<ul>
+<li>Relational Atoms，如 <code>P(X1, X2, ... , Xn)</code>，当谓词 P <strong>包含</strong>由 <code>X1, X2, ..., Xn</code> 描述的元组时，<code>P(X1, X2, ..., Xn)</code> 的结果为真
+<ul>
+<li>Age(“Xiaoming”,18) is true</li>
+<li>Age(“Alan”,23) is false</li>
+</ul>
+</li>
+<li>Arithmetic Atoms，用于额外的判断
+<ul>
+<li>例如，<code>age &gt;= 18</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521091822929.png" alt="image-20240521091822929" style="zoom:50%;" />
+<h3 id="Datalog-Rules-Logic">Datalog Rules (Logic)</h3>
+<ul>
+<li>规则是一种表达逻辑推理的方法，还用于指定如何<strong>推导出事实</strong></li>
+<li>规则的形式为：
+<ul>
+<li>H 是一个原子</li>
+<li></li>
+<li>当 Body 中的所有表达式都为 True 时，Head 才为 True</li>
+</ul>
+</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521092159465.png" alt="image-20240521092159465" style="zoom:50%;" />
+<ul>
+<li>Logic <strong>AND</strong>
+<ul>
+<li>“<strong>,</strong>” can be read as <strong>(logical) and</strong>, i.e., body B1,B2,…,Bn is true if <strong>all subgoals</strong> B1, B2, …, and Bn are <strong>true</strong></li>
+<li>例如，我们可以 Datalog 规则选取成年人：</li>
+</ul>
+</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521092540091.png" alt="image-20240521092540091" style="zoom:50%;" />
+<ul>
+<li>Logic <strong>OR</strong>
+<ul>
+<li>逻辑或有两种写法：
+<ul>
+<li>Write <strong>multiple rules</strong> with the <strong>same head</strong></li>
+<li>Use logical or operator “<strong>;</strong>”</li>
+</ul>
+</li>
+<li><strong>逻辑与</strong>的优先级比逻辑或的优先级高，建议在书写程序时用括号明确地标识期望的运算优先级，如<code>H&lt;-A,(B;C)</code></li>
+</ul>
+</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521093836120.png" alt="image-20240521093836120" style="zoom:50%;" />
+<ul>
+<li><strong>Negation</strong>
+<ul>
+<li>In Datalog rules, a subgoal can be <strong>a negated atom</strong>, which negates its meaning</li>
+</ul>
+</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521094200683.png" alt="image-20240521094200683" style="zoom:50%;" />
+<img src="\images\12_声明式编程分析\image-20240521094213414.png" alt="image-20240521094213414" style="zoom:50%;" />
+<ul>
+<li><strong>Recursion</strong>
+<ul>
+<li>Datalog supports recursive rules, which allows that an IDB predicate can be <strong>deduced (directly/indirectly) from itself</strong></li>
+<li>如果没有递归，Datalog 只能表达基本关系代数的查询；通过递归，Datalog 变得更强大，能够表达复杂的程序分析，例如指针分析</li>
+</ul>
+</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521094305622.png" alt="image-20240521094305622" style="zoom:50%;" />
+<h3 id="Interpretation-of-Datalog-Rules">Interpretation of Datalog Rules</h3>
+<ul>
+<li>求解过程 (Interpretation of Datalog Rules) 是<strong>枚举 Body 中所有关系表达式</strong>的可能取值组合，进而得到<strong>新的 predicate/table</strong></li>
+<li>Consider <strong>all possible combinations</strong> of values of the variables in the subgoals</li>
+<li>If <strong>a combination</strong> makes <strong>all subgoals true</strong>, then the head atom (with corresponding values) is also <strong>true</strong></li>
+<li>The head <strong>predicate</strong> consists of <strong>all true atoms</strong></li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521092816397.png" alt="image-20240521092816397" style="zoom:50%;" />
+<img src="\images\12_声明式编程分析\image-20240521092908360.png" alt="image-20240521092908360" style="zoom:50%;" />
+<h3 id="Rule-Safety">Rule Safety</h3>
+<ul>
+<li>A rule is safe if every variable appears in at least one <strong>non-negated relational</strong> atom. 如果<strong>每个变量</strong>至少出现在一个<strong>非否定的关系原子</strong>中，则该规则是<strong>安全</strong>的</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521102459720.png" alt="image-20240521102459720" style="zoom:50%;" />
+<ul>
+<li>For both rules, infinite values of x can satisfy the rule, which makes A an <strong>infinite</strong> relation. 对于这两条规则，x 可以有<strong>无限多个值满足该规则</strong>，使得 A 成为一个<strong>无限</strong>关系</li>
+<li>这里我们需要记住一个判定的准则：
+<ul>
+<li><strong>产生的数据必须有穷</strong>：如果规则中的<strong>每个变量</strong>至少在一个 <strong>non-nageted relational atom</strong> 中出现一次，那么这个规则是安全的。这实际上是借助已有的 predicates (它们必定是有限的) 来限制变量的取值范围。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># x只出现在算术原子中,没有出现在关系原子中,不安全</span></span><br><span class="line">A(x) &lt;- B(y), x &gt; y</span><br><span class="line"></span><br><span class="line"><span class="comment"># x只出现在取反原子中,没有出现在关系原子中,不安全</span></span><br><span class="line">A(x) &lt;- B(y), !C(x, y)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>In Datalog, only safe rules are allowed</li>
+<li>In Datalog, <strong>recursion and negation</strong> of an atom <strong>must be separated</strong>. Otherwise, the rules may contain <strong>contradiction</strong> and the inference fails to converge. <strong>推导规则不能出现悖论</strong></li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521102901604.png" alt="image-20240521102901604" style="zoom:50%;" />
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// !A(x)为真会推导出A(x)为真, 发生矛盾 (!A(x)为假同样也会发生矛盾)</span></span><br><span class="line"><span class="built_in">A</span>(x) &lt;- <span class="built_in">B</span>(x), !<span class="built_in">A</span>(x)</span><br></pre></td></tr></table></figure>
+<h3 id="Execution-of-Datalog-Programs">Execution of Datalog Programs</h3>
+<ul>
+<li>Datalog engine deduces facts by given rules and EDB predicates <strong>until no new facts can be deduced</strong>.</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240521103248029.png" alt="image-20240521103248029" style="zoom:50%;" />
+<ul>
+<li>Monotonicity: Datalog is monotone as <strong>facts cannot be deleted</strong>
+<ul>
+<li>单调性：事实 (facts) 不会被删除</li>
+</ul>
+</li>
+<li>Termination: A Datalog program <strong>always terminates</strong>
+<ul>
+<li>必然终止：
+<ul>
+<li>事实的数量是单调的</li>
+<li>由 Rule Safety，所能得到的 IDB 的大小也是有限的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Pointer-Analysis-via-Datalog">Pointer Analysis via Datalog</h2>
+<ul>
+<li>EDB: pointer-relevant information that can be extracted from program syntactically</li>
+<li>IDB: pointer analysis <strong>results</strong></li>
+<li>Rules: pointer analysis <strong>rules</strong></li>
+</ul>
+<h3 id="Datalog-Model-for-Pointer-Analysis">Datalog Model for Pointer Analysis</h3>
+<ul>
+<li>如下所示为 Datalog 的指针分析规则 (后面再考虑<strong>调用</strong>)</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240523102719297.png" alt="image-20240523102719297" style="zoom:50%;" />
+<ul>
+<li><strong>Example</strong></li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240523102906956.png" alt="image-20240523102906956" style="zoom:50%;" />
+<h3 id="Datalog-Rules-for-Pointer-Analysis">Datalog Rules for Pointer Analysis</h3>
+<ul>
+<li>如下所示
+<ul>
+<li>“←” 左侧对应 Rule 中的结论</li>
+<li>“←” 右侧第一行为 Statement</li>
+<li>“←” 右侧中的其他行对应 Rule 中的条件</li>
+</ul>
+</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240523103348653.png" alt="image-20240523103348653" style="zoom:50%;" />
+<ul>
+<li><strong>Example</strong>
+<ul>
+<li>根据以上规则与前一个示例，可得到如下的 VarPointsTo 和 FieldPointsTo：</li>
+</ul>
+</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240523104045689.png" alt="image-20240523104045689" style="zoom:50%;" />
+<h3 id="Handle-Method-Calls">Handle Method Calls</h3>
+<ul>
+<li>此时考虑<strong>函数调用</strong></li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240523104323658.png" alt="image-20240523104323658" style="zoom:50%;" />
+<img src="\images\12_声明式编程分析\image-20240523104257632.png" alt="image-20240523104257632" style="zoom:50%;" />
+<h3 id="Whole-Program-Pointer-Analysis">Whole-Program Pointer Analysis</h3>
+<img src="\images\12_声明式编程分析\image-20240523104621020.png" alt="image-20240523104621020" style="zoom:50%;" />
+<h2 id="Taint-Analysis-via-Datalog">Taint Analysis via Datalog</h2>
+<h3 id="Datalog-Model-for-Taint-Analysis">Datalog Model for Taint Analysis</h3>
+<ul>
+<li>
+<p>On top of pointer analysis</p>
+<ul>
+<li>
+<p>EDB predicates</p>
+<ul>
+<li>Source(m: M)  // source methods</li>
+<li>Sink(m: M, i: N)  // sink methods</li>
+<li>Taint(l: S, t: T)  // associates each call site to the tainted data from the call site</li>
+</ul>
+</li>
+<li>
+<p>IDB predicate</p>
+<ul>
+<li>
+<p>TaintFlow(sr: S, sn: S, i: N)</p>
+<p>// detected taint flows, e.g., <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>t</mi><mi>F</mi><mi>l</mi><mi>o</mi><mi>w</mi><mo stretchy="false">(</mo><mi>s</mi><mi>r</mi><mo separator="true">,</mo><mi>s</mi><mi>n</mi><mo separator="true">,</mo><mi>i</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">TaintFlow(sr,sn,i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">ain</span><span class="mord mathnormal" style="margin-right:0.01968em;">tFl</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">sr</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">n</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">i</span><span class="mclose">)</span></span></span></span> denotes that tainted data from source call <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mi>r</mi></mrow><annotation encoding="application/x-tex">sr</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">sr</span></span></span></span> may flow to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝑖</mi></mrow><annotation encoding="application/x-tex">𝑖</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span>-th argument of sink call <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">sn</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">n</span></span></span></span></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Taint-Analysis-via-Datalog-2">Taint Analysis via Datalog</h3>
+<ul>
+<li>Handles sources (generates tainted data)</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240523105040495.png" alt="image-20240523105040495" style="zoom:50%;" />
+<ul>
+<li>Handles sinks (generates taint flow information)</li>
+</ul>
+<img src="\images\12_声明式编程分析\image-20240523105048836.png" alt="image-20240523105048836" style="zoom:50%;" />
+<h3 id="Datalog-Based-Program-Analysis">Datalog-Based Program Analysis</h3>
+<ul>
+<li>Datalog 分析的优势
+<ul>
+<li>简洁易读</li>
+<li>容易实现</li>
+<li>容易受益于执行引擎的优化</li>
+</ul>
+</li>
+<li>Datalog 分析的劣势
+<ul>
+<li>表达能力有限，非通用编程语言</li>
+<li>难以实现自定义优化</li>
+</ul>
+</li>
+</ul>
+<h2 id="Focus-Key">Focus Key</h2>
+<ul>
+<li>Datalog language</li>
+<li>How to implement pointer analysis via Datalog</li>
+<li>How to implement taint analysis via Datalog</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PA/" rel="tag"># PA</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/21/PA_11/" rel="prev" title="Program Analysis 11：Static Analysis for Security">
+                  <i class="fa fa-angle-left"></i> Program Analysis 11：Static Analysis for Security
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/04/26/PA_13/" rel="next" title="Program Analysis 13：CFL-Reachability and IFDS">
+                  Program Analysis 13：CFL-Reachability and IFDS <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Chengwei Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>

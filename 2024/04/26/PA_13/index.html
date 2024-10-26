@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zhangcwei.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="CFL-Reachability and IFDS, important but complex.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Program Analysis 13：CFL-Reachability and IFDS">
+<meta property="og:url" content="https://zhangcwei.github.io/2024/04/26/PA_13/index.html">
+<meta property="og:site_name" content="Blog of ZhangCW">
+<meta property="og:description" content="CFL-Reachability and IFDS, important but complex.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangcwei.github.io/images/13_CFL%E5%8F%AF%E8%BE%BE%E6%80%A7%E4%B8%8EIFDS/image-20240530101942579.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/13_CFL%E5%8F%AF%E8%BE%BE%E6%80%A7%E4%B8%8EIFDS/image-20240530102231594.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/13_CFL%E5%8F%AF%E8%BE%BE%E6%80%A7%E4%B8%8EIFDS/image-20240530102901364.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/13_CFL%E5%8F%AF%E8%BE%BE%E6%80%A7%E4%B8%8EIFDS/image-20240530103943001.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/13_CFL%E5%8F%AF%E8%BE%BE%E6%80%A7%E4%B8%8EIFDS/image-20240530104239115.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/13_CFL%E5%8F%AF%E8%BE%BE%E6%80%A7%E4%B8%8EIFDS/image-20240530104428919.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/13_CFL%E5%8F%AF%E8%BE%BE%E6%80%A7%E4%B8%8EIFDS/image-20240530105130921.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/13_CFL%E5%8F%AF%E8%BE%BE%E6%80%A7%E4%B8%8EIFDS/image-20240530105649208.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/13_CFL%E5%8F%AF%E8%BE%BE%E6%80%A7%E4%B8%8EIFDS/image-20240530111334735.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/13_CFL%E5%8F%AF%E8%BE%BE%E6%80%A7%E4%B8%8EIFDS/image-20240530112255529.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/13_CFL%E5%8F%AF%E8%BE%BE%E6%80%A7%E4%B8%8EIFDS/image-20240530112758256.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/13_CFL%E5%8F%AF%E8%BE%BE%E6%80%A7%E4%B8%8EIFDS/image-20240530114546826.png">
+<meta property="article:published_time" content="2024-04-26T14:35:37.000Z">
+<meta property="article:modified_time" content="2024-10-26T14:10:26.308Z">
+<meta property="article:author" content="Chengwei Zhang">
+<meta property="article:tag" content="PA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangcwei.github.io/images/13_CFL%E5%8F%AF%E8%BE%BE%E6%80%A7%E4%B8%8EIFDS/image-20240530101942579.png">
+
+
+<link rel="canonical" href="https://zhangcwei.github.io/2024/04/26/PA_13/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zhangcwei.github.io/2024/04/26/PA_13/","path":"2024/04/26/PA_13/","title":"Program Analysis 13：CFL-Reachability and IFDS"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Program Analysis 13：CFL-Reachability and IFDS | Blog of ZhangCW</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Blog of ZhangCW</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">CFL-Reachability and IFDS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Feasible-and-Realizable-Paths"><span class="nav-text">Feasible and Realizable Paths</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Infeasible-Paths"><span class="nav-text">Infeasible Paths</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Realizable-Paths"><span class="nav-text">Realizable Paths</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CFL-Reachability"><span class="nav-text">CFL-Reachability</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview-of-IFDS"><span class="nav-text">Overview of IFDS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supergraph-and-Flow-Functions"><span class="nav-text">Supergraph and Flow Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Supergraph"><span class="nav-text">Supergraph</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Flow-Functions"><span class="nav-text">Flow Functions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exploded-Supergraph-and-Tabulation-Algorithm"><span class="nav-text">Exploded Supergraph and Tabulation Algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Build-Exploded-Supergraph"><span class="nav-text">Build Exploded Supergraph</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Understanding-the-Distributivity-of-IFDS"><span class="nav-text">Understanding the Distributivity of IFDS</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Chengwei Zhang"
+      src="/images/Chengwei-Zhang.png">
+  <p class="site-author-name" itemprop="name">Chengwei Zhang</p>
+  <div class="site-description" itemprop="description">An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZhangCWei" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZhangCWei" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhangcwei.github.io/2024/04/26/PA_13/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Chengwei-Zhang.png">
+      <meta itemprop="name" content="Chengwei Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Program Analysis 13：CFL-Reachability and IFDS | Blog of ZhangCW">
+      <meta itemprop="description" content="CFL-Reachability and IFDS, important but complex.">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Program Analysis 13：CFL-Reachability and IFDS
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-26 22:35:37" itemprop="dateCreated datePublished" datetime="2024-04-26T22:35:37+08:00">2024-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-26 22:10:26" itemprop="dateModified" datetime="2024-10-26T22:10:26+08:00">2024-10-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PA/" itemprop="url" rel="index"><span itemprop="name">PA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">CFL-Reachability and IFDS, important but complex.</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1>CFL-Reachability and IFDS</h1>
+<h2 id="Feasible-and-Realizable-Paths">Feasible and Realizable Paths</h2>
+<ul>
+<li>IFDS是一种<strong>分析框架</strong>，在这种框架下，分析的数据流满足 CFL-Reachability 性质</li>
+</ul>
+<h3 id="Infeasible-Paths">Infeasible Paths</h3>
+<ul>
+<li>实际分析时，JDK中一个方法能产生的CFG是非常复杂的。不过，并非所有的路径都会被执行到，一个很自然的想法是，<strong>只分析可能被执行的路径</strong></li>
+<li>Infeasible Paths 指CFG中<strong>实际执行不到的路径</strong>，静态分析<strong>不能肯定</strong>地判定路径是否可达
+<ul>
+<li>如下图所示，age &gt; 0，那么右侧路径是一条<strong>运行时永远不会被运行</strong>的路径，所以该路径为一条不可行路径</li>
+<li>本节课关注的方面并不是这些不可行路径，而是另外一类，被称为<strong>不可实现的路径</strong> (unrealizable path)</li>
+</ul>
+</li>
+</ul>
+<img src="\images\13_CFL可达性与IFDS\image-20240530101942579.png" alt="image-20240530101942579" style="zoom:50%;" />
+<ul>
+<li>判断一条路径是否 feasible 本身是 undecidable 的，但并不代表我们束手无策：
+<ul>
+<li>动态执行时 x 和 y 都有确定的值，而<strong>上下文不敏感</strong>的分析中，x 和 y 的取值是不确定的，更具体的说，两次对 foo 的调用的上下文被 join 到了一起，导致其数据流就会同时将 join 后的结果沿着<code>x = return foo</code> (传播结果为{18，30，-1}，真实结果应该为{18，-1}) 和<code>y = return foo</code> (传播结果为{18，30-1}，真实结果应该为{30，-1}) 传播，导致数据流<strong>精度降低</strong></li>
+<li>仔细地观察 x 的两个不精确的分析结果，可以发现-1这个结果在当前框架下是不可避免的，而30这个不精确的结果则是可以避免的 (通过<strong>上下文敏感指针分析)</strong></li>
+</ul>
+</li>
+</ul>
+<img src="\images\13_CFL可达性与IFDS\image-20240530102231594.png" alt="image-20240530102231594" style="zoom:50%;" />
+<h3 id="Realizable-Paths">Realizable Paths</h3>
+<ul>
+<li>可实现路径是指 <strong>return 和 call 相匹配</strong>的路径，可以把 feasible path 看作  realizable path 的真子集
+<ul>
+<li>Realizable paths may not be executable 可实现路径不一定被执行</li>
+<li>but <strong>unrealizable paths</strong> must <strong>not be executable</strong> 不可实现路径一定不被执行</li>
+</ul>
+</li>
+<li>Our goal is to <strong>recognize realizable paths</strong> so that we could avoid polluting analysis results along unrealizable paths.
+<ul>
+<li>这个问题和括号匹配问题本质上是一样的，如下图所示，使用<strong>上下文无关文法</strong>能够很好地识别一个匹配的括号串 (Balanced-Parenthesis Problem)</li>
+<li>CFL 的做法是先<strong>在控制流边上标注 label</strong>，然后定义一门上下文无关语言去<strong>识别路径</strong>，如果<strong>能被这门语言识别</strong>，那么就说这条路径是一条可实现的路径；如果不能被这门语言识别  ，那么就说这是一条不可实现的路径。那么只需要沿着那些能被 CFL 语言识别的路径传播数据流救能应对数据流 join 到一起导致不精确的问题</li>
+</ul>
+</li>
+</ul>
+<img src="\images\13_CFL可达性与IFDS\image-20240530102901364.png" alt="image-20240530102901364" style="zoom:50%;" />
+<h2 id="CFL-Reachability">CFL-Reachability</h2>
+<ul>
+<li>A path is considered to <strong>connect two nodes</strong> A and B, or B is reachable from A, only if <strong>the concatenation of the labels</strong> on the edges of the path is a <strong>word</strong> in a specified <strong>context-free language</strong>.
+<ul>
+<li>在普通的 CFG 可达条件下，同时路径上的 label 拼接起来满足<strong>上下文无关语言</strong>定义的一个 word，此时该路径是 CFL-Reachable 的</li>
+<li>Context-free language (CFL)：由 CFG 产生的语言</li>
+<li>Context-Free Grammar (CFG)：CFG 是一个形式化的语法，满足上下文无关文法</li>
+</ul>
+</li>
+</ul>
+<img src="\images\13_CFL可达性与IFDS\image-20240530103943001.png" alt="image-20240530103943001" style="zoom:50%;" />
+<ul>
+<li><strong>Example</strong>
+<ul>
+<li>部分括号匹配问题 (Partially Balanced-Parenthesis)：有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo stretchy="false">)</mo><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">)_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 右括号一定要有对应的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo stretchy="false">(</mo><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">(_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen"><span class="mopen">(</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 左括号，反之有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo stretchy="false">(</mo><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">(_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen"><span class="mopen">(</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 不一定要有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo stretchy="false">)</mo><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">)_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，因为在分析过程中，可能<strong>还没有分析到</strong>对应的右括号的，但此时也可能是 Realizable 的</li>
+<li>如下图定义语言 L (realizable)，右侧黄色框中的4个字符串都是语言 L 的一部分</li>
+<li>这样，就可以使用这门语言<strong>将不可实现路径和实现路径区别开</strong>来。具体而言，如下图所示，对于绿色的 path，根据中间定义好的 realizable 语法是满足的，所以是 realizable 的。右边的红色 path 不满足语法，是 unrealizable 的</li>
+<li>e 表示一条边，括号表示方法调用的 label。path 上一系列的 label 满足我们定义好的 CFL 语法，则能判断它是 realizable 的</li>
+</ul>
+</li>
+</ul>
+<img src="\images\13_CFL可达性与IFDS\image-20240530104239115.png" alt="image-20240530104239115" style="zoom:50%;" />
+<img src="\images\13_CFL可达性与IFDS\image-20240530104428919.png" alt="image-20240530104428919" style="zoom:50%;" />
+<h2 id="Overview-of-IFDS">Overview of IFDS</h2>
+<ul>
+<li>IFDS 全称为 <strong>I</strong>nterprocedural <strong>F</strong>inite <strong>D</strong>istributive <strong>S</strong>ubset Problem，是一种基于<strong>图可达性</strong>的程序分析框架。
+<ul>
+<li>名字直接反映了这个框架适用的问题范围：全程序 (跨函数) 的、分析对象的域是有限的、流函数满足分配律 (<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>a</mi><mo>∪</mo><mi>b</mi><mo stretchy="false">)</mo><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">)</mo><mo>∪</mo><mi>f</mi><mo stretchy="false">(</mo><mi>b</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(a \cup b) = f(a) \cup f(b)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∪</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">b</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∪</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">b</span><span class="mclose">)</span></span></span></span>) 的集合问题</li>
+<li>IFDS 相比传统的通过迭代算法到达格上的不动点角度的不同，它通过<strong>将程序看作一个图</strong>，并通过对图上的可达性来求解诸如到达定义这类静态分析问题</li>
+</ul>
+</li>
+<li>IFDS 得到的结果为 MRP (meet over all realizable path)，回顾之前的 MOP：MOP通过枚举所有路径，然后再分析的最后一个点上 join 而得到。区别在于 MRP 不是枚举所有路径，而<strong>只会枚举可实现的路径</strong>，所以 MRP 肯定比 MOP 更精确</li>
+</ul>
+<img src="\images\13_CFL可达性与IFDS\image-20240530105130921.png" alt="image-20240530105130921" style="zoom:50%;" />
+<ul>
+<li>给定一个<strong>程序 P</strong> 和一个<strong>数据流分析问题 Q</strong>，IFDS 的分析过程如下：
+<ol>
+<li>构造一个 P 的<strong>超图</strong> supergraph <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>G</mi><mo>∗</mo></msup></mrow><annotation encoding="application/x-tex">G^*</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6887em;"></span><span class="mord"><span class="mord mathnormal">G</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span>，根据 Q 定义 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>G</mi><mo>∗</mo></msup></mrow><annotation encoding="application/x-tex">G^*</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6887em;"></span><span class="mord"><span class="mord mathnormal">G</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span> 上的<strong>边的流函数</strong>。</li>
+<li>通过将定义的流函数应用于关系表达 (图)，构造 P 的<strong>分解超图</strong> exploded supergraph <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>G</mi><mi mathvariant="normal">#</mi></msup></mrow><annotation encoding="application/x-tex">G^\#</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8491em;"></span><span class="mord"><span class="mord mathnormal">G</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">#</span></span></span></span></span></span></span></span></span></span></span></li>
+<li>Q 能够通过在 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>G</mi><mi mathvariant="normal">#</mi></msup></mrow><annotation encoding="application/x-tex">G^\#</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8491em;"></span><span class="mord"><span class="mord mathnormal">G</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">#</span></span></span></span></span></span></span></span></span></span></span>上应用 <strong>Tabulation 算法</strong>来转化为<strong>图可达问题</strong> (通过解决MRP问题) 来解决。对于程序中的一点 n，如果存在一条 realizable 的，从 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&lt;</mo><msub><mi>S</mi><mrow><mi>m</mi><mi>a</mi><mi>i</mi><mi>n</mi></mrow></msub><mo separator="true">,</mo><mn>0</mn><mo>&gt;</mo></mrow><annotation encoding="application/x-tex">&lt;S_{main}, 0&gt;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">main</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span></span></span></span> 到<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&lt;</mo><mi>n</mi><mo separator="true">,</mo><mi>d</mi><mo>&gt;</mo></mrow><annotation encoding="application/x-tex">&lt;n, d&gt;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">n</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span></span></span></span> 的path，则有 data fact：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>∈</mo><mi>M</mi><mi>R</mi><msub><mi>P</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">d∈MRP_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7335em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">MR</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></li>
+</ol>
+</li>
+</ul>
+<img src="\images\13_CFL可达性与IFDS\image-20240530105649208.png" alt="image-20240530105649208" style="zoom:50%;" />
+<h2 id="Supergraph-and-Flow-Functions">Supergraph and Flow Functions</h2>
+<h3 id="Supergraph">Supergraph</h3>
+<ul>
+<li>在 IFDS 中，整个程序被一个 Supergraph <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>G</mi><mo>∗</mo></msup><mo>=</mo><mo stretchy="false">(</mo><msup><mi>N</mi><mo>∗</mo></msup><mo separator="true">,</mo><msup><mi>E</mi><mo>∗</mo></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">G^*=(N^*,E^*)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6887em;"></span><span class="mord"><span class="mord mathnormal">G</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 表示，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>G</mi><mo>∗</mo></msup></mrow><annotation encoding="application/x-tex">G^*</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6887em;"></span><span class="mord"><span class="mord mathnormal">G</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span> 包含<strong>所有的流图</strong> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>G</mi><mn>2</mn></msub><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">G_1, G_2, ...</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">G</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">G</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">...</span></span></span></span> (<strong>每个函数对应一个流图</strong>)
+<ul>
+<li>每个流图中添加了辅助的开始节点 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">s_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> 和退出节点 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">e_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></li>
+<li>每个函数调用包含调用节点 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>a</mi><mi>l</mi><msub><mi>l</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">Call_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0197em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> 和返回节点 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>e</mi><msub><mi>t</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">Ret_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></li>
+<li>可以理解成 IFDS 分析体系下的 ICFG</li>
+</ul>
+</li>
+<li>过程调用中，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>G</mi><mo>∗</mo></msup></mrow><annotation encoding="application/x-tex">G^*</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6887em;"></span><span class="mord"><span class="mord mathnormal">G</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span> 有 3 种边：
+<ul>
+<li><strong>call-to-return-site edge</strong> from <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>a</mi><mi>l</mi><msub><mi>l</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">Call_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0197em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>e</mi><msub><mi>t</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">Ret_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> (下图紫色)</li>
+<li><strong>call-to-start edge</strong> from <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>a</mi><mi>l</mi><msub><mi>l</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">Call_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0197em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">s_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> of the called procedure (下图绿色)</li>
+<li><strong>exit-to-return-site edge</strong> from <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">e_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> of the called procedure to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>e</mi><msub><mi>t</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">Ret_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> (下图蓝色)</li>
+</ul>
+</li>
+</ul>
+<img src="\images\13_CFL可达性与IFDS\image-20240530111334735.png" alt="image-20240530111334735" style="zoom:50%;" />
+<h3 id="Flow-Functions">Flow Functions</h3>
+<ul>
+<li>“Possibly-uninitialized variables”: for each node <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>∈</mo><msup><mi>N</mi><mo>∗</mo></msup></mrow><annotation encoding="application/x-tex">n ∈ N^*</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6887em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span>, determine <strong>the set of variables</strong> that <strong>may be uninitialized before execution reaches n</strong>.
+<ul>
+<li><strong>可能未初始化</strong>的变量的分析：分析出在程序点 n 处可能未被初始化的变量</li>
+</ul>
+</li>
+<li><strong>Lambda expression</strong>
+<ul>
+<li>以 λ 标识一个 lambda 表达式：
+<ul>
+<li>从<strong>开头</strong>到<strong>中间点</strong>间的符号代表<strong>参数列表</strong></li>
+<li>从<strong>中间点</strong>到<strong>最后</strong>的符号代表<strong>函数体</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如下例子，就代表一个函数调用
+<ul>
+<li>函数以 x 作为输入参数，返回值为 x+1，调用函数时传入的参数为 3</li>
+</ul>
+</li>
+</ul>
+<img src="\images\13_CFL可达性与IFDS\image-20240530112255529.png" alt="image-20240530112255529" style="zoom:50%;" />
+<ul>
+<li><strong>Example</strong>
+<ol>
+<li>在进入 main 后，全局变量 g 和局部变量 x 一定是<strong>没有初始化的</strong></li>
+<li>随后 x 被初始化</li>
+<li>以 x 来初始化 a，a 是否被初始化与 x 一致</li>
+<li>如果 a 和 g 都被初始化了，则 a 是被初始化的，否则认为 a 没有被初始化</li>
+<li>注意左侧以红色标记的函数，这样写能够使得在 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>e</mi><msub><mi>t</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">Ret_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> 处 g 是否已经初始化取决于是否在被调用函数中被赋值</li>
+<li>由于离开了函数，所以要去除函数内部变量 a</li>
+</ol>
+</li>
+</ul>
+<img src="\images\13_CFL可达性与IFDS\image-20240530112758256.png" alt="image-20240530112758256" style="zoom:50%;" />
+<h2 id="Exploded-Supergraph-and-Tabulation-Algorithm">Exploded Supergraph and Tabulation Algorithm</h2>
+<h3 id="Build-Exploded-Supergraph">Build Exploded Supergraph</h3>
+<ul>
+<li>通过将定义的流函数应用于关系表达 (图)，构造P的 exploded supergraph <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>G</mi><mi mathvariant="normal">#</mi></msup></mrow><annotation encoding="application/x-tex">G^\#</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8491em;"></span><span class="mord"><span class="mord mathnormal">G</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">#</span></span></span></span></span></span></span></span></span></span></span>
+<ul>
+<li>每个流函数可以表示为有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo stretchy="false">(</mo><mi>D</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">2(D+1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span> 个<strong>节点</strong> (上面 D+1 个，下面也是 D+1 个)，最多 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>D</mi><mo>+</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">(D+1)^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span> 条<strong>边</strong>的图 (上面乘下面，二分图)</li>
+<li>D 表示 dataflow facts 元素个数 (如待分析的变量个数)。上半部分表示<strong>输入</strong>，下半部分表示<strong>输出</strong>。<strong>边代表某个状态的输入是否会影响另一个状态的输出</strong></li>
+</ul>
+</li>
+<li>构造子图时遵循如下3种规则：
+<ul>
+<li><code>0 → 0</code>；<strong>无条件</strong>地在图中加一条0到0的边</li>
+<li><code>0 → d1</code>；对于<strong>没有输入但有输出</strong>的转化函数，加上相应的边 (0到xxx)</li>
+<li><code>d1 → d2</code>；对于<strong>既有输入也有输出</strong>的函数，加上相应的边</li>
+</ul>
+</li>
+<li><strong>Example</strong>
+<ul>
+<li>枚举上、下半图的<strong>每对</strong>节点，考虑<strong>输入这些值</strong>时对于<strong>对应的输出</strong>满足哪些规则，并连上相应的边。特别地，如果<strong>输入对输出没有影响</strong>，则判断为 <strong>f(Ø)</strong>，被 0 连接的下部图节点会<strong>取消</strong>其他上部图节点的连接 (相当于为 f(Ø) )</li>
+<li>0 节点代表了空输入，如果没有 0 节点，有<strong>空输入</strong>但<strong>有输出</strong>的情况就不能通过 exploded supergraph 表示出来，造成漏报。0 → 0又称为Glue Edge
+<ol>
+<li>输入什么就输出什么，所以直接连上对应的即可</li>
+<li>虽然有输入 S，但可以为空，并且输入空也返回 a 的状态，故只满足规则1、2</li>
+<li>无条件传递 b 的状态，所以 0 除了连 0 还连接了 b；输入 b 的初始化状态，不影响 a、b、c 的初始化结果；此外，输入 c 的状态就输出 c 的状态，所以 c 连 c</li>
+<li>如果输入包含 a，则输出一定包含 b；否则一定不包含 b</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<img src="\images\13_CFL可达性与IFDS\image-20240530114546826.png" alt="image-20240530114546826" style="zoom:50%;" />
+<h2 id="Understanding-the-Distributivity-of-IFDS">Understanding the Distributivity of IFDS</h2>
+<p>…</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PA/" rel="tag"># PA</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/23/PA_12/" rel="prev" title="Program Analysis 12：Datalog-Based Program Analysis">
+                  <i class="fa fa-angle-left"></i> Program Analysis 12：Datalog-Based Program Analysis
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/04/29/PA_14/" rel="next" title="Program Analysis 14：Soundness and Soundiness">
+                  Program Analysis 14：Soundness and Soundiness <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Chengwei Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zhangcwei.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","Sidebar Display (only for Muse | Mist), available values":["hide    expand only when click on the sidebar toggle icon."],"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Context Sensitivity can improve the precision of Pointer Analysis.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Program Analysis 10：Context Sensitivity in Pointer Analysis">
+<meta property="og:url" content="https://zhangcwei.github.io/2024/04/20/PA_10/index.html">
+<meta property="og:site_name" content="Blog of ZhangCW">
+<meta property="og:description" content="Context Sensitivity can improve the precision of Pointer Analysis.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430081432041.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430083311257.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430103436064.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430083352273.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430084827209.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430091729709.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430175720139.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430093449605.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430180335297.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430180431579.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430180615982.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430180630993.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430181328888.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430192241592.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240502144123283.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240502150454310.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240502150611927.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240502150727409.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240502151503813.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240507081145321.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240507081445141.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240507081937144.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240507082503528.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240507082538038.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240507082916148.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240509160323973.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240509161051969.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240509164146932.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240509164650752.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240507083714640.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240507085748999.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240507090932053.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240507091009575.png">
+<meta property="og:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240507091135684.png">
+<meta property="article:published_time" content="2024-04-20T14:35:37.000Z">
+<meta property="article:modified_time" content="2024-10-26T14:09:29.342Z">
+<meta property="article:author" content="Chengwei Zhang">
+<meta property="article:tag" content="PA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhangcwei.github.io/images/10_%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%8F%E6%84%9F%E7%9A%84%E6%8C%87%E9%92%88%E5%88%86%E6%9E%90/image-20240430081432041.png">
+
+
+<link rel="canonical" href="https://zhangcwei.github.io/2024/04/20/PA_10/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zhangcwei.github.io/2024/04/20/PA_10/","path":"2024/04/20/PA_10/","title":"Program Analysis 10：Context Sensitivity in Pointer Analysis"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Program Analysis 10：Context Sensitivity in Pointer Analysis | Blog of ZhangCW</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Blog of ZhangCW</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">Pointer Analysis Context Sensitivity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Imprecision-of-Context-Insensitivity-C-I"><span class="nav-text">Imprecision of Context Insensitivity (C.I.)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Context-Sensitivity-C-S"><span class="nav-text">Context Sensitivity (C.S.)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Context-Sensitive-Pointer-Analysis-Rules"><span class="nav-text">Context Sensitive Pointer Analysis: Rules</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Domain-and-Notations"><span class="nav-text">Domain and Notations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rules"><span class="nav-text">Rules</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rule-Call"><span class="nav-text">Rule: Call</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Context-Sensitive-Pointer-Analysis-Algorithms"><span class="nav-text">Context Sensitive Pointer Analysis: Algorithms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-Implement-Context-Sensitive-Pointer-Analysis"><span class="nav-text">How to Implement Context-Sensitive Pointer Analysis?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pointer-Flow-Graph-with-C-S"><span class="nav-text">Pointer Flow Graph with C.S.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-S-Pointer-Analysis-Algorithm"><span class="nav-text">C.S. Pointer Analysis: Algorithm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Context-Sensitive-Variants"><span class="nav-text">Context Sensitive Variants</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Call-site-sensitivity"><span class="nav-text">Call-site sensitivity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-sensitivity"><span class="nav-text">Object sensitivity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Type-sensitivity"><span class="nav-text">Type sensitivity</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Focus-points"><span class="nav-text">Focus points</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Chengwei Zhang"
+      src="/images/Chengwei-Zhang.png">
+  <p class="site-author-name" itemprop="name">Chengwei Zhang</p>
+  <div class="site-description" itemprop="description">An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZhangCWei" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZhangCWei" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhangcwei.github.io/2024/04/20/PA_10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Chengwei-Zhang.png">
+      <meta itemprop="name" content="Chengwei Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of ZhangCW">
+      <meta itemprop="description" content="An undergraduate student from Sun Yat-sen University, majoring in Software Engineering.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Program Analysis 10：Context Sensitivity in Pointer Analysis | Blog of ZhangCW">
+      <meta itemprop="description" content="Context Sensitivity can improve the precision of Pointer Analysis.">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Program Analysis 10：Context Sensitivity in Pointer Analysis
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-20 22:35:37" itemprop="dateCreated datePublished" datetime="2024-04-20T22:35:37+08:00">2024-04-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-26 22:09:29" itemprop="dateModified" datetime="2024-10-26T22:09:29+08:00">2024-10-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PA/" itemprop="url" rel="index"><span itemprop="name">PA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">Context Sensitivity can improve the precision of Pointer Analysis.</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1>Pointer Analysis Context Sensitivity</h1>
+<h2 id="Introduction">Introduction</h2>
+<h3 id="Imprecision-of-Context-Insensitivity-C-I">Imprecision of Context Insensitivity (C.I.)</h3>
+<ul>
+<li>In dynamic execution, a <strong>method</strong> may be called <strong>multiple times</strong> under <strong>different calling contexts</strong>.</li>
+<li>Under different calling contexts, the variables of the method may point to <strong>different objects</strong></li>
+<li>In C.I. pointer analysis, objects under different contexts are <strong>mixed</strong> and <strong>propagated</strong> to other parts of program (through return values or side-effects), causing <strong>spurious data flows</strong></li>
+<li>如下图所示的程序，如果进行上下文不敏感的常量传播分析，id 被调用了两次，一次传入的是 n1，另一次是 n2，这就会导致 id 方法的参数 n 在不同上下文里的对象混在一起，指针域为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo><msub><mi>o</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>o</mi><mn>2</mn></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{o_1, o_2\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>，再顺着指针分析传播的时候，通过返回值给 x 和 y，会传递虚假的值，再分析 i 值的时候，会导致 i = NAC</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240430081432041.png" alt="image-20240430081432041" style="zoom:50%;" />
+<h3 id="Context-Sensitivity-C-S">Context Sensitivity (C.S.)</h3>
+<ul>
+<li>Context sensitivity models calling contexts by <strong>distinguishing</strong> different data flows of <strong>different contexts</strong> to improve precision
+<ul>
+<li>上下文敏感模型通过<strong>区分不同上下文的不同数据流</strong>以提高精度</li>
+</ul>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240430083311257.png" alt="image-20240430083311257" style="zoom:50%;" />
+<ul>
+<li>The oldest and best-known context sensitivity strategy is <strong>call-site sensitivity</strong> (call-string), which represents <strong>each context</strong> of a method as a <strong>chain of call sites</strong>
+<ul>
+<li>将方法的每个上下文表示为<strong>一系列调用点</strong></li>
+<li>a call site of the <strong>method</strong>,</li>
+<li>a call site of the <strong>caller</strong>,</li>
+<li>a call site of <strong>caller of caller</strong>, etc.</li>
+</ul>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240430103436064.png" alt="image-20240430103436064" style="zoom:50%;" />
+<ul>
+<li><strong>Cloning-Based Context Sensitivity</strong>
+<ul>
+<li>The <strong>most straightforward</strong> approach to implement context sensitivity</li>
+<li>In cloning-based context-sensitive pointer analysis, each <strong>method</strong> is <strong>qualified</strong> by one or more <strong>contexts</strong>; 给每个<strong>方法</strong>加一个或多个上下文进行修饰</li>
+<li>The <strong>variables</strong> are also <strong>qualified by contexts</strong> (inherited from the method they are declared in); 给方法加上下文，实际上就是给<strong>变量</strong>加上下文 (因为变量在某方法中声明)，可以当作对一个变量的标记，标记从哪个 call-site 过来</li>
+<li>Essentially each method and its variables are cloned, <strong>one clone per context</strong>; 基本上，每个方法及其变量都是克隆的，每个上下文对应一个克隆</li>
+</ul>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240430083352273.png" alt="image-20240430083352273" style="zoom:50%;" />
+<ul>
+<li><strong>Context-Sensitive Heap</strong>
+<ul>
+<li>OO programs (e.g., Java) are typically heap-intensive; 因为OO语言会频繁地对分配在堆区的对象进行操作，所以把这种频繁修改对象的行为称为 heap-intensive</li>
+<li>In practice, to improve precision, context sensitivity should also be applied to <strong>heap abstraction</strong>; 给对象的上下文来自于<strong>所在的方法</strong>
+<ul>
+<li>The abstract objects are also qualified by contexts (called heap contexts)</li>
+<li>Context-sensitive heap abstraction provides a <strong>finer-grained</strong> heap model over allocation-site abstraction</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240430084827209.png" alt="image-20240430084827209" style="zoom:50%;" />
+<ul>
+<li>Why Context-Sensitive Heap Improve Precision?
+<ul>
+<li>In dynamic execution, an allocation site can create <strong>multiple objects</strong> under different calling contexts; 在不同上下文 (函数调用) 下，一个 site 会创建<strong>多个对象</strong></li>
+<li><strong>Different objects</strong> (allocated by the same site) may be manipulated with different data flows, e.g., <strong>stored different values</strong> to their fields</li>
+<li>In pointer analysis, analyzing such code without heap contexts may <strong>lose precision</strong> by <strong>merging the data flows</strong> of different contexts to one abstract object</li>
+<li>In contrast, <strong>distinguishing</strong> different objects from the same allocation site by heap contexts <strong>gains precision</strong></li>
+</ul>
+</li>
+<li>Example
+<ul>
+<li>如下图左侧所示代码：</li>
+<li>对于不使用 C.S. heap 的上下文敏感分析：因为是上下文敏感分析，所以在两次调用时，函数的形参 p 和其中的 x 有分别的标记 (site : 参数名)，能够进行区分；但在进行两次 newX() 函数调用时，生成 x 的 object 都是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mn>8</mn></msub></mrow><annotation encoding="application/x-tex">o_8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">8</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，这样 x1 和 x2 都是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mn>8</mn></msub></mrow><annotation encoding="application/x-tex">o_8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">8</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，而 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mn>8</mn></msub><mi mathvariant="normal">.</mi><mi>f</mi><mo>=</mo><mo stretchy="false">{</mo><msub><mi>o</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>o</mi><mn>2</mn></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">o_8.f = \{o_1,o_2\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">8</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>，因此 n 最终指向 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo><msub><mi>o</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>o</mi><mn>2</mn></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{o_1,o_2\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>
+<ul>
+<li>不同对象的数据流在 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mn>8</mn></msub><mi mathvariant="normal">.</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">o_8.f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">8</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span> 处进行汇合，导致精度下降</li>
+</ul>
+</li>
+<li>对于使用 C.S. heap 的上下文敏感分析，在进行两次 newX() 函数调用时，生成 x 的 object 是不一样的 (site : 参数名)，即 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>:</mo><msub><mi>o</mi><mn>8</mn></msub><mi mathvariant="normal">.</mi><mi>f</mi><mo>=</mo><mo stretchy="false">{</mo><msub><mi>o</mi><mn>1</mn></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">3:o_8.f = \{o_1\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">8</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>:</mo><msub><mi>o</mi><mn>8</mn></msub><mi mathvariant="normal">.</mi><mi>f</mi><mo>=</mo><mo stretchy="false">{</mo><msub><mi>o</mi><mn>2</mn></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">4:o_8.f = \{o_2\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">8</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>，最终 n 指向 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo><msub><mi>o</mi><mn>1</mn></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{o_1\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></li>
+<li>注意，仅采用 C.S. heap 而不采用上下文敏感分析，是没有效果的</li>
+</ul>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240430091729709.png" alt="image-20240430091729709" style="zoom:50%;" />
+<img src="\images\10_上下文敏感的指针分析\image-20240430175720139.png" alt="image-20240430175720139" style="zoom:50%;" />
+<h2 id="Context-Sensitive-Pointer-Analysis-Rules">Context Sensitive Pointer Analysis: Rules</h2>
+<h3 id="Domain-and-Notations">Domain and Notations</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">域</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Context</td>
+<td style="text-align:center"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo separator="true">,</mo><msup><mi>c</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo separator="true">,</mo><msup><mi>c</mi><mrow><mo mathvariant="normal">′</mo><mo mathvariant="normal">′</mo></mrow></msup><mo>∈</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">c,c&#x27;,c&#x27;&#x27; \in C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9463em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>C.S. Variables</strong></td>
+<td style="text-align:center"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>:</mo><mi>x</mi><mo separator="true">,</mo><msup><mi>c</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>:</mo><mi>y</mi><mo>∈</mo><mi>C</mi><mo>×</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">c:x,c&#x27;:y \in C×V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9463em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7335em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>C.S. Methods</strong></td>
+<td style="text-align:center"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>:</mo><mi>m</mi><mo>∈</mo><mi>C</mi><mo>×</mo><mi>M</mi></mrow><annotation encoding="application/x-tex">c:m \in C × M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">m</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>C.S. Objects</strong></td>
+<td style="text-align:center"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>:</mo><msub><mi>o</mi><mi>i</mi></msub><mo separator="true">,</mo><msup><mi>c</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>:</mo><msub><mi>o</mi><mi>j</mi></msub><mo>∈</mo><mi>C</mi><mo>×</mo><mi>O</mi></mrow><annotation encoding="application/x-tex">c:o_i,c&#x27;:o_j \in C×O</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9463em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8252em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span></span></span></span></td>
+</tr>
+<tr>
+<td style="text-align:center">Fields</td>
+<td style="text-align:center"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo separator="true">,</mo><mi>g</mi><mo>∈</mo><mi>F</mi></mrow><annotation encoding="application/x-tex">f,g \in F</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span></span></span></span></td>
+</tr>
+<tr>
+<td style="text-align:center">Instance fields</td>
+<td style="text-align:center"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>:</mo><msub><mi>o</mi><mi>i</mi></msub><mi mathvariant="normal">.</mi><mi>f</mi><mo separator="true">,</mo><msup><mi>c</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>:</mo><msub><mi>o</mi><mi>j</mi></msub><mi mathvariant="normal">.</mi><mi>g</mi><mo>∈</mo><mi>C</mi><mo>×</mo><mi>O</mi><mo>×</mo><mi>F</mi></mrow><annotation encoding="application/x-tex">c:o_i.f,c&#x27;:o_j.g \in C×O×F</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9463em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8252em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span></span></span></span></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>C.S. Pointers</strong></td>
+<td style="text-align:center"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>CSPointer</mtext><mo>=</mo><mo stretchy="false">(</mo><mi>C</mi><mo>×</mo><mi>V</mi><mo stretchy="false">)</mo><mo>∪</mo><mo stretchy="false">(</mo><mi>C</mi><mo>×</mo><mi>O</mi><mo>×</mo><mi>F</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text{CSPointer} = (C×V) \cup (C×O×F)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">CSPointer</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∪</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mclose">)</span></span></span></span></td>
+</tr>
+<tr>
+<td style="text-align:center">Points-to relations</td>
+<td style="text-align:center"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>t</mi><mo>:</mo><mtext> CSPointer</mtext><mo>→</mo><mi>P</mi><mo stretchy="false">(</mo><mi>C</mi><mo>×</mo><mi>O</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">pt:~\text{CSPointer}→P(C×O)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">pt</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace nobreak"> </span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord text"><span class="mord">CSPointer</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mclose">)</span></span></span></span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Rules">Rules</h3>
+<img src="\images\10_上下文敏感的指针分析\image-20240430093449605.png" alt="image-20240430093449605" style="zoom:50%;" />
+<ul>
+<li>New</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240430180335297.png" alt="image-20240430180335297" style="zoom:50%;" />
+<ul>
+<li>Assign</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240430180431579.png" alt="image-20240430180431579" style="zoom:50%;" />
+<ul>
+<li>Store</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240430180615982.png" alt="image-20240430180615982" style="zoom:50%;" />
+<ul>
+<li>Load</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240430180630993.png" alt="image-20240430180630993" style="zoom:50%;" />
+<h3 id="Rule-Call">Rule: Call</h3>
+<ul>
+<li>符号定义
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mi>i</mi><mi>s</mi><mi>p</mi><mi>a</mi><mi>t</mi><mi>c</mi><mi>h</mi><mo stretchy="false">(</mo><msub><mi>𝑜</mi><mi>𝑖</mi></msub><mo separator="true">,</mo><mi>k</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Dispatch(𝑜_𝑖, k)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal">i</span><span class="mord mathnormal">s</span><span class="mord mathnormal">p</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">c</span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mclose">)</span></span></span></span>: resolves the virtual dispatch of k on 𝑜𝑜𝑖𝑖 to a target method (based on type of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">o_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>)</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>e</mi><mi>l</mi><mi>e</mi><mi>c</mi><mi>t</mi><mo stretchy="false">(</mo><mi>𝑐</mi><mo separator="true">,</mo><mi>𝑙</mi><mo separator="true">,</mo><msup><mi>𝑐</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>:</mo><msub><mi>𝑜</mi><mi>𝑖</mi></msub><mo separator="true">,</mo><mi>m</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Select(𝑐,𝑙,𝑐&#x27;:𝑜_𝑖, m)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0019em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">ec</span><span class="mord mathnormal">t</span><span class="mopen">(</span><span class="mord mathnormal">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">m</span><span class="mclose">)</span></span></span></span>: <strong>selects context</strong> for target method <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝑚</mi></mrow><annotation encoding="application/x-tex">𝑚</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span>, based on the information available at call site <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝑙</mi></mrow><annotation encoding="application/x-tex">𝑙</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span></span>
+<ul>
+<li>为目标方法 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span> <strong>选择上下文</strong>，参数为：
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span>：当前调用点所在的上下文</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span></span>：调用点本身，可以是这条语句的标签 label</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>c</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>:</mo><msub><mi>o</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">c&#x27;: o_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>  ：receive object，流入调用者的新对象</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span>：目标方法</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>c</mi><mi>t</mi></msup><mo>:</mo><msub><mi>m</mi><mrow><mi>t</mi><mi>h</mi><mi>i</mi><mi>s</mi></mrow></msub></mrow><annotation encoding="application/x-tex">c^t:m_{this}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7936em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">hi</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>: <strong>this variable</strong> of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>𝑐</mi><mi>𝑡</mi></msup><mo>:</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">𝑐^𝑡:m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7936em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span></li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>c</mi><mi>t</mi></msup><mo>:</mo><msub><mi>m</mi><mrow><mi>p</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">c^t:m_{pj}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7936em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span>: the <strong>j-th parameter</strong> of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>𝑐</mi><mi>𝑡</mi></msup><mo>:</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">𝑐^𝑡:m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7936em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span></li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>c</mi><mi>t</mi></msup><mo>:</mo><msub><mi>m</mi><mrow><mi>r</mi><mi>e</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">c^t:m_{ret}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7936em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">re</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>: the variable that holds the <strong>return value</strong> of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>𝑐</mi><mi>𝑡</mi></msup><mo>:</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">𝑐^𝑡:m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7936em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span></li>
+</ul>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240430181328888.png" alt="image-20240430181328888" style="zoom:50%;" />
+<ul>
+<li>在处理没有上下文敏感的调用时，主要负责如下4个步骤：Dispatch 确定目标方法→传递 receive objects→传参数→传返回值。加入上下文之后，主要区别为：
+<ul>
+<li>在 Dispatch 找到目标方法 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span> 之后，进行Select：选择目标方法 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span> 的上下文 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>c</mi><mi>t</mi></msup></mrow><annotation encoding="application/x-tex">c^t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7936em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span></span></span></span></li>
+<li>找到上下文之后，带着上下文信息，传递 receive object、参数、返回值
+<ul>
+<li>例如：对于变量 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span>，需要将 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>c</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>:</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">c&#x27;:x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> 传到找到的目标方法的上下文 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>c</mi><mi>t</mi></msup></mrow><annotation encoding="application/x-tex">c^t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7936em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span></span></span></span> 里的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mrow><mi>t</mi><mi>h</mi><mi>i</mi><mi>s</mi></mrow></msub></mrow><annotation encoding="application/x-tex">m_{this}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">hi</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>因此，在处理上下文敏感的调用时，主要负责如下<strong>5个步骤</strong>：
+<ol>
+<li>Dispatch 找到目标方法</li>
+<li>Select 选择目标方法 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span> 的上下文</li>
+<li>传递特定上下文的 receive objects</li>
+<li>传递特定上下文的参数</li>
+<li>传递特定上下文的返回值</li>
+</ol>
+</li>
+<li><strong>Example</strong>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span> 为这些调用语句所在的方法/上下文，给 Select 传入一系列参数，选出第2行语句的目标方法 id(Number n) 的上下文是2，第3行的目标方法的上下文是3，然后跟目标函数组合在一起</li>
+<li>之后会<strong>对该方法进行克隆</strong>，有一个上下文就克隆一次，将针对特定上下文，传receive object (处理this语句)、传参、传返回值</li>
+<li>要注意，本例子中用 call site，即语句的 label 来表示上下文，但也有其他的表示方法，具体怎么选、上下文用什么表示可参见下一节</li>
+</ul>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240430192241592.png" alt="image-20240430192241592" style="zoom:50%;" />
+<h2 id="Context-Sensitive-Pointer-Analysis-Algorithms">Context Sensitive Pointer Analysis: Algorithms</h2>
+<h3 id="How-to-Implement-Context-Sensitive-Pointer-Analysis">How to Implement Context-Sensitive Pointer Analysis?</h3>
+<img src="\images\10_上下文敏感的指针分析\image-20240502144123283.png" alt="image-20240502144123283" style="zoom:50%;" />
+<h3 id="Pointer-Flow-Graph-with-C-S">Pointer Flow Graph with C.S.</h3>
+<ul>
+<li>Pointer flow graph of a program is a <strong>directed graph</strong> that expresses how <strong>objects flow</strong> among the <strong>pointers</strong> in the program</li>
+<li>Nodes: <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>CSPointer</mtext><mo>=</mo><mo stretchy="false">(</mo><mi>C</mi><mo>×</mo><mi>V</mi><mo stretchy="false">)</mo><mo>⋃</mo><mo stretchy="false">(</mo><mi>C</mi><mo>×</mo><mi>O</mi><mo>×</mo><mi>F</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text{CSPointer} = (C×V)⋃(C×O×F)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">CSPointer</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-symbol small-op" style="position:relative;top:0em;">⋃</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mclose">)</span></span></span></span>
+<ul>
+<li>A node n represents <strong>a context-sensitive variable</strong> or <strong>a field of a context-sensitive abstract object</strong></li>
+<li>With C.S., the nodes (pointers) are qualified by contexts</li>
+</ul>
+</li>
+<li>Edges: <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>CSPointer</mtext><mo>×</mo><mtext>CSPointer</mtext></mrow><annotation encoding="application/x-tex">\text{CSPointer}×\text{CSPointer}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord text"><span class="mord">CSPointer</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">CSPointer</span></span></span></span></span>
+<ul>
+<li>An edge <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝑥</mi><mo>→</mo><mi>𝑦</mi></mrow><annotation encoding="application/x-tex">𝑥→𝑦</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span> means that the objects pointed by pointer <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝑥</mi></mrow><annotation encoding="application/x-tex">𝑥</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> <strong>may flow to</strong> (and also be pointed to by) pointer <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝑦</mi></mrow><annotation encoding="application/x-tex">𝑦</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>e.g., edge <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝑐</mi><mo>:</mo><mi>𝑎</mi><mo>→</mo><msup><mi>𝑐</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>:</mo><mi>𝑏</mi></mrow><annotation encoding="application/x-tex">𝑐:𝑎→𝑐&#x27;: 𝑏</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span></span></span></span> means that objects in <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>t</mi><mo stretchy="false">(</mo><mi>𝑐</mi><mo>:</mo><mi>𝑎</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">pt(𝑐:𝑎)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">pt</span><span class="mopen">(</span><span class="mord mathnormal">c</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">a</span><span class="mclose">)</span></span></span></span> may flow to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>t</mi><mo stretchy="false">(</mo><msup><mi>𝑐</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>:</mo><mi>𝑏</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">pt(𝑐&#x27;: 𝑏)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0019em;vertical-align:-0.25em;"></span><span class="mord mathnormal">pt</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">b</span><span class="mclose">)</span></span></span></span></li>
+</ul>
+</li>
+<li><strong>Example</strong>
+<ul>
+<li>The PFG contains two nodes for variable n in method id(), one node per context</li>
+</ul>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240502150454310.png" alt="image-20240502150454310" style="zoom:50%;" />
+<ul>
+<li>Pointer Flow Graph: Edges
+<ul>
+<li>PFG edges are added according to the statements of the program and the corresponding rules</li>
+</ul>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240502150611927.png" alt="image-20240502150611927" style="zoom:50%;" />
+<img src="\images\10_上下文敏感的指针分析\image-20240502150727409.png" alt="image-20240502150727409" style="zoom:50%;" />
+<h3 id="C-S-Pointer-Analysis-Algorithm">C.S. Pointer Analysis: Algorithm</h3>
+<ul>
+<li>
+<p>与 C.I. 相比，基本一致</p>
+</li>
+<li>
+<p>主要有两点差异</p>
+<ul>
+<li>给每个<strong>变量、函数、调用点</strong>等都加上了所在的上下文</li>
+<li>在处理调用的函数 ProcessCall() 函数中，增加了调用 Select() 函数的部分</li>
+</ul>
+</li>
+<li>
+<p>C.I. 可以看作 C.S. 的一个特殊情况，对于 C.I.，Select 函数在<strong>任何情况</strong>下都返回一个<strong>空的上下文</strong>，也就是在任何情况下都是一样的上下文</p>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240502151503813.png" alt="image-20240502151503813" style="zoom:50%;" />
+<h2 id="Context-Sensitive-Variants">Context Sensitive Variants</h2>
+<ul>
+<li>不同的 select 定义的方式，取决于不同的<strong>上下文敏感策略</strong>，下面我们介绍3种最常用的上下文敏感的策略，然后再详细介绍各自的 select 方法
+<ul>
+<li>Call-site sensitivity</li>
+<li>Object sensitivity</li>
+<li>Type sensitivity</li>
+</ul>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240507081145321.png" alt="image-20240507081145321" style="zoom:50%;" />
+<h3 id="Call-site-sensitivity">Call-site sensitivity</h3>
+<ul>
+<li>Each context consists of a list of call sites (call chain)
+<ul>
+<li>At a method call, append the call site to the caller context as callee context</li>
+<li>Essentially the abstraction of call stacks</li>
+</ul>
+</li>
+<li>每个上下文由<strong>一系列调用链</strong>组成，在方法调用的时候，将调用点<strong>附加到调用者上下文</strong>作为<strong>被调用者上下文</strong>。实际上就是<strong>调用栈的抽象</strong>。</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240507081445141.png" alt="image-20240507081445141" style="zoom:50%;" />
+<ul>
+<li>
+<p>Also called <strong>call-string sensitivity</strong>, or <strong>k-CFA</strong></p>
+</li>
+<li>
+<p><strong>Example</strong></p>
+<ul>
+<li>每增加一次调用，就会加入一个新的上下文，但是对于15行有递归调用的情况，就可能会一直调用下去，导致 context 无限</li>
+</ul>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240507081937144.png" alt="image-20240507081937144" style="zoom:50%;" />
+<ul>
+<li><strong>k-Limiting Context Abstraction</strong>
+<ul>
+<li>Motivation
+<ul>
+<li><strong>Ensure termination</strong> of pointer analysis</li>
+<li><strong>Avoid too many contexts</strong> (long call chains) in real-world programs blow up the pointer analysis</li>
+</ul>
+</li>
+<li>Approach: set an <strong>upper bound</strong> for <strong>length of contexts</strong>, denoted by <strong>k</strong>
+<ul>
+<li>For call-site sensitivity, each context consists of the <strong>last k call sites</strong> of the call chains (每个上下文由调用链的<strong>最后</strong> k 个调用点组成)</li>
+<li>In practice, k is a <strong>small number</strong> (usually ≤ 3)</li>
+<li>Method contexts and heap contexts may <strong>use different k</strong>
+<ul>
+<li>e.g., k=2 for method contexts, k=1 for heap contexts</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Example</strong>
+<ul>
+<li>下图为 1-call-site/1-CFA</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240507082503528.png" alt="image-20240507082503528" style="zoom:50%;" />
+<img src="\images\10_上下文敏感的指针分析\image-20240507082538038.png" alt="image-20240507082538038" style="zoom:50%;" />
+<img src="\images\10_上下文敏感的指针分析\image-20240507082916148.png" alt="image-20240507082916148" style="zoom:50%;" />
+<ul>
+<li>
+<p><strong>1-Call-Site Example</strong> (如上图所示，为了简便，分析的过程中省去了 <strong>heap 的上下文</strong>和 <strong><a target="_blank" rel="noopener" href="http://C.id">C.id</a> 里的 this 变量</strong>，<strong>最终目标是，分析第16行代码x.get() 会调用哪些方法</strong>)</p>
+<ol>
+<li>
+<p>调用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>d</mi><mi>d</mi><mi>R</mi><mi>e</mi><mi>a</mi><mi>c</mi><mi>h</mi><mi>a</mi><mi>b</mi><mi>l</mi><mi>e</mi><mo stretchy="false">(</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">AddReachable()</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal">dd</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">a</span><span class="mord mathnormal">c</span><span class="mord mathnormal">hab</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">e</span><span class="mopen">(</span><span class="mclose">)</span></span></span></span> 处理 main 方法<br>
+<img src="\images\10_上下文敏感的指针分析\image-20240509160323973.png" alt="image-20240509160323973" style="zoom:50%;" /></p>
+<ul>
+<li>
+<p>将方法 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mtext> </mtext><mo stretchy="false">]</mo><mo>:</mo><mi>C</mi><mi mathvariant="normal">.</mi><mi>m</mi><mi>a</mi><mi>i</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">[~]:C.main</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mspace nobreak"> </span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord">.</span><span class="mord mathnormal">main</span></span></span></span> 加入 RM 中，表示其可达 (注意入口处的上下文设置为空)</p>
+</li>
+<li>
+<p>将 main 方法的语句加入语句集合 S 中</p>
+</li>
+<li>
+<p>因为其中有赋值语句，所以将 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&lt;</mo><mo stretchy="false">[</mo><mtext> </mtext><mo stretchy="false">]</mo><mo>:</mo><mi>c</mi><mo separator="true">,</mo><mo stretchy="false">{</mo><msub><mi>o</mi><mn>3</mn></msub><mo stretchy="false">}</mo><mo>&gt;</mo></mrow><annotation encoding="application/x-tex">&lt;[~]:c,\{o_3\}&gt;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mspace nobreak"> </span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span></span></span></span> 加入 WL 中</p>
+</li>
+</ul>
+</li>
+<li>
+<p>处理 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&lt;</mo><mo stretchy="false">[</mo><mtext> </mtext><mo stretchy="false">]</mo><mo>:</mo><mi>c</mi><mo separator="true">,</mo><mo stretchy="false">{</mo><msub><mi>o</mi><mn>3</mn></msub><mo stretchy="false">}</mo><mo>&gt;</mo></mrow><annotation encoding="application/x-tex">&lt;[~]:c,\{o_3\}&gt;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mspace nobreak"> </span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span></span></span></span></p>
+<ul>
+<li>进行差集操作，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mo>=</mo><mo stretchy="false">{</mo><msub><mi>o</mi><mn>3</mn></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\Delta = \{o_3\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></li>
+<li>调用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>o</mi><mi>p</mi><mi>a</mi><mi>g</mi><mi>a</mi><mi>t</mi><mi>e</mi><mo stretchy="false">(</mo><mo stretchy="false">[</mo><mtext> </mtext><mo stretchy="false">]</mo><mo>:</mo><mi>c</mi><mo separator="true">,</mo><mi mathvariant="normal">Δ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Propagate([~]:c,\Delta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal">ro</span><span class="mord mathnormal">p</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mopen">([</span><span class="mspace nobreak"> </span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">Δ</span><span class="mclose">)</span></span></span></span>，也就是将 object 传递给 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mtext> </mtext><mo stretchy="false">]</mo><mo>:</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">[~]:c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mspace nobreak"> </span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span></li>
+<li>处理当前函数中与 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span> 相关的 Load 和 Store 语句，因为没有，所以直接跳过</li>
+<li>调用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>o</mi><mi>c</mi><mi>e</mi><mi>s</mi><mi>s</mi><mi>C</mi><mi>a</mi><mi>l</mi><mi>l</mi><mo stretchy="false">(</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">ProcessCall()</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal">rocess</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">ll</span><span class="mopen">(</span><span class="mclose">)</span></span></span></span> 处理函数中的调用语句<br>
+<img src="\images\10_上下文敏感的指针分析\image-20240509161051969.png" alt="image-20240509161051969" style="zoom:50%;" />
+<ul>
+<li>对于语句中所有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span> 作为 receiver object 的函数调用，执行以下步骤：
+<ul>
+<li>进行 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mi>i</mi><mi>s</mi><mi>p</mi><mi>a</mi><mi>t</mi><mi>c</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">Dispatch</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal">i</span><span class="mord mathnormal">s</span><span class="mord mathnormal">p</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">c</span><span class="mord mathnormal">h</span></span></span></span> 获取目标方法，显然就是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span> 类中的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span> 方法，即 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>=</mo><mi>C</mi><mi mathvariant="normal">.</mi><mi>m</mi><mo stretchy="false">(</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">m=C.m()</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord">.</span><span class="mord mathnormal">m</span><span class="mopen">(</span><span class="mclose">)</span></span></span></span></li>
+<li>进行 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>e</mi><mi>l</mi><mi>e</mi><mi>c</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">Select</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">ec</span><span class="mord mathnormal">t</span></span></span></span> 选择上下文，由于是 1-Call-Site，所以上下文即为调用点，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>c</mi><mi>t</mi></msup><mo>=</mo><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">c^t=[4]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7936em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mclose">]</span></span></span></span></li>
+<li>传递 receiver object：将<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&lt;</mo><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo><mo>:</mo><msub><mi>m</mi><mrow><mi>t</mi><mi>h</mi><mi>i</mi><mi>s</mi></mrow></msub><mo separator="true">,</mo><mo stretchy="false">{</mo><msub><mi>o</mi><mn>3</mn></msub><mo stretchy="false">}</mo><mo>&gt;</mo></mrow><annotation encoding="application/x-tex">&lt;[4]:m_{this},\{o_3\}&gt;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">hi</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span></span></span></span> 加入 WL</li>
+<li>因为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mo stretchy="false">]</mo><mo>:</mo><mn>4</mn><mo>→</mo><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo><mo>:</mo><mi>C</mi><mi mathvariant="normal">.</mi><mi>m</mi><mo stretchy="false">(</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">[]:4 → [4]:C.m()</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord">.</span><span class="mord mathnormal">m</span><span class="mopen">(</span><span class="mclose">)</span></span></span></span> 不属于调用图 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mi>G</mi></mrow><annotation encoding="application/x-tex">CG</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">CG</span></span></span></span>，所以将其加入，并执行以下步骤：
+<ul>
+<li>调用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>d</mi><mi>d</mi><mi>R</mi><mi>e</mi><mi>a</mi><mi>c</mi><mi>h</mi><mi>a</mi><mi>b</mi><mi>l</mi><mi>e</mi><mo stretchy="false">(</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">AddReachable()</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal">dd</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">a</span><span class="mord mathnormal">c</span><span class="mord mathnormal">hab</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">e</span><span class="mopen">(</span><span class="mclose">)</span></span></span></span> 处理</li>
+<li>将方法 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo><mo>:</mo><mi>C</mi><mi mathvariant="normal">.</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">[4]:C.m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord">.</span><span class="mord mathnormal">m</span></span></span></span> 加入 RM 中</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span> 方法中具有两个赋值语句，所以需要将它们加入 WL 中，此时 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mi>L</mi><mo>=</mo><mo stretchy="false">{</mo><mo>&lt;</mo><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo><mo>:</mo><mi>C</mi><mi mathvariant="normal">.</mi><msub><mi>m</mi><mrow><mi>t</mi><mi>h</mi><mi>i</mi><mi>s</mi></mrow></msub><mo separator="true">,</mo><mo stretchy="false">{</mo><msub><mi>o</mi><mn>3</mn></msub><mo stretchy="false">}</mo><mo>&gt;</mo><mo separator="true">,</mo><mo>&lt;</mo><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo><mo>:</mo><mi>n</mi><mn>1</mn><mo separator="true">,</mo><mo stretchy="false">{</mo><msub><mi>o</mi><mn>12</mn></msub><mo stretchy="false">}</mo><mo>&gt;</mo><mo separator="true">,</mo><mo>&lt;</mo><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo><mo>:</mo><mi>n</mi><mn>2</mn><mo separator="true">,</mo><mo stretchy="false">{</mo><msub><mi>o</mi><mn>13</mn></msub><mo stretchy="false">}</mo><mo>&gt;</mo><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">WL=\{&lt;[4]:C.m_{this},\{o_3\}&gt;, &lt;[4]:n1,\{o_{12}\}&gt;,&lt;[4]:n2,\{o_{13}\}&gt;\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">hi</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span></span><span class="base"><span class="strut" style="height:0.7335em;vertical-align:-0.1944em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">n</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">12</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span></span><span class="base"><span class="strut" style="height:0.7335em;vertical-align:-0.1944em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">n</span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">13</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mclose">}</span></span></span></span></li>
+<li>由于 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span> 方法没有参数和返回值，所以不进行相关的加边操作</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>处理 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&lt;</mo><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo><mo>:</mo><mi>C</mi><mi mathvariant="normal">.</mi><msub><mi>m</mi><mrow><mi>t</mi><mi>h</mi><mi>i</mi><mi>s</mi></mrow></msub><mo separator="true">,</mo><mo stretchy="false">{</mo><msub><mi>o</mi><mn>3</mn></msub><mo stretchy="false">}</mo><mo>&gt;</mo></mrow><annotation encoding="application/x-tex">&lt;[4]:C.m_{this},\{o_3\}&gt;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">hi</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span></span></span></span></p>
+<ul>
+<li>进行差集操作，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mo>=</mo><mo stretchy="false">{</mo><msub><mi>o</mi><mn>3</mn></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\Delta = \{o_3\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></li>
+<li>调用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>o</mi><mi>p</mi><mi>a</mi><mi>g</mi><mi>a</mi><mi>t</mi><mi>e</mi><mo stretchy="false">(</mo><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo><mo>:</mo><mi>C</mi><mi mathvariant="normal">.</mi><msub><mi>m</mi><mrow><mi>t</mi><mi>h</mi><mi>i</mi><mi>s</mi></mrow></msub><mo separator="true">,</mo><mi mathvariant="normal">Δ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Propagate([4]:C.m_{this},\Delta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal">ro</span><span class="mord mathnormal">p</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mopen">([</span><span class="mord">4</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">hi</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">Δ</span><span class="mclose">)</span></span></span></span>，也就是将 object 传递给 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo><mo>:</mo><mi>C</mi><mi mathvariant="normal">.</mi><msub><mi>m</mi><mrow><mi>t</mi><mi>h</mi><mi>i</mi><mi>s</mi></mrow></msub></mrow><annotation encoding="application/x-tex">[4]:C.m_{this}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">hi</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></li>
+<li>同理没有 Load 和 Store 语句，所以使用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>o</mi><mi>c</mi><mi>e</mi><mi>s</mi><mi>s</mi><mi>C</mi><mi>a</mi><mi>l</mi><mi>l</mi><mo stretchy="false">(</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">ProcessCall()</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal">rocess</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">ll</span><span class="mopen">(</span><span class="mclose">)</span></span></span></span> 处理 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span> 中的两个调用语句：
+<ul>
+<li>对于第一个调用语句(14)：显然 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>=</mo><mi>C</mi><mi mathvariant="normal">.</mi><mi>i</mi><mi>d</mi><mo stretchy="false">(</mo><mi>N</mi><mi>u</mi><mi>m</mi><mi>b</mi><mi>e</mi><mi>r</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><msup><mi>c</mi><mi>t</mi></msup><mo>=</mo><mo stretchy="false">[</mo><mn>14</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">m=C.id(Number),c^t=[14]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0436em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord">.</span><span class="mord mathnormal">i</span><span class="mord mathnormal">d</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">u</span><span class="mord mathnormal">mb</span><span class="mord mathnormal" style="margin-right:0.02778em;">er</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">14</span><span class="mclose">]</span></span></span></span></li>
+<li>需要进行加入 WL 的操作，但这里省略了</li>
+<li>加入调用边 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo><mo>:</mo><mn>14</mn><mo>→</mo><mo stretchy="false">[</mo><mn>14</mn><mo stretchy="false">]</mo><mo>:</mo><mi>C</mi><mi mathvariant="normal">.</mi><mi>i</mi><mi>d</mi><mo stretchy="false">(</mo><mi>N</mi><mi>u</mi><mi>m</mi><mi>b</mi><mi>e</mi><mi>r</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">[4]:14→[14]:C.id(Number)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">14</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">14</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord">.</span><span class="mord mathnormal">i</span><span class="mord mathnormal">d</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">u</span><span class="mord mathnormal">mb</span><span class="mord mathnormal" style="margin-right:0.02778em;">er</span><span class="mclose">)</span></span></span></span></li>
+<li>调用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>d</mi><mi>d</mi><mi>R</mi><mi>e</mi><mi>a</mi><mi>c</mi><mi>h</mi><mi>a</mi><mi>b</mi><mi>l</mi><mi>e</mi><mo stretchy="false">(</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">AddReachable()</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal">dd</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">a</span><span class="mord mathnormal">c</span><span class="mord mathnormal">hab</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">e</span><span class="mopen">(</span><span class="mclose">)</span></span></span></span> 函数，由于 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mi>d</mi></mrow><annotation encoding="application/x-tex">id</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">i</span><span class="mord mathnormal">d</span></span></span></span> 中没有 New 和 Assign 语句，所以就仅将其加入 RM</li>
+<li>对于传参和返回值，进行<strong>加边</strong>：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>d</mi><mi>d</mi><mi>E</mi><mi>d</mi><mi>g</mi><mi>e</mi><mo stretchy="false">(</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">AddEdge()</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal">dd</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">e</span><span class="mopen">(</span><span class="mclose">)</span></span></span></span></li>
+<li>对于第二个调用语句(15)：同理加入调用边 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo><mo>:</mo><mn>15</mn><mo>→</mo><mo stretchy="false">[</mo><mn>15</mn><mo stretchy="false">]</mo><mo>:</mo><mi>C</mi><mi mathvariant="normal">.</mi><mi>i</mi><mi>d</mi><mo stretchy="false">(</mo><mi>N</mi><mi>u</mi><mi>m</mi><mi>b</mi><mi>e</mi><mi>r</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">[4]:15→[15]:C.id(Number)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">15</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">15</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord">.</span><span class="mord mathnormal">i</span><span class="mord mathnormal">d</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">u</span><span class="mord mathnormal">mb</span><span class="mord mathnormal" style="margin-right:0.02778em;">er</span><span class="mclose">)</span></span></span></span>，并加入 RM</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>处理 WL 中的剩余内容，也就是将它们的 object 不断传播，此时结果为：<br>
+<img src="\images\10_上下文敏感的指针分析\image-20240509164146932.png" alt="image-20240509164146932" style="zoom: 33%;" /></p>
+</li>
+<li>
+<p>处理 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&lt;</mo><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo><mo>:</mo><mi>x</mi><mo separator="true">,</mo><mo stretchy="false">{</mo><msub><mi>o</mi><mn>12</mn></msub><mo stretchy="false">}</mo><mo>&gt;</mo></mrow><annotation encoding="application/x-tex">&lt;[4]:x,\{o_{12}\}&gt;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">12</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span></span></span></span></p>
+<ul>
+<li>现在，我们就可以处理 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mi mathvariant="normal">.</mi><mi>g</mi><mi>e</mi><mi>t</mi><mo stretchy="false">(</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">x.get()</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">x</span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mopen">(</span><span class="mclose">)</span></span></span></span> 了，因为其具有上下文，所以只将 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>4</mn><mo stretchy="false">]</mo><mo>:</mo><mn>16</mn><mo>→</mo><mo stretchy="false">[</mo><mn>16</mn><mo stretchy="false">]</mo><mo>:</mo><mi>O</mi><mi>n</mi><mi>e</mi><mi mathvariant="normal">.</mi><mi>g</mi><mi>e</mi><mi>t</mi><mo stretchy="false">(</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">[4]:16→[16]:One.get()</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">16</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">16</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord mathnormal">n</span><span class="mord mathnormal">e</span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mopen">(</span><span class="mclose">)</span></span></span></span> 加入 CG 中，只将 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>16</mn><mo stretchy="false">]</mo><mo>:</mo><mi>O</mi><mi>n</mi><mi>e</mi><mi mathvariant="normal">.</mi><mi>g</mi><mi>e</mi><mi>t</mi><mo stretchy="false">(</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">[16]:One.get()</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">16</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord mathnormal">n</span><span class="mord mathnormal">e</span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mopen">(</span><span class="mclose">)</span></span></span></span> 加入 RM 中，最终结果为：</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240509164650752.png" alt="image-20240509164650752" style="zoom:50%;" />
+<h3 id="Object-sensitivity">Object sensitivity</h3>
+<ul>
+<li>Each context consists of <strong>a list of abstract objects</strong> (represented by their allocation sites)
+<ul>
+<li>At a method call, use the receiver object with its heap context as callee context</li>
+<li>Distinguish the operations of data flow on different objects</li>
+</ul>
+</li>
+<li>对象敏感策略的每个上下文都包含一个<strong>抽象对象列表</strong> (由他们的 allocation sites 表示)。在方法调用时，使用<strong>接收对象</strong>及其 <strong>heap context</strong> 作为被调用上下文，区分数据流在不同对象上的操作</li>
+<li>也被称作 allocation-site sensitivity</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240507083714640.png" alt="image-20240507083714640" style="zoom:50%;" />
+<ul>
+<li>
+<p><strong>Example</strong></p>
+</li>
+<li>
+<p>Call-Site vs. Object Sensitivity</p>
+<ul>
+<li>In theory, their precision is <strong>incomparable</strong></li>
+<li>In practice, <strong>object sensitivity generally outperforms</strong> call-site sensitivity for OO languages (like Java)</li>
+<li>In general
+<ul>
+<li>Precision: object &gt; call-site</li>
+<li>Efficiency: object &gt; call-site</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240507085748999.png" alt="image-20240507085748999" style="zoom:50%;" />
+<h3 id="Type-sensitivity">Type sensitivity</h3>
+<ul>
+<li>Each context consists of a list of types</li>
+<li>At a method call, use the <strong>type</strong> containing the allocation site of the <strong>receiver object</strong> with its <strong>heap context</strong> as callee context</li>
+<li>A <strong>coarser abstraction</strong> over object sensitivity</li>
+<li>每个上下文都包含一个<strong>类型列表</strong>，在用方法调用时基于<strong>创建点所在的类型</strong>，作为被调用上下文。</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240507090932053.png" alt="image-20240507090932053" style="zoom:50%;" />
+<img src="\images\10_上下文敏感的指针分析\image-20240507091009575.png" alt="image-20240507091009575" style="zoom:50%;" />
+<ul>
+<li>Type sensitivity 对 Object sensitivity 的抽象，精度相比较弱、但效率更高</li>
+</ul>
+<img src="\images\10_上下文敏感的指针分析\image-20240507091135684.png" alt="image-20240507091135684" style="zoom:50%;" />
+<ul>
+<li>Call-Site vs. Object vs. Type Sensitivity (In general)
+<ul>
+<li><strong>Precision</strong>: object &gt; type &gt; call-site</li>
+<li><strong>Efficiency</strong>: type &gt; object &gt; call-site</li>
+</ul>
+</li>
+</ul>
+<h2 id="Focus-points">Focus points</h2>
+<ul>
+<li>Concept of <strong>context sensitivity</strong> (C.S.)</li>
+<li>Concept of <strong>context-sensitive heap</strong> (C.S. heap)</li>
+<li>Why <strong>C.S. and C.S.</strong> heap improve <strong>precision</strong></li>
+<li>Context-sensitive pointer analysis <strong>rules</strong></li>
+<li>Algorithm for <strong>context-sensitive pointer analysis</strong></li>
+<li>Common <strong>context sensitivity variants</strong></li>
+<li><strong>Differences and relationship</strong> among common context sensitivity variants</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PA/" rel="tag"># PA</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/17/PA_9/" rel="prev" title="Program Analysis 9：Pointer Analysis Foundations">
+                  <i class="fa fa-angle-left"></i> Program Analysis 9：Pointer Analysis Foundations
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/04/21/PA_11/" rel="next" title="Program Analysis 11：Static Analysis for Security">
+                  Program Analysis 11：Static Analysis for Security <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Chengwei Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+</body>
+</html>
