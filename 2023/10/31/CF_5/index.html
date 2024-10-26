@@ -78,7 +78,7 @@
 <meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231117155028410.png">
 <meta property="og:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/image-20231116100537125.png">
 <meta property="article:published_time" content="2023-10-31T09:03:07.000Z">
-<meta property="article:modified_time" content="2024-04-15T07:34:14.497Z">
+<meta property="article:modified_time" content="2024-10-26T14:41:29.573Z">
 <meta property="article:author" content="Chengwei Zhang">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://zhangcwei.github.io/images/5_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/img1698118448890.jpg">
@@ -255,7 +255,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-04-15 15:34:14" itemprop="dateModified" datetime="2024-04-15T15:34:14+08:00">2024-04-15</time>
+      <time title="修改时间：2024-10-26 22:41:29" itemprop="dateModified" datetime="2024-10-26T22:41:29+08:00">2024-10-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -732,7 +732,7 @@
 <p>​		变量的类型告诉我们它在运行时刻需要多大的内存空间，在编译时刻，我们可以使用变量的内存大小信息为每个变量分配一个相对地址。</p>
 <p>​		一个变量的<strong>相对地址</strong>需要用该变量的<strong>起始地址</strong>和该变量的<strong>类型宽度</strong>来刻画。其中，起始地址是用于存储变量的字节块的第一个字节的地址，类型宽度是用于存储变量的字节块包含的字节数。</p>
 <p>​		例如，假设x是一个整型变量并且它的起始地址为100，那么x的相对地址是从100开始，到103结束的4字节的字节块。</p>
-<p>​		假设<strong>存储变量的方式是连续的</strong>（即对变量x和y，x的相对地址是从d~1~到d~i~的字节块，那么y的起始地址是d~i+1~），则存储变量的关键问题变成了确定每个变量需要多大的存储空间（说白了就是确定每个类型的宽度）。下面我们对计算基本类型、数组类型和记录类型的宽度分别进行说明：</p>
+<p>​		假设<strong>存储变量的方式是连续的</strong>（即对变量x和y，x的相对地址是从d<sub>1</sub>到d<sub>i</sub>的字节块，那么y的起始地址是d<sub>i+1</sub>），则存储变量的关键问题变成了确定每个变量需要多大的存储空间（说白了就是确定每个类型的宽度）。下面我们对计算基本类型、数组类型和记录类型的宽度分别进行说明：</p>
 <ul>
 <li><strong>基本类型</strong>。基本类型的宽度是由语言事先定义的，如Java的int类型的宽度是4个字节；</li>
 <li><strong>数组类型</strong>。数组类型的宽度是由元素的类型宽度和元素的数量共同决定的，比如数组类型int[3]的宽度是4*3=12个字节；</li>
@@ -877,7 +877,7 @@
 </li>
 <li>
 <p>L.addr指示一个<strong>临时变量</strong>，计算数组引用的<strong>偏移量</strong><br>
-base + i~1~ * w~1~ + i~2~ * w~2~ + … + i~k~ * w~k~</p>
+base + i<sub>1</sub> * w<sub>1</sub> + i<sub>2</sub> * w<sub>2</sub> + … + i<sub>k</sub> * w<sub>k</sub></p>
 </li>
 <li>
 <p>L.type是L生成的<strong>子数组的类型</strong></p>
@@ -1111,13 +1111,13 @@ base + i~1~ * w~1~ + i~2~ * w~2~ + … + i~k~ * w~k~</p>
 <p>控制流语句</p>
 <ul>
 <li>
-<p>S → <strong>if</strong> (B) S~1~</p>
+<p>S → <strong>if</strong> (B) S<sub>1</sub></p>
 </li>
 <li>
-<p>S → <strong>if</strong> (B) S~1~ <strong>else</strong> S~2~</p>
+<p>S → <strong>if</strong> (B) S<sub>1</sub> <strong>else</strong> S<sub>2</sub></p>
 </li>
 <li>
-<p>S → <strong>while</strong> (B) S~1~</p>
+<p>S → <strong>while</strong> (B) S<sub>1</sub></p>
 </li>
 </ul>
 </li>
@@ -1156,10 +1156,10 @@ base + i~1~ * w~1~ + i~2~ * w~2~ + … + i~k~ * w~k~</p>
 <p>语义</p>
 <ul>
 <li>
-<p>B~1~   ‖   B~2~  中B~1~为真或B~2~为真时，整个表达式为真</p>
+<p>B<sub>1</sub>   ‖   B<sub>2</sub>  中B<sub>1</sub>为真或B<sub>2</sub>为真时，整个表达式为真</p>
 </li>
 <li>
-<p>B~1~ &amp;&amp; B~2~  中B~1~为真且B~2~为真时，整个表达式为真</p>
+<p>B<sub>1</sub> &amp;&amp; B<sub>2</sub>  中B<sub>1</sub>为真且B<sub>2</sub>为真时，整个表达式为真</p>
 </li>
 </ul>
 </li>
@@ -1170,10 +1170,10 @@ base + i~1~ * w~1~ + i~2~ * w~2~ + … + i~k~ * w~k~</p>
 <p>通过<strong>跳转指令</strong>实现控制流，<strong>逻辑运算符不出现</strong>在代码中</p>
 <ul>
 <li>
-<p>B~1~   ‖   B~2~  中：B~1~为真时，无需计算B~2~</p>
+<p>B<sub>1</sub>   ‖   B<sub>2</sub>  中：B<sub>1</sub>为真时，无需计算B<sub>2</sub></p>
 </li>
 <li>
-<p>B~1~ &amp;&amp; B~2~  中：B~1~为假时，无需计算B~2~</p>
+<p>B<sub>1</sub> &amp;&amp; B<sub>2</sub>  中：B<sub>1</sub>为假时，无需计算B<sub>2</sub></p>
 </li>
 </ul>
 </li>
@@ -1181,7 +1181,7 @@ base + i~1~ * w~1~ + i~2~ * w~2~ + … + i~k~ * w~k~</p>
 <p>例：</p>
 <ul>
 <li>语句：if (x &lt; 100 ‖ (x &gt; 200 &amp;&amp; x != y ))  x = 0;</li>
-<li>代码，其中L~2~: x = 0；L~1~: 接下去的代码</li>
+<li>代码，其中L<sub>2</sub>: x = 0；L<sub>1</sub>: 接下去的代码</li>
 </ul>
 </li>
 </ul>
@@ -1196,29 +1196,29 @@ base + i~1~ * w~1~ + i~2~ * w~2~ + … + i~k~ * w~k~</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (x &lt; <span class="number">100</span> ‖ x &gt; <span class="number">200</span> &amp;&amp; x != y ) </span><br><span class="line">    x = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
 <p><strong>Step1</strong>  使用产生式和规则如下：</p>
 <img src="/images/5_中间代码生成/v2-e99f7b17132b0d8210f3eea62ea0933d_1440w.png" alt="img" style="zoom: 80%;" />
-<p>​		<strong>Step1.1</strong>  在 S~1~ 的代码（x=0）之前生成了标号 L~2~</p>
-<p>​		<strong>Step1.2</strong>  L~2~ 对应于 B.true，而 L~1~ 对应于 B.false</p>
+<p>​		<strong>Step1.1</strong>  在 S<sub>1</sub> 的代码（x=0）之前生成了标号 L<sub>2</sub></p>
+<p>​		<strong>Step1.2</strong>  L<sub>2</sub> 对应于 B.true，而 L<sub>1</sub> 对应于 B.false</p>
 <hr>
 <p><strong>Step2</strong>  使用<strong>布尔表达式的翻译规则</strong>，对x &lt; 100 || x &gt; 200 &amp;&amp; x != y 进行翻译：</p>
 <img src="/images/5_中间代码生成/image-20231117144832194.png" alt="image-20231117144832194" style="zoom: 50%;" />
-<p>​		<strong>Step2.1</strong>  因为 &amp;&amp; 的优先级高于 ||，所以先对 x &lt; 100 进行处理：作为 || 运算符的左边部分，(x &lt; 100).true此时就是整个 || 布尔表达式的B.true, 也即L2；B.false要生成L~3~，L~3~就是接下来下一条指令的位置；应用的规则和此时生成的代码如下：</p>
+<p>​		<strong>Step2.1</strong>  因为 &amp;&amp; 的优先级高于 ||，所以先对 x &lt; 100 进行处理：作为 || 运算符的左边部分，(x &lt; 100).true此时就是整个 || 布尔表达式的B.true, 也即L2；B.false要生成L<sub>3</sub>，L<sub>3</sub>就是接下来下一条指令的位置；应用的规则和此时生成的代码如下：</p>
 <img src="/images/5_中间代码生成/v2-11759adc1cf77db5300c1f6d8463935e_1440w.png" alt="img" style="zoom:67%;" />
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> x &lt; <span class="number">100</span> <span class="keyword">goto</span> B.<span class="literal">true</span> ; </span><br><span class="line"><span class="keyword">goto</span> B.<span class="literal">false</span>；</span><br></pre></td></tr></table></figure>
-<p>​		<strong>Step2.2</strong>  开始处理（x &gt; 200 &amp;&amp; x != y ），L~3~的位置也就是（x &gt; 200 &amp;&amp; x != y ）代码的起始位置；接下来，使用上面的relop的规则，处理 x &gt; 200 和 x != y，目前代码如下：</p>
+<p>​		<strong>Step2.2</strong>  开始处理（x &gt; 200 &amp;&amp; x != y ），L<sub>3</sub>的位置也就是（x &gt; 200 &amp;&amp; x != y ）代码的起始位置；接下来，使用上面的relop的规则，处理 x &gt; 200 和 x != y，目前代码如下：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> x &lt; <span class="number">100</span> <span class="keyword">goto</span> L2 ; </span><br><span class="line"><span class="keyword">goto</span> L3；</span><br><span class="line">    </span><br><span class="line"><span class="comment">// 此时的B.true是下面规则中的B1.true；也即开始处理x != y的起始代码</span></span><br><span class="line"><span class="keyword">if</span> x &gt; <span class="number">200</span> <span class="keyword">goto</span> B.<span class="literal">true</span> ; </span><br><span class="line"><span class="comment">// 此时的B.false就是B1.false，也就是 || 中右部的false；</span></span><br><span class="line"><span class="comment">// 可以查 || 的翻译方案，知道也就是整个逻辑表达式的.false，也即L1</span></span><br><span class="line"><span class="keyword">goto</span> B.<span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> x != y <span class="keyword">goto</span> B.<span class="literal">true</span> ; </span><br><span class="line"><span class="keyword">goto</span> B.<span class="literal">false</span>；</span><br></pre></td></tr></table></figure>
 <hr>
 <p><strong>Step3</strong>  此时使用如下规则处理 &amp;&amp; 表达式，生成了标号B1.true L4；也即接下来要计算B2</p>
 <img src="/images/5_中间代码生成/v2-1e4c4818cfe96e94d24e08ba195ab9cd_1440w.webp" alt="img" style="zoom:80%;" />
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">	<span class="keyword">if</span> x &lt; <span class="number">100</span> <span class="keyword">goto</span> L2 ; </span><br><span class="line">	<span class="keyword">goto</span> L3；</span><br><span class="line">	<span class="keyword">if</span> x &gt; <span class="number">200</span> <span class="keyword">goto</span> L4 ; </span><br><span class="line">	<span class="keyword">goto</span> B.<span class="literal">false</span></span><br><span class="line">L4:	<span class="keyword">if</span> x != y <span class="keyword">goto</span> B.<span class="literal">true</span> ; </span><br><span class="line">	<span class="keyword">goto</span> B.<span class="literal">false</span>；</span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>Step4</strong>  最后，B~1~.false、B~2~.true以及 B~2~.false 取决于 B 的整体的 true 和 false 属性，结合||的语义，我们知道 B.false = L~1~；B.true = L~2~</p>
+<p><strong>Step4</strong>  最后，B<sub>1</sub>.false、B<sub>2</sub>.true以及 B<sub>2</sub>.false 取决于 B 的整体的 true 和 false 属性，结合||的语义，我们知道 B.false = L<sub>1</sub>；B.true = L<sub>2</sub></p>
 <p>​		所以代码为：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成的中间代码</span></span><br><span class="line">	<span class="keyword">if</span> x &lt; <span class="number">100</span> <span class="keyword">goto</span> L2</span><br><span class="line">    <span class="keyword">goto</span> L3</span><br><span class="line">L3: <span class="keyword">if</span> x &gt; <span class="number">200</span> <span class="keyword">goto</span> L4</span><br><span class="line">    <span class="keyword">goto</span> L1</span><br><span class="line">L4: <span class="keyword">if</span> x != y  <span class="keyword">goto</span> L2</span><br><span class="line">    <span class="keyword">goto</span> L1</span><br><span class="line">L2: x = <span class="number">0</span></span><br><span class="line">L1: <span class="comment">//接下去的代码</span></span><br></pre></td></tr></table></figure>
 <hr>
 <p><strong>代码优化</strong></p>
 <p>​		<code>if not</code>指令利用了<strong>控制流在指令序列中会从一个指令自然流动到下一个指令</strong>的性质，因此当 x &gt; 200 时，控制流直接“穿越“到标号 L4 ，从而减少了一个跳转指令</p>
-<p>​		通过使用<strong>特殊标记 “fall”</strong> (即，不生成任何跳转指令)，我们可以修改上面的语义规则，支持控制流从B的代码直接穿越到 S~1~ 的代码，譬如：</p>
-<p>​		对于 S → if (B) S~1~ ，新语义规则是：</p>
+<p>​		通过使用<strong>特殊标记 “fall”</strong> (即，不生成任何跳转指令)，我们可以修改上面的语义规则，支持控制流从B的代码直接穿越到 S<sub>1</sub> 的代码，譬如：</p>
+<p>​		对于 S → if (B) S<sub>1</sub> ，新语义规则是：</p>
 <img src="/images/5_中间代码生成/v2-f0dbd8de88509d7a308f68dfcf269883_1440w.webp" alt="img" style="zoom:67%;" />
 <p>​		对于语句 “if (true)  S;” ，原本生成的代码是 goto B.true; ，也就是如下形式：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   	<span class="keyword">goto</span> L1;</span><br><span class="line">L1: S.code</span><br></pre></td></tr></table></figure>
@@ -1253,7 +1253,7 @@ base + i~1~ * w~1~ + i~2~ * w~2~ + … + i~k~ * w~k~</p>
 <p>根据<strong>B的语法树结点所在的位置</strong></p>
 <ul>
 <li>
-<p>S -&gt; while(B) S~1~ 中的B，生成<strong>跳转代码</strong></p>
+<p>S -&gt; while(B) S<sub>1</sub> 中的B，生成<strong>跳转代码</strong></p>
 </li>
 <li>
 <p>对于S -&gt; id = B，生成<strong>计算右值的代码</strong></p>
@@ -1308,7 +1308,7 @@ base + i~1~ * w~1~ + i~2~ * w~2~ + … + i~k~ * w~k~</p>
 <p>将<strong>指令坯</strong>并向<strong>父结点</strong>传递 (综合属性)</p>
 </li>
 <li>
-<p>翻译过程中，若遇到某条指令是<strong>跳转目标</strong>，则<strong>记录</strong>其索引，备用S → if (B) ~▲~ S~1~</p>
+<p>翻译过程中，若遇到某条指令是<strong>跳转目标</strong>，则<strong>记录</strong>其索引，备用S → if (B) <sub>▲</sub> S<sub>1</sub></p>
 </li>
 <li>
 <p>当父结点<strong>收集齐</strong>跳转指令坯及其跳转目标时，<strong>将索引填入指令坯</strong></p>
